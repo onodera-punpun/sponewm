@@ -17,6 +17,7 @@ func NewFloating() *Floating {
 	}
 }
 
+// TODO: Add "border" to monitor edges.
 func (f *Floating) InitialPlacement(x *xgbutil.XUtil, c Client) {
 	cgeom := c.Geom()
 	xc, rw := x.Conn(), x.RootWin()
@@ -26,12 +27,15 @@ func (f *Floating) InitialPlacement(x *xgbutil.XUtil, c Client) {
 	// TODO: Is this x/y-limit needed, what does it do?
 	xlimit := f.geom.Width() - cgeom.Width()
 	ylimit := f.geom.Height() - cgeom.Height()
-	// TODO: I have a slight feeling a big border makes windows off-center.
 	if xlimit > 0 {
-		fx += int(qp.RootX) - cgeom.Width() / 2
+		// TODO: Currently hardcoding the bordersize (10), because I can't
+		// seem to get the value
+		fx += int(qp.RootX) - cgeom.Width() / 2 - 10
 	}
 	if ylimit > 0 {
-		fy += int(qp.RootY) - cgeom.Height() / 2
+		// TODO: Currently hardcoding the bordersize (10), because I can't
+		// seem to get the value
+		fy += int(qp.RootY) - cgeom.Height() / 2 - 10
 	}
 	f.Move(c, fx, fy)
 }
