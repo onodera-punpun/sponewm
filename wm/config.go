@@ -202,8 +202,6 @@ func (conf *Configuration) loadOptionsConfigSection(
 			setString(key, &conf.ConfirmKey)
 		case "shell":
 			setString(key, &conf.Shell)
-		case "audio_play_cmd":
-			setString(key, &conf.AudioProgram)
 		}
 	}
 }

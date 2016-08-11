@@ -78,9 +78,6 @@ match := True
 # You can add more by just adding another definition of "startup".
 #startup := Shell "gkrellm"
 
-# Easter egg!
-startup := Dale
-
 [ForceFloating]
 # This hook matches certain windows, and forces them into the floating layout.
 # You probably don't need to add windows like "gmrun" or "krunner", since

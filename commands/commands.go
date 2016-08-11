@@ -31,7 +31,6 @@ import (
 var Env = gribble.New([]gribble.Command{
 	&AddWorkspace{},
 	&Close{},
-	&Dale{},
 	&Float{},
 	&Focus{},
 	&FocusRaise{},
@@ -217,31 +216,6 @@ func (cmd Close) Run() gribble.Value {
 		})
 		return nil
 	})
-}
-
-type Dale struct {
-	Help string `
-Make sure "audio_play_cmd" is set to a program that can play wav files.
-`
-}
-
-func (cmd Dale) Run() gribble.Value {
-	go func() {
-		var stderr bytes.Buffer
-
-		program := wm.Config.AudioProgram
-
-		c := exec.Command(program)
-		c.Stderr = &stderr
-		c.Stdin = bytes.NewReader(misc.WingoWav)
-		if err := c.Run(); err != nil {
-			if stderr.Len() > 0 {
-				logger.Warning.Printf("%s failed: %s", program, stderr.String())
-			}
-			logger.Warning.Printf("Error running %s: %s", program, err)
-		}
-	}()
-	return nil
 }
 
 type Float struct {
