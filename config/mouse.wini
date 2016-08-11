@@ -79,65 +79,6 @@ Mod4-3 := MouseResize "Infer"
 # Mod4-4 := Shell "transset-df -p --max 1.0 --inc 0.05"
 # Mod4-5 := Shell "transset-df -p --min 0.1 --dec 0.05"
 
-[FullIcon]
-1 := MouseMove
-1 := FocusRaise ":mouse:"
-3 := MouseResize "Infer"
-
-[FullTitleText]
-1 := MouseMove
-1 := FocusRaise ":mouse:"
-3 := MouseResize "Infer"
-
-[FullTitleBar]
-1 := MouseMove
-1 := FocusRaise ":mouse:"
-3 := MouseResize "Infer"
-
-[FullClose]
-1 up := Close ":mouse:"
-
-[FullMaximize]
-1 up := ToggleMaximize ":mouse:"
-
-[FullMinimize]
-1 up := ToggleIconify ":mouse:"
-
-[FullTop]
-1 := MouseResize "Top"
-1 := FocusRaise ":mouse:"
-
-[FullTitleBottom]
-1 := FocusRaise ":mouse:"
-
-[FullBottom]
-1 := MouseResize "Bottom"
-1 := FocusRaise ":mouse:"
-
-[FullLeft]
-1 := MouseResize "Left"
-1 := FocusRaise ":mouse:"
-
-[FullRight]
-1 := MouseResize "Right"
-1 := FocusRaise ":mouse:"
-
-[FullTopLeft]
-1 := MouseResize "TopLeft"
-1 := FocusRaise ":mouse:"
-
-[FullTopRight]
-1 := MouseResize "TopRight"
-1 := FocusRaise ":mouse:"
-
-[FullBottomLeft]
-1 := MouseResize "BottomLeft"
-1 := FocusRaise ":mouse:"
-
-[FullBottomRight]
-1 := MouseResize "BottomRight"
-1 := FocusRaise ":mouse:"
-
 [BordersTop]
 1 := MouseResize "Top"
 1 := FocusRaise ":mouse:"
@@ -169,4 +110,3 @@ Mod4-3 := MouseResize "Infer"
 [BordersBottomRight]
 1 := MouseResize "BottomRight"
 1 := FocusRaise ":mouse:"
-

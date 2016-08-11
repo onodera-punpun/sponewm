@@ -284,7 +284,7 @@ func (c *Client) cbShapeNotify() xevent.ShapeNotifyFun {
 			return
 		}
 
-		// So this is only done with Slim/Borders/Full frames. It basically
+		// So this is only done with Slim/Borders frames. It basically
 		// negates the effects of shaping since we use one monolithic
 		// rectangle.
 		rect := xproto.Rectangle{

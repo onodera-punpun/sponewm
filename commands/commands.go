@@ -35,7 +35,6 @@ var Env = gribble.New([]gribble.Command{
 	&Focus{},
 	&FocusRaise{},
 	&FrameBorders{},
-	&FrameFull{},
 	&FrameNada{},
 	&FrameSlim{},
 	&HeadCycle{},
@@ -97,7 +96,6 @@ var Env = gribble.New([]gribble.Command{
 	&CycleClientHide{},
 	&CycleClientNext{},
 	&CycleClientPrev{},
-	&Input{},
 	&Message{},
 	&SelectClient{},
 	&SelectWorkspace{},
@@ -148,8 +146,6 @@ var Env = gribble.New([]gribble.Command{
 var (
 	// SafeExec is a channel through which a Gribble command execution is
 	// sent and executed synchronously with respect to the X main event loop.
-	// This is necessary to allow asynchronous prompts to run and return
-	// values without locking up the rest of the window manager.
 	SafeExec = make(chan func() gribble.Value, 1)
 
 	// SafeReturn is the means through which a return value from a Gribble
@@ -306,24 +302,6 @@ func (cmd FrameBorders) Run() gribble.Value {
 	return syncRun(func() gribble.Value {
 		withClient(cmd.Client, func(c *xclient.Client) {
 			c.FrameBorders()
-		})
-		return nil
-	})
-}
-
-type FrameFull struct {
-	Client gribble.Any `param:"1" types:"int,string"`
-	Help   string      `
-Set the decorations of the window specified by Client to the "Full" frame.
-
-Client may be the window id or a substring that matches a window name.
-`
-}
-
-func (cmd FrameFull) Run() gribble.Value {
-	return syncRun(func() gribble.Value {
-		withClient(cmd.Client, func(c *xclient.Client) {
-			c.FrameFull()
 		})
 		return nil
 	})

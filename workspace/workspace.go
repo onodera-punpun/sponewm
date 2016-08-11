@@ -10,7 +10,6 @@ import (
 	"github.com/onodera-punpun/wingo/event"
 	"github.com/onodera-punpun/wingo/layout"
 	"github.com/onodera-punpun/wingo/logger"
-	"github.com/onodera-punpun/wingo/prompt"
 )
 
 type Workspace struct {
@@ -26,9 +25,6 @@ type Workspace struct {
 
 	autoTilers   []layout.AutoTiler
 	curAutoTiler int
-
-	PromptSlctGroup *prompt.SelectGroupItem
-	PromptSlctItem  *prompt.SelectItem
 }
 
 func (wrks *Workspaces) NewWorkspace(name string) *Workspace {
@@ -77,8 +73,6 @@ func (wrk *Workspace) Destroy() {
 	for _, lay := range wrk.autoTilers {
 		lay.Destroy()
 	}
-	wrk.PromptSlctGroup.Destroy()
-	wrk.PromptSlctItem.Destroy()
 }
 
 func (wrk *Workspace) String() string {
@@ -199,8 +193,6 @@ func (wrk *Workspace) RemoveAllAndAdd(newWk *Workspace) {
 
 func (wrk *Workspace) Rename(newName string) {
 	wrk.Name = newName
-	wrk.PromptSlctGroup.UpdateText()
-	wrk.PromptSlctItem.UpdateText()
 }
 
 func (wrk *Workspace) setGeom(geom xrect.Rect) {

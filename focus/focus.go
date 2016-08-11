@@ -151,8 +151,7 @@ func Fallback(focusable func(c Client) bool) {
 
 // LastFocused returns the last client that was focused that satisfies the
 // predicate focusable. This is only used in the commands package to retrieve
-// the active window. (It's a hack to work around the fact that prompts can
-// steal focus, which makes the GetActive command not work properly.)
+// the active window.
 func LastFocused(focusable func(c Client) bool) Client {
 	for i := len(Clients) - 1; i >= 0; i-- {
 		c := Clients[i]

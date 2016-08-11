@@ -5,9 +5,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/BurntSushi/freetype-go/freetype"
-	"github.com/BurntSushi/freetype-go/freetype/truetype"
-
 	"github.com/BurntSushi/xgbutil/xgraphics"
 
 	"github.com/onodera-punpun/wingo/logger"
@@ -88,6 +85,7 @@ func getLastFloat(k wini.Key) (float64, bool) {
 	return vals[len(vals)-1], true
 }
 
+// TODO: Can I remove this?
 func setNoGradient(k wini.Key, clr *render.Color) {
 	// Check to make sure we have a value for this key
 	vals := k.Strings()
@@ -109,84 +107,4 @@ func setNoGradient(k wini.Key, clr *render.Color) {
 
 	logger.Warning.Println(
 		k.Err("Gradients are not supported for this theme option."))
-}
-
-func setGradient(k wini.Key, clr *render.Color) {
-	// Check to make sure we have a value for this key
-	vals := k.Strings()
-	if len(vals) == 0 {
-		logger.Warning.Println(k.Err("No values found."))
-		return
-	}
-
-	// Use the last value
-	val := vals[len(vals)-1]
-
-	// If there are no spaces, it can't be a gradient.
-	if strings.Index(val, " ") == -1 {
-		if start, ok := getLastInt(k); ok {
-			clr.ColorSet(start)
-		}
-		return
-	}
-
-	// Okay, now we have to do things manually.
-	// Split up the value into two pieces separated by whitespace and parse
-	// each piece as an int.
-	splitted := strings.Split(val, " ")
-	if len(splitted) != 2 {
-		logger.Warning.Println(k.Err("Expected a gradient value (two colors "+
-			"separated by a space), but found '%s' "+
-			"instead.", val))
-		return
-	}
-
-	start, err := strconv.ParseInt(strings.TrimSpace(splitted[0]), 0, 0)
-	if err != nil {
-		logger.Warning.Println(k.Err("'%s' is not an integer. (%s)",
-			splitted[0], err))
-		return
-	}
-
-	end, err := strconv.ParseInt(strings.TrimSpace(splitted[1]), 0, 0)
-	if err != nil {
-		logger.Warning.Println(k.Err("'%s' is not an integer. (%s)",
-			splitted[1], err))
-		return
-	}
-
-	// finally...
-	clr.GradientSet(int(start), int(end))
-}
-
-func setImage(k wini.Key, place **xgraphics.Image) {
-	if v, ok := getLastString(k); ok {
-		img, err := xgraphics.NewFileName(X, v)
-		if err != nil {
-			logger.Warning.Printf(
-				"Could not load '%s' as a png image because: %v", v, err)
-			return
-		}
-		*place = img
-	}
-}
-
-func setFont(k wini.Key, place **truetype.Font) {
-	if v, ok := getLastString(k); ok {
-		bs, err := ioutil.ReadFile(v)
-		if err != nil {
-			logger.Warning.Printf(
-				"Could not get font data from '%s' because: %v", v, err)
-			return
-		}
-
-		font, err := freetype.ParseFont(bs)
-		if err != nil {
-			logger.Warning.Printf(
-				"Could not parse font data from '%s' because: %v", v, err)
-			return
-		}
-
-		*place = font
-	}
 }

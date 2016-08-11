@@ -91,12 +91,6 @@ func (c *Client) manage() {
 	c.refreshName()
 	logger.Message.Printf("Managing new client: %s", c)
 
-	promptDone := make(chan struct{}, 0)
-	go func() {
-		c.prompts = c.newClientPrompts()
-		promptDone <- struct{}{}
-	}()
-
 	c.fetchXProperties()
 	c.setPrimaryType()
 	c.setInitialLayer()
@@ -136,8 +130,6 @@ func (c *Client) manage() {
 				"if you try to replace Wingo with another window manager: %s",
 			c, err)
 	}
-
-	<-promptDone
 }
 
 func (c *Client) maybeInitPlace(presumedWorkspace workspace.Workspacer) {

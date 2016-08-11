@@ -17,14 +17,9 @@ func (c *Client) handleProperty(name string) {
 		fallthrough
 	case "_NET_WM_NAME":
 		fallthrough
-	case "WM_NAME":
-		c.refreshName()
-	case "_NET_WM_ICON":
-		c.refreshIcon()
 	case "WM_HINTS":
 		if hints, err := icccm.WmHintsGet(wm.X, c.Id()); err == nil {
 			c.hints = hints
-			c.refreshIcon()
 		}
 	case "WM_NORMAL_HINTS":
 		if nhints, err := icccm.WmNormalHintsGet(wm.X, c.Id()); err == nil {
@@ -51,7 +46,7 @@ func (c *Client) handleProperty(name string) {
 		decor := c.shouldDecor()
 		if _, ok := c.Layout().(layout.Floater); ok {
 			if decor {
-				c.FrameFull()
+				c.FrameBorders()
 			} else {
 				c.FrameNada()
 			}
@@ -59,7 +54,7 @@ func (c *Client) handleProperty(name string) {
 			for k := range c.states {
 				s := c.states[k]
 				if decor {
-					s.frame = c.frames.full
+					s.frame = c.frames.borders
 				} else {
 					s.frame = c.frames.nada
 				}
@@ -67,38 +62,6 @@ func (c *Client) handleProperty(name string) {
 			}
 		}
 	}
-}
-
-func (c *Client) refreshIcon() {
-	c.frames.full.UpdateIcon()
-	c.prompts.updateIcon()
-}
-
-func (c *Client) refreshName() {
-	var newName string
-
-	defer func() {
-		if newName != c.name {
-			c.name = newName
-			c.frames.full.UpdateTitle()
-			c.prompts.updateName()
-			ewmh.WmVisibleNameSet(wm.X, c.Id(), c.name)
-
-			event.Notify(event.ChangedClientName{c.Id()})
-		}
-	}()
-
-	newName, _ = ewmh.WmNameGet(wm.X, c.Id())
-	if len(newName) > 0 {
-		return
-	}
-
-	newName, _ = icccm.WmNameGet(wm.X, c.Id())
-	if len(newName) > 0 {
-		return
-	}
-
-	newName = "Unnamed Window"
 }
 
 func (c *Client) maybeApplyStruts() {

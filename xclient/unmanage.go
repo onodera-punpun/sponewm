@@ -19,7 +19,6 @@ func (c *Client) unmanage() {
 
 	go func() {
 		c.frames.destroy()
-		c.prompts.destroy()
 	}()
 
 	logger.Message.Printf("Unmanaging client: %s", c)

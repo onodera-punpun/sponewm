@@ -52,10 +52,7 @@ WARNING: The major drawback of using a workspaces per monitor model is that it
 violates an implicit assumption made by EWMH: that one and only one workspace 
 may be viewable at any point in time. As a result, in multi-head setups, pagers 
 and taskbars may operate in confusing ways. In a single head setup, they should 
-continue to operate normally. Wingo provides prompts that allow you to 
-add/remove workspaces and select clients that may alleviate the need for pagers 
-or taskbars.
-
+continue to operate normally.
 
 Configuration
 =============
@@ -78,15 +75,6 @@ Gribble. For example, one can add a workspace named "cromulent" with this
 command:
 
     AddWorkspace "cromulent"
-
-But that's not very flexible, right? It'd be nice if you could specify the name
-of workspace on the fly... For this, simply use the "Input" command as an
-argument to AddWorkspace, which shows a graphical prompt and allows you to type 
-in a name:
-
-    AddWorkspace (Input "Enter your workspace name:")
-
-The text entered into the input box will be passed to the AddWorkspace command.
 
 Please see the HOWTO-COMMANDS file for more info. We've barely scratched the 
 surface.
@@ -234,7 +222,6 @@ to the authors (well, the ones that aren't me anyway).
 
 * go                  http://golang.org
 * graphics-go         http://code.google.com/p/graphics-go
-* freetype-go         http://code.google.com/p/freetype-go
 * ansi                http://github.com/str1ngs/ansi
 * go-bindata          http://github.com/jteeuwen/go-bindata (build dependency)
 * gribble             http://github.com/BurntSushi/gribble
@@ -252,55 +239,5 @@ monitor). I've also adopted Xmonad's "greedy" workspace switching and embedded
 the concepts from the "DynamicWorkspaces" contrib library into the Gribble 
 command system.
 
-
-Go your own way
-===============
-Wingo is actually split up into *many* sub-packages. It is possible (but not 
-necessarily likely) that you could pick out some of these sub-packages and use 
-them in your own window manager. The packages of particular interest are 
-probably the ones that do the most nitty gritty X stuff---especially relating 
-to drawing windows. Here's a quick run down of those:
-
-cursors
--------
-Sets up some plain old X cursors. Not very interesting.
-
-prompt
-------
-Provides several different kinds of prompt windows that can take user input. 
-These should actually work in an existing window manager. (See the examples in 
-the package directory.) Prompt requires both the 'render' and 'text' Wingo 
-packages.
-
-render
-------
-Renders some very basic shapes and gradients to X windows.
-
-text
-----
-Renders text to windows. Also provides a special window type that can act as a 
-text box for user input.
-
-Others
-------
-The only other package worth mentioning is 'frame'. It's probably too 
-monolithic to be used in another window manager (unless you really like Wingo's 
-decorations), but it's possible that it could serve as a half-decent template 
-for your own frames.
-
-The rest of the sub-packages (excluding xclient and wm, since they are very 
-Wingo specific) could also be used, particularly since only minimal Client 
-interfaces are required. However, most of them aren't that complex and 
-therefore probably aren't worth it. And the ones that do have some complexity 
-(maybe 'heads' and 'workspace') aren't packages that I'm particularly proud of.
-
-Also, if you're wanting to make a Go window manager, my xgbutil package 
+il package 
 (separate from Wingo) will be a big help. Feel free to ping me.
-
-
-My past X work
-==============
-There's too much. The highlights are pytyle and Openbox Multihead.
-
-For more: http://burntsushi.net/x11/
-

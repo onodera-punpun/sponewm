@@ -98,8 +98,7 @@ func loadConfig() (*Configuration, error) {
 // loadMouseConfigSection does two things:
 // 1) Inspects the section name to infer the identifier. In general, the
 // "mouse" prefix is removed, and whatever remains is the identifier. There
-// are two special cases: "MouseBorders*" turns into "borders_*" and
-// "MouseFull*" turns into "full_*".
+// is one special cases: "MouseBorders*" turns into "borders_*.
 // 2) Constructs a "mouseCommand" for *every* value.
 //
 // The idents are used for attaching mouse commands to the corresponding
@@ -111,8 +110,6 @@ func (conf *Configuration) loadMouseConfigSection(
 	switch {
 	case len(section) > 7 && section[:7] == "borders":
 		ident = "borders_" + section[7:]
-	case len(section) > 4 && section[:4] == "full":
-		ident = "full_" + section[4:]
 	default:
 		ident = section
 	}

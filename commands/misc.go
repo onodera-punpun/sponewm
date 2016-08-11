@@ -11,7 +11,6 @@ import (
 	"github.com/BurntSushi/xgbutil/xrect"
 
 	"github.com/onodera-punpun/wingo/logger"
-	"github.com/onodera-punpun/wingo/prompt"
 	"github.com/onodera-punpun/wingo/workspace"
 	"github.com/onodera-punpun/wingo/wm"
 	"github.com/onodera-punpun/wingo/xclient"
@@ -88,24 +87,6 @@ func intToBool(n int) bool {
 		return true
 	}
 	panic(fmt.Sprintf("Unexpected boolean integer: %d", n))
-}
-
-// stringTabComp takes a string and converts it to a tab completion constant
-// defined in the prompt package. Valid values are "Prefix", "Any" and
-// "Multiple"
-func stringTabComp(s string) int {
-	switch s {
-	case "Prefix":
-		return prompt.TabCompletePrefix
-	case "Any":
-		return prompt.TabCompleteAny
-	case "Multiple":
-		return prompt.TabCompleteMultiple
-	default:
-		logger.Warning.Printf(
-			"Tab completion mode '%s' not supported.", s)
-	}
-	return prompt.TabCompletePrefix
 }
 
 // Shortcut for executing Client interface functions that have no parameters

@@ -24,11 +24,6 @@ func (c *Client) refreshExtents() {
 	ewmh.FrameExtentsSet(wm.X, c.Id(), &exts)
 }
 
-// FrameFull switches this client's frame to the 'Full' frame.
-func (c *Client) FrameFull() {
-	c.frames.set(c.frames.full)
-}
-
 // FrameBorders switches this client's frame to the 'Borders' frame.
 func (c *Client) FrameBorders() {
 	c.frames.set(c.frames.borders)
@@ -188,7 +183,6 @@ func (c *Client) validateSize(size, inc, base, min, max int) int {
 // can switch to at any point in time.
 type clientFrames struct {
 	client  *Client
-	full    *frame.Full
 	borders *frame.Borders
 	slim    *frame.Slim
 	nada    *frame.Nada
@@ -202,7 +196,7 @@ func (c *Client) newClientFrames() clientFrames {
 	cf := createFrames(c)
 
 	if c.shouldDecor() {
-		c.frame = cf.full
+		c.frame = cf.borders
 	} else {
 		if c.PrimaryType() == TypeNormal {
 			if c.shaped {
@@ -248,10 +242,6 @@ func createFrames(c *Client) clientFrames {
 		cf.nada.Parent(), c)
 	errHandle(err)
 
-	cf.full, err = frame.NewFull(wm.X, wm.Theme.Full.FrameTheme(),
-		cf.nada.Parent(), c)
-	errHandle(err)
-
 	return cf
 }
 
@@ -276,15 +266,14 @@ func (cf clientFrames) destroy() {
 	cf.nada.Destroy()
 	cf.slim.Destroy()
 	cf.borders.Destroy()
-	cf.full.Destroy()
 
 	// Since a single parent window is shared between all frames, we only need
 	// to pick a parent window from one of the frames, and destroy that.
-	cf.full.Parent().Destroy()
+	// TODO: Can I remove this?
+	cf.borders.Parent().Destroy()
 }
 
 func (cf clientFrames) maximize() {
-	cf.full.Maximize()
 	cf.borders.Maximize()
 	cf.slim.Maximize()
 	cf.nada.Maximize()
@@ -293,20 +282,9 @@ func (cf clientFrames) maximize() {
 }
 
 func (cf clientFrames) unmaximize() {
-	cf.full.Unmaximize()
 	cf.borders.Unmaximize()
 	cf.slim.Unmaximize()
 	cf.nada.Unmaximize()
 
 	cf.client.refreshExtents()
-}
-
-// updateIcon updates any frames that use a client's icon.
-func (cf clientFrames) updateIcon() {
-	cf.full.UpdateIcon()
-}
-
-// updateName updates any frames that use a client's name.
-func (cf clientFrames) updateName() {
-	cf.full.UpdateTitle()
 }

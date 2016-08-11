@@ -11,8 +11,7 @@ declared by reflection via a single struct. See
 https://github.com/BurntSushi/gribble)
 
 In Wingo, commands are extremely important because they are used everywhere. 
-They are used for key bindings, mouse bindings, hooks and can be run via the 
-WingoExec prompt. They can be run via the `wingo-cmd` program, or if you're 
+They are used for key bindings abd mouse bindings. They can be run via the `wingo-cmd` program, or if you're 
 more savvy, can be run from opening up a socket yourself. (See the end for an 
 example in Python.)
 
@@ -45,12 +44,7 @@ How to run commands
 ===================
 Wingo needs to be running.
 
-There are two common ways to run a command. One is from within Wingo using one 
-of its prompts. If you have a vanilla configuration, you can bring up such a 
-prompt with "Mod4+Shift+r" (mod4 is usually the "super" or "windows" key on 
-your keyboard).
-
-The other way to run a command is with `wingo-cmd`. For example, while Wingo is 
+Run a command is with `wingo-cmd`. For example, while Wingo is 
 running:
 
     wingo-cmd 'AddWorkspace "embiggen"'
@@ -110,64 +104,6 @@ closer to a Lisp dialect:
     (Focus (GetActive))
 
 
-Advanced command usage
-======================
-Wingo also provides several different kinds of prompts that can be used as 
-input to Gribble commands---which makes the command system truly dynamic with 
-respect to user input.
-
-For example, remember the AddWorkspace command we had above?
-
-    AddWorkspace "embiggen"
-
-Things are a bit more flexible if we bind this to a keybinding:
-
-    AddWorkspace (Input "Workspace name:")
-
-But what does Input do?
-
-    wingo-cmd --usage Input
-
-    Input (Label :: string)
-        Shows a centered prompt window that allows the user to type in text. If
-        the user presses the Confirm Key (i.e., enter), then the text typed
-        into the input box will be returned.
-        
-        Label will be shown next to the input box.
-        
-        This command may be used as a sub-command to pass user provided
-        arguments to another command.
-
-So we've now created a command that will prompt the user for some text, and 
-pass the entered text as an argument to a command.
-
-There are also other prompts available too. Namely, there are prompts that list 
-workspaces and clients. We can use them together in the same command!
-
-    WorkspaceSendClient \
-        (SelectWorkspace "Prefix") \
-        (SelectClient "Any" "no" "no" "yes")
-
-(N.B. The '\' is used as a line continuation. It can be used in your 
-configuration files if you're as crazy about 80 columns as I am.
-Otherwise, you can put everything on one line and omit the '\' characters.)
-
-So let's take a look at the types of each of the commands:
-
-    WorkspaceSendClient (Workspace :: int | string) (Client :: int | string)
-    SelectWorkspace (TabCompletion :: string)
-    SelectClient (TabCompletion :: string) \
-                 (OnlyActiveWorkspace :: string) \
-                 (OnlyVisible :: string) \
-                 (ShowIconified :: string)
-
-The effect of this command is that first you'll see a prompt to select a 
-workspace. Then you'll see a prompt to select a client. Then the client 
-selected will be sent to the workspace selected. This works because the
-SelectWorkspace command passes a workspace as the first argument, and 
-SelectClient passes a client as the second argument.
-
-
 Python, Sockets and Gribble... Oh my!
 =====================================
 Wingo uses Unix Domain Sockets for its inter-process communication mechanism. 
@@ -216,4 +152,3 @@ def gribble(cmd):
 print gribble("GetClientName (GetActive)")
 
 sock.close()
-

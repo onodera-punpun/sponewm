@@ -26,7 +26,6 @@ var (
 	Startup    bool
 	Clients    ClientList
 	Heads      *heads.Heads
-	Prompts    AllPrompts
 	Config     *Configuration
 	Theme      *ThemeConfig
 	StickyWrk  *workspace.Sticky
@@ -60,7 +59,6 @@ func Initialize(x *xgbutil.XUtil,
 	}
 
 	Clients = make(ClientList, 0, 50)
-	Prompts = newPrompts()
 
 	Heads = heads.NewHeads(X, Config.DefaultLayout)
 
@@ -207,8 +205,6 @@ func AddWorkspace(name string) error {
 		return fmt.Errorf("a workspace with name '%s' already exists.", name)
 	}
 	wrk := Heads.NewWorkspace(name)
-	wrk.PromptSlctGroup = Prompts.Slct.AddGroup(wrk)
-	wrk.PromptSlctItem = Prompts.Slct.AddChoice(wrk)
 
 	Heads.AddWorkspace(wrk)
 

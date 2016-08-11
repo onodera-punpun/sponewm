@@ -41,7 +41,6 @@ type Client struct {
 
 	frames  clientFrames
 	states  map[string]clientState
-	prompts clientPrompts
 
 	name        string
 	state       int // One of frame.Active or frame.Inactive.

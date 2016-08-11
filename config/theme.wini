@@ -1,5 +1,5 @@
 # This file contains all theme information for Wingo. For the most part, this
-# includes changing colors, fonts, font sizes, border and icon sizes. This is
+# includes changing colors, and borders. This is
 # enough to completely configure your own color scheme for Wingo, but you won't
 # be able to make any structural changes to the window decorations.
 #
@@ -9,19 +9,11 @@
 # where a value might go. You can see a few examples of using such variables
 # below.
 #
-# There two primary themeable portions of Wingo: window decorations and
-# prompts. There are four different kinds of decorations that can be configured
-# separately, and many different kinds of prompts that all use the same theme
-# configuration. The sections "Full", "Borders", and "Slim" correspond
-# to three of the four frame decorations (the fourth is "Nada" and does not
-# have any appearance, and therefore has no theme), and the "Prompt" section
-# corresponds to the prompt theme information.
+# The sections "Borders", and "Slim" correspond
+# to two of the three frame decorations (the third is "Nada" and does not
+# have any appearance, and therefore has no theme).
 #
 # Here is a brief description of each kind of window decoration:
-#
-# Full      Your standard window decorations. Complete with a title bar, window
-#           icon, and buttons to minimize/maximize/close the window. This
-#           decoration is typically used on windows that are floating.
 #
 # Borders   A border decoration that is responsive to mouse input. This
 #           decoration is typically used on windows that are tiling.
@@ -37,14 +29,6 @@
 #           windows that aren't normal clients (like desktops and docks) and
 #           windows that ask not to be decorated AND specially shape their
 #           window (like Google Chrome/Chromium).
-#
-#
-# Gradients
-# ---------
-# There are four theme options below that can accept two colors, which
-# when combined, describe a gradient starting from the first color and ending
-# at the second. These options are: [Full]/a_title_color, [Full]/i_title_color,
-# [Borders]/a_border_color and [Borders]/i_border_color.
 #
 #
 # File paths
@@ -67,42 +51,8 @@
 # The single letter "a" refers to an "active" state and the single letter "i"
 # refers to an "inactive" state.
 #
-#
-# Miscellaneous
-# -------------
-# The only option here is a path to the default Wingo icon. This is used for
-# windows that don't specify an icon.
 
 $THIN_COLOR := 0x585a5d
-
-[Full]
-font := /usr/share/fonts/TTF/DejaVuSansMono-Bold.ttf
-font_size := 16
-a_font_color := 0xffffff
-i_font_color := 0x000000
-
-title_size := 27
-a_title_color := 0xd66b00 0xff9123
-i_title_color := 0xffffff
-
-border_size := 4
-a_border_color := $THIN_COLOR
-i_border_color := $THIN_COLOR
-
-$ACTIVE_BUTTON := 0xffffff
-$INACTIVE_BUTTON := 0x000000
-
-close := ./data/close.png
-a_close_color := $ACTIVE_BUTTON
-i_close_color := $INACTIVE_BUTTON
-
-maximize := ./data/maximize.png
-a_maximize_color := $ACTIVE_BUTTON
-i_maximize_color := $INACTIVE_BUTTON
-
-minimize := ./data/minimize.png
-a_minimize_color := $ACTIVE_BUTTON
-i_minimize_color := $INACTIVE_BUTTON
 
 [Borders]
 border_size := 4
@@ -115,28 +65,3 @@ i_border_color := 0xdfdcdf
 border_size := 1
 a_border_color := 0x000000
 i_border_color := 0x000000
-
-[Prompt]
-bg_color := 0x8e8e8e
-border_color := 0x585a5d
-border_size := 8
-padding := 15
-font := /usr/share/fonts/TTF/DejaVuSansMono.ttf
-font_size := 17
-font_color := 0xffffff
-select_active_color := 0x4c4c4c
-select_active_bg_color := 0xffffff
-select_group_bg_color := 0x8e8e8e
-select_group_font := /usr/share/fonts/TTF/DejaVuSansMono-Bold.ttf
-select_group_font_size := 25
-select_group_font_color := 0xffffff
-cycle_icon_size := 64
-cycle_icon_border_size := 8
-
-# 0 = completely transparent, 100 = completely opaque
-cycle_icon_transparency := 30
-
-[Misc]
-# This is the default icon to use for windows that don't specify an icon.
-default_icon := ./data/wingo.png
-

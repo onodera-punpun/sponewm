@@ -206,9 +206,10 @@ EVENTLOOP:
 		for _, client := range wm.Clients {
 			c := client.(*xclient.Client)
 
-			if _, ok := c.Frame().(*frame.Full); ok {
-				c.FrameNada()
-			}
+			// TODO: Erm, can I remove this?
+			//if _, ok := c.Frame().(*frame.Full); ok {
+				//c.FrameNada()
+			//}
 		}
 		time.Sleep(1 * time.Second)
 
