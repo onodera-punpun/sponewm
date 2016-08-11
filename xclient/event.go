@@ -205,7 +205,7 @@ func (c *Client) cbEnterNotify() xevent.EnterNotifyFun {
 			return
 		}
 		if c.IsMapped() {
-			if wm.Config.FfmFocus {
+			if wm.Config.Ffm {
 				c.Focus()
 			}
 			if wm.Config.FfmRaise {

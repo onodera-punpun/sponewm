@@ -16,7 +16,6 @@ type Configuration struct {
 	TabKey, RevTabKey     string
 
 	Ffm                 bool
-	FfmFocus            bool
 	FfmRaise            bool
 	FfmHead             bool
 	Workspaces          []string
@@ -38,8 +37,7 @@ func newConfig() *Configuration {
 		TabKey:       "Tab",
 		RevTabKey:    "ISO_Left_Tab",
 
-		Ffm:             false,
-		FfmFocus:        true,
+		Ffm:             true,
 		FfmRaise:        false,
 		FfmHead:         false,
 		Workspaces:      []string{"1", "2", "3", "4"},
@@ -172,8 +170,6 @@ func (conf *Configuration) loadOptionsConfigSection(
 			setString(key, &conf.DefaultLayout)
 		case "focus_follows_mouse":
 			setBool(key, &conf.Ffm)
-		case "focus_follows_mouse_focus":
-			setBool(key, &conf.FfmFocus)
 		case "focus_follows_mouse_raise":
 			setBool(key, &conf.FfmRaise)
 		case "focus_follows_mouse_head":
