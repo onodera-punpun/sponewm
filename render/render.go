@@ -45,11 +45,11 @@ func NewBorder(X *xgbutil.XUtil, borderType int, borderColor Color,
 	return img
 }
 
-func NewCorner(X *xgbutil.XUtil, borderType int, borderColor,
-	width, height) *Image {
+func NewCorner(X *xgbutil.XUtil, borderType int, borderColor Color,
+	width, height int) *Image {
 
 	return NewBorder(X, borderType, borderColor,
-			width, height, 0, 0)
+			width, height)
 }
 
 // XXX: Optimize.

@@ -92,20 +92,3 @@ conjunction := no
 
 # Just make sure it's floating.
 managed := Float ":client:"
-
-[FocusTransparency]
-# If you have a compositing manager running, this will use transparency
-# to indicate focus.
-match := True
-
-focused := SetOpacity ":client:" 1.0
-unfocused := SetOpacity ":client:" 0.85
-
-[StupidKDE]
-# This hook is to make sure the KDE splash window isn't decorated on startup.
-# Unfortunately, it appears the KDE folks don't care to let us know this fact
-# in a standard way...
-match := MatchClientClass ":client:" "ksplashx"
-
-managed := FrameNada ":client:"
-

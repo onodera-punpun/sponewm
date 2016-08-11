@@ -62,7 +62,6 @@ var Env = gribble.New([]gribble.Command{
 	&Restart{},
 	&Quit{},
 	&SetLayout{},
-	&SetOpacity{},
 	&Script{},
 	&ScriptConfig{},
 	&Shell{},
@@ -796,38 +795,6 @@ func (cmd SetLayout) Run() gribble.Value {
 	return syncRun(func() gribble.Value {
 		withWorkspace(cmd.Workspace, func(wrk *workspace.Workspace) {
 			wrk.SetLayout(cmd.Name)
-		})
-		return nil
-	})
-}
-
-type SetOpacity struct {
-	Client  gribble.Any `param:"1" types:"int,string"`
-	Opacity float64     `param:"2"`
-	Help    string      `
-Sets the opacity of the window specified by Client to the opacity level
-specified by Opacity.
-
-This command won't have any effect unless you're running a compositing manager
-like compton or cairo-compmgr.
-
-Client may be the window id or a substring that matches a window name.
-
-Opacity should be a float in the range 0.0 to 1.0, inclusive, where 0.0 is
-completely transparent and 1.0 is completely opaque.
-`
-}
-
-func (cmd SetOpacity) Run() gribble.Value {
-	return syncRun(func() gribble.Value {
-		if cmd.Opacity < 0.0 || cmd.Opacity > 1.0 {
-			logger.Warning.Printf(
-				"Opacity %f is not in the range [0, 1].", cmd.Opacity)
-			return nil
-		}
-		withClient(cmd.Client, func(c *xclient.Client) {
-			// Opacity is set on the top-most frame window of the client.
-			ewmh.WmWindowOpacitySet(wm.X, c.Frame().Parent().Id, cmd.Opacity)
 		})
 		return nil
 	})

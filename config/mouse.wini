@@ -73,12 +73,6 @@
 Mod4-1 := MouseMove
 Mod4-3 := MouseResize "Infer"
 
-# Here's an example of binding to the mouse scroll wheel.
-# (If a compositing manager is running, this will allow you to adjust the
-# opacity of a window with your scroll wheel.)
-# Mod4-4 := Shell "transset-df -p --max 1.0 --inc 0.05"
-# Mod4-5 := Shell "transset-df -p --min 0.1 --dec 0.05"
-
 [BordersTop]
 1 := MouseResize "Top"
 1 := FocusRaise ":mouse:"
