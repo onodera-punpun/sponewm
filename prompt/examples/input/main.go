@@ -9,7 +9,7 @@ import (
 	"github.com/BurntSushi/xgbutil/xevent"
 	"github.com/BurntSushi/xgbutil/xwindow"
 
-	"github.com/BurntSushi/wingo/prompt"
+	"github.com/onodera-punpun/wingo/prompt"
 )
 
 // response is the callback that gets executed whenever the user hits

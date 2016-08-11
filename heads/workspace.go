@@ -6,9 +6,9 @@ import (
 
 	"github.com/BurntSushi/xgbutil/xrect"
 
-	"github.com/BurntSushi/wingo/logger"
-	"github.com/BurntSushi/wingo/misc"
-	"github.com/BurntSushi/wingo/workspace"
+	"github.com/onodera-punpun/wingo/logger"
+	"github.com/onodera-punpun/wingo/misc"
+	"github.com/onodera-punpun/wingo/workspace"
 )
 
 // ActivateWorkspace will "focus" or "activate" the workspace provided.

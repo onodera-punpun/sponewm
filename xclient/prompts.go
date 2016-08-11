@@ -3,8 +3,8 @@ package xclient
 import (
 	"github.com/BurntSushi/xgbutil/xgraphics"
 
-	"github.com/BurntSushi/wingo/prompt"
-	"github.com/BurntSushi/wingo/wm"
+	"github.com/onodera-punpun/wingo/prompt"
+	"github.com/onodera-punpun/wingo/wm"
 )
 
 type clientPrompts struct {
