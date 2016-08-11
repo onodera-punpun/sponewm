@@ -220,16 +220,13 @@ func (f *Borders) Resize(validate bool, w, h int) {
 
 type BordersTheme struct {
 	BorderSize                 int
-	AThinColor, IThinColor     render.Color
 	ABorderColor, IBorderColor render.Color
 }
 
 func DefaultBordersTheme() *BordersTheme {
 	return &BordersTheme{
 		BorderSize:   10,
-		AThinColor:   render.NewColor(0x0),
-		IThinColor:   render.NewColor(0x0),
-		ABorderColor: render.NewColor(0x3366ff),
-		IBorderColor: render.NewColor(0xdfdcdf),
+		ABorderColor: render.NewColor(0xeeeeee),
+		IBorderColor: render.NewColor(0xeeeeee),
 	}
 }

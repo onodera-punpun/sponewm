@@ -41,17 +41,17 @@ func (f *Borders) pieceImages(borderTypes,
 	width, height int) (*xgraphics.Image, *xgraphics.Image) {
 
 	imgA := render.NewBorder(f.X, borderTypes,
-		f.theme.AThinColor, width, height)
+		f.theme.ABorderColor, width, height)
 	imgI := render.NewBorder(f.X, borderTypes,
-		f.theme.IThinColor, width, height)
+		f.theme.IBorderColor, width, height)
 	return imgA.Image, imgI.Image
 }
 
 func (f *Borders) cornerImages(borderTypes int) (*xgraphics.Image, *xgraphics.Image) {
 	imgA := render.NewCorner(f.X, borderTypes,
-		f.theme.AThinColor, f.theme.BorderSize, f.theme.BorderSize)
+		f.theme.ABorderColor, f.theme.BorderSize, f.theme.BorderSize)
 	imgI := render.NewCorner(f.X, borderTypes,
-		f.theme.IThinColor, f.theme.BorderSize, f.theme.BorderSize)
+		f.theme.IBorderColor, f.theme.BorderSize, f.theme.BorderSize)
 	return imgA.Image, imgI.Image
 }
 
