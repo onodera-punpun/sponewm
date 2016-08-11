@@ -202,7 +202,7 @@ func (c *Client) maybeInitPlace(presumedWorkspace workspace.Workspacer) {
 		return
 	}
 	w := presumedWorkspace.(*workspace.Workspace)
-	w.LayoutFloater().InitialPlacement(c)
+	w.LayoutFloater().InitialPlacement(wm.X, c)
 }
 
 func (c *Client) fetchXProperties() {

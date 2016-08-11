@@ -1,6 +1,7 @@
 package layout
 
 import (
+	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/xrect"
 )
 
@@ -30,7 +31,7 @@ type Layout interface {
 
 type Floater interface {
 	Layout
-	InitialPlacement(c Client)
+	InitialPlacement(x *xgbutil.XUtil, c Client)
 	Save()
 	Reposition()
 }
