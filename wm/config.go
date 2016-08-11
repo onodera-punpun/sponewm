@@ -18,7 +18,6 @@ type Configuration struct {
 	Ffm                 bool
 	FfmFocus            bool
 	FfmRaise            bool
-	FfmStartupFocus     bool
 	FfmHead             bool
 	Workspaces          []string
 	DefaultLayout       string
@@ -42,7 +41,6 @@ func newConfig() *Configuration {
 		Ffm:             false,
 		FfmFocus:        true,
 		FfmRaise:        false,
-		FfmStartupFocus: false,
 		FfmHead:         false,
 		Workspaces:      []string{"1", "2", "3", "4"},
 		Shell:           "dash",
@@ -178,8 +176,6 @@ func (conf *Configuration) loadOptionsConfigSection(
 			setBool(key, &conf.FfmFocus)
 		case "focus_follows_mouse_raise":
 			setBool(key, &conf.FfmRaise)
-		case "focus_follows_mouse_startup_focus":
-			setBool(key, &conf.FfmStartupFocus)
 		case "focus_follows_mouse_head":
 			setBool(key, &conf.FfmHead)
 		case "cancel":
