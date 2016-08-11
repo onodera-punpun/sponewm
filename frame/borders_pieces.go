@@ -37,15 +37,15 @@ func (f *Borders) newPieceWindow(ident string,
 	return win
 }
 
-func (f *Borders) pieceImages(borderTypes, gradientType, gradientDir,
+func (f *Borders) pieceImages(borderTypes,
 	width, height int) (*xgraphics.Image, *xgraphics.Image) {
 
 	imgA := render.NewBorder(f.X, borderTypes,
 		f.theme.AThinColor, f.theme.ABorderColor,
-		width, height, gradientType, gradientDir)
+		width, height)
 	imgI := render.NewBorder(f.X, borderTypes,
 		f.theme.IThinColor, f.theme.IBorderColor,
-		width, height, gradientType, gradientDir)
+		width, height)
 	return imgA.Image, imgI.Image
 }
 
@@ -69,7 +69,6 @@ func (f *Borders) newTopSide() *piece {
 	}
 
 	pixA, pixI := f.pieceImages(render.BorderTop,
-		render.GradientVert, render.GradientRegular,
 		1, f.theme.BorderSize)
 	win := f.newPieceWindow("top", cursors.TopSide)
 	win.MROpt(fX|fY|fH, f.theme.BorderSize, 0,
@@ -83,7 +82,6 @@ func (f *Borders) newBottomSide() *piece {
 	}
 
 	pixA, pixI := f.pieceImages(render.BorderBottom,
-		render.GradientVert, render.GradientReverse,
 		1, f.theme.BorderSize)
 	win := f.newPieceWindow("bottom", cursors.BottomSide)
 	win.MROpt(fX|fH,
@@ -97,7 +95,6 @@ func (f *Borders) newLeftSide() *piece {
 	}
 
 	pixA, pixI := f.pieceImages(render.BorderLeft,
-		render.GradientHorz, render.GradientRegular,
 		f.theme.BorderSize, 1)
 	win := f.newPieceWindow("left", cursors.LeftSide)
 	win.MROpt(fX|fY|fW,
@@ -111,7 +108,6 @@ func (f *Borders) newRightSide() *piece {
 	}
 
 	pixA, pixI := f.pieceImages(render.BorderRight,
-		render.GradientHorz, render.GradientReverse,
 		f.theme.BorderSize, 1)
 	win := f.newPieceWindow("right", cursors.RightSide)
 	win.MROpt(fY|fW,

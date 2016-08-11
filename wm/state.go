@@ -155,9 +155,6 @@ func Workspace() *workspace.Workspace {
 func SetWorkspace(wrk *workspace.Workspace, greedy bool) {
 	old := Workspace()
 	wrk.Activate(greedy)
-	if old != Workspace() {
-		FYI("%s", wrk)
-	}
 
 	ewmhVisibleDesktops()
 	ewmhCurrentDesktop()

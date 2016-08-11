@@ -4,8 +4,6 @@ import (
 	"github.com/BurntSushi/xgbutil/xgraphics"
 
 	"github.com/onodera-punpun/wingo/frame"
-	"github.com/onodera-punpun/wingo/logger"
-	"github.com/onodera-punpun/wingo/misc"
 	"github.com/onodera-punpun/wingo/render"
 	"github.com/onodera-punpun/wingo/wini"
 )
@@ -71,10 +69,6 @@ func loadTheme() (*ThemeConfig, error) {
 
 	for _, section := range tdata.Sections() {
 		switch section {
-		case "misc":
-			for _, key := range tdata.Keys(section) {
-				loadMiscOption(theme, key)
-			}
 		case "borders":
 			for _, key := range tdata.Keys(section) {
 				loadBorderOption(theme, key)
@@ -104,13 +98,13 @@ func loadBorderOption(theme *ThemeConfig, k wini.Key) {
 	case "border_size":
 		setInt(k, &theme.Borders.borderSize)
 	case "a_thin_color":
-		setNoGradient(k, &theme.Borders.aThinColor)
+		setColor(k, &theme.Borders.aThinColor)
 	case "i_thin_color":
-		setNoGradient(k, &theme.Borders.iThinColor)
+		setColor(k, &theme.Borders.iThinColor)
 	case "a_border_color":
-		setGradient(k, &theme.Borders.aBorderColor)
+		setColor(k, &theme.Borders.aBorderColor)
 	case "i_border_color":
-		setGradient(k, &theme.Borders.iBorderColor)
+		setColor(k, &theme.Borders.iBorderColor)
 	}
 }
 
@@ -119,8 +113,8 @@ func loadSlimOption(theme *ThemeConfig, k wini.Key) {
 	case "border_size":
 		setInt(k, &theme.Slim.borderSize)
 	case "a_border_color":
-		setNoGradient(k, &theme.Slim.aBorderColor)
+		setColor(k, &theme.Slim.aBorderColor)
 	case "i_border_color":
-		setNoGradient(k, &theme.Slim.iBorderColor)
+		setColor(k, &theme.Slim.iBorderColor)
 	}
 }

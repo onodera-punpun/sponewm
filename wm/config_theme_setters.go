@@ -1,11 +1,7 @@
 package wm
 
 import (
-	"io/ioutil"
-	"strconv"
 	"strings"
-
-	"github.com/BurntSushi/xgbutil/xgraphics"
 
 	"github.com/onodera-punpun/wingo/logger"
 	"github.com/onodera-punpun/wingo/render"
@@ -85,8 +81,7 @@ func getLastFloat(k wini.Key) (float64, bool) {
 	return vals[len(vals)-1], true
 }
 
-// TODO: Can I remove this?
-func setNoGradient(k wini.Key, clr *render.Color) {
+func setColor(k wini.Key, clr *render.Color) {
 	// Check to make sure we have a value for this key
 	vals := k.Strings()
 	if len(vals) == 0 {
@@ -97,14 +92,11 @@ func setNoGradient(k wini.Key, clr *render.Color) {
 	// Use the last value
 	val := vals[len(vals)-1]
 
-	// If there are no spaces, it can't be a gradient.
+	// TODO: Can I simplify this?
 	if strings.Index(val, " ") == -1 {
 		if start, ok := getLastInt(k); ok {
 			clr.ColorSet(start)
 		}
 		return
 	}
-
-	logger.Warning.Println(
-		k.Err("Gradients are not supported for this theme option."))
 }
