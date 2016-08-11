@@ -30,12 +30,12 @@ func (f *Floating) InitialPlacement(x *xgbutil.XUtil, c Client) {
 	if xlimit > 0 {
 		// TODO: Currently hardcoding the bordersize (10), because I can't
 		// seem to get the value
-		fx += int(qp.RootX) - cgeom.Width() / 2 - 10
+		fx += int(qp.RootX) - cgeom.Width() / 2 + 10
 	}
 	if ylimit > 0 {
 		// TODO: Currently hardcoding the bordersize (10), because I can't
 		// seem to get the value
-		fy += int(qp.RootY) - cgeom.Height() / 2 - 10
+		fy += int(qp.RootY) - cgeom.Height() / 2 + 10
 	}
 	f.Move(c, fx, fy)
 }
