@@ -29,11 +29,6 @@ func (c *Client) FrameBorders() {
 	c.frames.set(c.frames.borders)
 }
 
-// FrameSlim switches this client's frame to the 'Slim' frame.
-func (c *Client) FrameSlim() {
-	c.frames.set(c.frames.slim)
-}
-
 // FrameNada switches this client's frame to the 'Nada' frame.
 func (c *Client) FrameNada() {
 	c.frames.set(c.frames.nada)
@@ -184,7 +179,6 @@ func (c *Client) validateSize(size, inc, base, min, max int) int {
 type clientFrames struct {
 	client  *Client
 	borders *frame.Borders
-	slim    *frame.Slim
 	nada    *frame.Nada
 }
 
@@ -199,11 +193,7 @@ func (c *Client) newClientFrames() clientFrames {
 		c.frame = cf.borders
 	} else {
 		if c.PrimaryType() == TypeNormal {
-			if c.shaped {
-				c.frame = cf.nada
-			} else {
-				c.frame = cf.slim
-			}
+			c.frame = cf.nada
 		} else {
 			c.frame = cf.nada
 		}
@@ -234,10 +224,6 @@ func createFrames(c *Client) clientFrames {
 	cf.nada, err = frame.NewNada(wm.X, nil, c)
 	errHandle(err)
 
-	cf.slim, err = frame.NewSlim(wm.X, wm.Theme.Slim.FrameTheme(),
-		cf.nada.Parent(), c)
-	errHandle(err)
-
 	cf.borders, err = frame.NewBorders(wm.X, wm.Theme.Borders.FrameTheme(),
 		cf.nada.Parent(), c)
 	errHandle(err)
@@ -264,18 +250,15 @@ func (cf clientFrames) set(f frame.Frame) {
 // this client.
 func (cf clientFrames) destroy() {
 	cf.nada.Destroy()
-	cf.slim.Destroy()
 	cf.borders.Destroy()
 
 	// Since a single parent window is shared between all frames, we only need
 	// to pick a parent window from one of the frames, and destroy that.
-	// TODO: Can I remove this?
 	cf.borders.Parent().Destroy()
 }
 
 func (cf clientFrames) maximize() {
 	cf.borders.Maximize()
-	cf.slim.Maximize()
 	cf.nada.Maximize()
 
 	cf.client.refreshExtents()
@@ -283,7 +266,6 @@ func (cf clientFrames) maximize() {
 
 func (cf clientFrames) unmaximize() {
 	cf.borders.Unmaximize()
-	cf.slim.Unmaximize()
 	cf.nada.Unmaximize()
 
 	cf.client.refreshExtents()

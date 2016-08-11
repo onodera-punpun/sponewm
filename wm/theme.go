@@ -9,7 +9,6 @@ import (
 
 type ThemeConfig struct {
 	Borders     ThemeBorders
-	Slim        ThemeSlim
 }
 
 type ThemeBorders struct {
@@ -25,30 +24,12 @@ func (tb ThemeBorders) FrameTheme() *frame.BordersTheme {
 	}
 }
 
-type ThemeSlim struct {
-	borderSize                 int
-	aBorderColor, iBorderColor render.Color
-}
-
-func (ts ThemeSlim) FrameTheme() *frame.SlimTheme {
-	return &frame.SlimTheme{
-		BorderSize:   ts.borderSize,
-		ABorderColor: ts.aBorderColor,
-		IBorderColor: ts.iBorderColor,
-	}
-}
-
 func newTheme() *ThemeConfig {
 	return &ThemeConfig{
 		Borders: ThemeBorders{
 			borderSize:   10,
 			aBorderColor: render.NewColor(0xeeeeee),
 			iBorderColor: render.NewColor(0xeeeeee),
-		},
-		Slim: ThemeSlim{
-			borderSize:   10,
-			aBorderColor: render.NewColor(0xeeeee),
-			iBorderColor: render.NewColor(0xeeeee),
 		},
 	}
 }
@@ -67,10 +48,6 @@ func loadTheme() (*ThemeConfig, error) {
 			for _, key := range tdata.Keys(section) {
 				loadBorderOption(theme, key)
 			}
-		case "slim":
-			for _, key := range tdata.Keys(section) {
-				loadSlimOption(theme, key)
-			}
 		}
 	}
 
@@ -85,16 +62,5 @@ func loadBorderOption(theme *ThemeConfig, k wini.Key) {
 		setColor(k, &theme.Borders.aBorderColor)
 	case "i_border_color":
 		setColor(k, &theme.Borders.iBorderColor)
-	}
-}
-
-func loadSlimOption(theme *ThemeConfig, k wini.Key) {
-	switch k.Name() {
-	case "border_size":
-		setInt(k, &theme.Slim.borderSize)
-	case "a_border_color":
-		setColor(k, &theme.Slim.aBorderColor)
-	case "i_border_color":
-		setColor(k, &theme.Slim.iBorderColor)
 	}
 }

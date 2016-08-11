@@ -34,7 +34,6 @@ var Env = gribble.New([]gribble.Command{
 	&FocusRaise{},
 	&FrameBorders{},
 	&FrameNada{},
-	&FrameSlim{},
 	&HeadCycle{},
 	&HeadFocus{},
 	&HeadFocusWithClient{},
@@ -305,24 +304,6 @@ func (cmd FrameNada) Run() gribble.Value {
 	return syncRun(func() gribble.Value {
 		withClient(cmd.Client, func(c *xclient.Client) {
 			c.FrameNada()
-		})
-		return nil
-	})
-}
-
-type FrameSlim struct {
-	Client gribble.Any `param:"1" types:"int,string"`
-	Help   string      `
-Set the decorations of the window specified by Client to the "Slim" frame.
-
-Client may be the window id or a substring that matches a window name.
-`
-}
-
-func (cmd FrameSlim) Run() gribble.Value {
-	return syncRun(func() gribble.Value {
-		withClient(cmd.Client, func(c *xclient.Client) {
-			c.FrameSlim()
 		})
 		return nil
 	})
