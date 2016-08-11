@@ -25,8 +25,9 @@ import (
 	"github.com/onodera-punpun/wingo/commands"
 	"github.com/onodera-punpun/wingo/cursors"
 	"github.com/onodera-punpun/wingo/event"
-	"github.com/onodera-punpun/wingo/focus"
 	"github.com/onodera-punpun/wingo/frame"
+
+	"github.com/onodera-punpun/wingo/focus"
 	"github.com/onodera-punpun/wingo/hook"
 	"github.com/onodera-punpun/wingo/logger"
 	"github.com/onodera-punpun/wingo/misc"
@@ -131,10 +132,6 @@ func main() {
 	if len(flagConfigDir) > 0 {
 		misc.ConfigPaths.Override = flagConfigDir
 	}
-	if len(flagDataDir) > 0 {
-		misc.DataPaths.Override = flagDataDir
-	}
-	misc.ReadData()
 
 	keybind.Initialize(X)
 	mousebind.Initialize(X)
@@ -207,9 +204,9 @@ EVENTLOOP:
 			c := client.(*xclient.Client)
 
 			// TODO: Erm, can I remove this?
-			//if _, ok := c.Frame().(*frame.Full); ok {
-				//c.FrameNada()
-			//}
+			if _, ok := c.Frame().(*frame.Borders); ok {
+				c.FrameNada()
+			}
 		}
 		time.Sleep(1 * time.Second)
 

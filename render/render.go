@@ -36,7 +36,7 @@ func NewBorder(X *xgbutil.XUtil, borderType int, borderColor Color,
 
 	img := New(xgraphics.New(X, image.Rect(0, 0, width, height)))
 
-	r, g, b := bgColor.RGB8()
+	r, g, b := borderColor.RGB8()
 	img.ForExp(func(x, y int) (uint8, uint8, uint8, uint8) {
 		return r, g, b, 0xff
 	})

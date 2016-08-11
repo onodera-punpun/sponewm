@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os/exec"
 	"regexp"
-	"strings"
 	"sync"
 	"time"
 
@@ -13,7 +12,6 @@ import (
 
 	"github.com/BurntSushi/xgb/xproto"
 
-	"github.com/BurntSushi/xgbutil/ewmh"
 	"github.com/BurntSushi/xgbutil/xevent"
 	"github.com/BurntSushi/xgbutil/xprop"
 	"github.com/BurntSushi/xgbutil/xrect"
@@ -62,13 +60,10 @@ var Env = gribble.New([]gribble.Command{
 	&Restart{},
 	&Quit{},
 	&SetLayout{},
-	&Script{},
-	&ScriptConfig{},
 	&Shell{},
 	&Unfloat{},
 	&Unmaximize{},
 	&WingoExec{},
-	&WingoHelp{},
 	&Workspace{},
 	&WorkspaceGreedy{},
 	&WorkspaceHead{},
@@ -90,14 +85,6 @@ var Env = gribble.New([]gribble.Command{
 	&AutoMakeMaster{},
 	&AutoMastersMore{},
 	&AutoMastersFewer{},
-
-	&CycleClientChoose{},
-	&CycleClientHide{},
-	&CycleClientNext{},
-	&CycleClientPrev{},
-	&Message{},
-	&SelectClient{},
-	&SelectWorkspace{},
 
 	&GetActive{},
 	&GetAllClients{},
@@ -188,7 +175,6 @@ The name of the workspace that was added is returned.
 func (cmd AddWorkspace) Run() gribble.Value {
 	return syncRun(func() gribble.Value {
 		if err := wm.AddWorkspace(cmd.Name); err != nil {
-			wm.PopupError("Could not add workspace '%s': %s", cmd.Name, err)
 			return ""
 		}
 		return cmd.Name
@@ -815,11 +801,9 @@ func (cmd RemoveWorkspace) Run() gribble.Value {
 	return syncRun(func() gribble.Value {
 		withWorkspace(cmd.Workspace, func(wrk *workspace.Workspace) {
 			if err := wm.RemoveWorkspace(wrk); err != nil {
-				wm.PopupError("Could not remove workspace '%s': %s", wrk, err)
 				return
 			}
 
-			wm.FYI("Workspace %s removed.", wrk)
 			wm.FocusFallback()
 		})
 		return nil
@@ -841,13 +825,9 @@ NewName can only be a string.
 func (cmd RenameWorkspace) Run() gribble.Value {
 	return syncRun(func() gribble.Value {
 		withWorkspace(cmd.Workspace, func(wrk *workspace.Workspace) {
-			oldName := wrk.String()
 			if err := wm.RenameWorkspace(wrk, cmd.NewName); err != nil {
-				wm.PopupError("Could not rename workspace '%s': %s", wrk, err)
 				return
 			}
-
-			wm.FYI("Workspace %s renamed to %s.", oldName, cmd.NewName)
 		})
 		return nil
 	})
@@ -884,64 +864,6 @@ func (cmd Resize) Run() gribble.Value {
 	})
 }
 
-type Script struct {
-	Command string `param:"1"`
-	Help    string `
-Executes a script in $XDG_CONFIG_HOME/wingo/scripts. The command
-may include arguments.
-`
-}
-
-func (cmd Script) Run() gribble.Value {
-	if len(cmd.Command) == 0 {
-		logger.Warning.Printf("Cannot execute empty script.")
-		return nil
-	}
-
-	go func() {
-		var stderr bytes.Buffer
-		time.Sleep(time.Microsecond)
-
-		c := fixScannerBugs(cmd.Command)
-		fields := strings.Split(c, " ")
-		script := misc.ScriptPath(fields[0])
-		if len(script) == 0 {
-			return
-		}
-		c = strings.Join(append([]string{script}, fields[1:]...), " ")
-
-		logger.Message.Printf("%s -c [%s]", wm.Config.Shell, c)
-		shellCmd := exec.Command(wm.Config.Shell, "-c", c)
-		shellCmd.Stderr = &stderr
-
-		err := shellCmd.Run()
-		if err != nil {
-			logger.Warning.Printf("Error running script '%s': %s",
-				cmd.Command, err)
-			if stderr.Len() > 0 {
-				logger.Warning.Printf("Error running script '%s': %s",
-					cmd.Command, stderr.String())
-			}
-		}
-	}()
-	return nil
-}
-
-type ScriptConfig struct {
-	ScriptName string `param:"1"`
-	Help       string `
-Returns the path to a script's configuration file.
-`
-}
-
-func (cmd ScriptConfig) Run() gribble.Value {
-	if len(cmd.ScriptName) == 0 {
-		logger.Warning.Printf("Cannot find config file for empty script name.")
-		return nil
-	}
-	return misc.ScriptConfigPath(cmd.ScriptName)
-}
-
 type Shell struct {
 	Command string `param:"1"`
 	Help    string `
@@ -966,8 +888,6 @@ func (cmd Shell) Run() gribble.Value {
 	// change behavior.)
 	go func() {
 		var stderr bytes.Buffer
-
-		cmd.Command = fixScannerBugs(cmd.Command)
 
 		time.Sleep(time.Microsecond)
 		logger.Message.Printf("%s -c [%s]", wm.Config.Shell, cmd.Command)
@@ -1026,36 +946,13 @@ func (cmd Unmaximize) Run() gribble.Value {
 
 type WingoExec struct {
 	Commands string `param:"1"`
-	Help     string `
-Executes a series of Wingo commands specified by Commands. If an error occurs
-while executing the command, it will be shown in a popup message.
-`
+	Help     string `Executes a series of Wingo commands specified by Commands.`
 }
 
 func (cmd WingoExec) Run() gribble.Value {
 	Env.Verbose = true
-	_, err := Env.RunMany(cmd.Commands)
+	Env.RunMany(cmd.Commands)
 	Env.Verbose = false
-	if len(cmd.Commands) > 0 && err != nil {
-		wm.PopupError("%s", err)
-	}
-	return nil
-}
-
-type WingoHelp struct {
-	CommandName string `param:"1"`
-	Help        string `
-Shows the usage information for a particular command specified by CommandName.
-`
-}
-
-func (cmd WingoHelp) Run() gribble.Value {
-	if len(strings.TrimSpace(cmd.CommandName)) == 0 {
-		return nil
-	}
-	usage := Env.UsageTypes(cmd.CommandName)
-	help := Env.Help(cmd.CommandName)
-	wm.PopupError("%s\n%s\n%s", usage, strings.Repeat("-", len(usage)), help)
 	return nil
 }
 

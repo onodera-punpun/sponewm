@@ -88,7 +88,6 @@ func New(id xproto.Window) *Client {
 }
 
 func (c *Client) manage() {
-	c.refreshName()
 	logger.Message.Printf("Managing new client: %s", c)
 
 	c.fetchXProperties()

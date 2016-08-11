@@ -1,9 +1,8 @@
 package wm
 
 import (
-	"github.com/BurntSushi/xgbutil/xgraphics"
-
 	"github.com/onodera-punpun/wingo/frame"
+	"github.com/onodera-punpun/wingo/misc"
 	"github.com/onodera-punpun/wingo/render"
 	"github.com/onodera-punpun/wingo/wini"
 )
@@ -78,16 +77,6 @@ func loadTheme() (*ThemeConfig, error) {
 				loadSlimOption(theme, key)
 			}
 		}
-	}
-
-	// re-color some images
-	colorize := func(im *xgraphics.Image, clr render.Color) {
-		var i int
-		r, g, b := clr.RGB8()
-		im.ForExp(func(x, y int) (uint8, uint8, uint8, uint8) {
-			i = im.PixOffset(x, y)
-			return r, g, b, im.Pix[i+3]
-		})
 	}
 
 	return theme, nil

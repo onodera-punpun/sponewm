@@ -22,7 +22,6 @@ type Configuration struct {
 	FfmHead             bool
 	Workspaces          []string
 	DefaultLayout       string
-	PopupTime           int
 	ShowFyi, ShowErrors bool
 	Shell               string
 	AudioProgram        string
@@ -46,11 +45,7 @@ func newConfig() *Configuration {
 		FfmStartupFocus: false,
 		FfmHead:         false,
 		Workspaces:      []string{"1", "2", "3", "4"},
-		PopupTime:       500,
-		ShowFyi:         true,
-		ShowErrors:      true,
-		Shell:           "bash",
-		AudioProgram:    "aplay",
+		Shell:           "dash",
 
 		mouse: map[string][]mouseCommand{},
 		key:   map[string][]keyCommand{},
@@ -187,12 +182,6 @@ func (conf *Configuration) loadOptionsConfigSection(
 			setBool(key, &conf.FfmStartupFocus)
 		case "focus_follows_mouse_head":
 			setBool(key, &conf.FfmHead)
-		case "popup_time":
-			setInt(key, &conf.PopupTime)
-		case "show_popup_fyi":
-			setBool(key, &conf.ShowFyi)
-		case "show_popup_errors":
-			setBool(key, &conf.ShowErrors)
 		case "cancel":
 			setString(key, &conf.CancelKey)
 		case "confirm":

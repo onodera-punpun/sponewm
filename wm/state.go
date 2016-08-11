@@ -153,7 +153,6 @@ func Workspace() *workspace.Workspace {
 }
 
 func SetWorkspace(wrk *workspace.Workspace, greedy bool) {
-	old := Workspace()
 	wrk.Activate(greedy)
 
 	ewmhVisibleDesktops()

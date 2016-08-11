@@ -47,13 +47,11 @@ func (f *Borders) pieceImages(borderTypes,
 	return imgA.Image, imgI.Image
 }
 
-func (f *Borders) cornerImages(borderTypes) (*xgraphics.Image, *xgraphics.Image) {
+func (f *Borders) cornerImages(borderTypes int) (*xgraphics.Image, *xgraphics.Image) {
 	imgA := render.NewCorner(f.X, borderTypes,
-		f.theme.AThinColor, f.theme.ABorderColor,
-		f.theme.BorderSize, f.theme.BorderSize)
+		f.theme.AThinColor, f.theme.BorderSize, f.theme.BorderSize)
 	imgI := render.NewCorner(f.X, borderTypes,
-		f.theme.IThinColor, f.theme.IBorderColor,
-		f.theme.BorderSize, f.theme.BorderSize)
+		f.theme.IThinColor, f.theme.BorderSize, f.theme.BorderSize)
 	return imgA.Image, imgI.Image
 }
 
@@ -114,8 +112,7 @@ func (f *Borders) newTopLeft() *piece {
 		return newEmptyPiece()
 	}
 
-	pixA, pixI := f.cornerImages(render.BorderTop|render.BorderLeft,
-		render.DiagTopLeft)
+	pixA, pixI := f.cornerImages(render.BorderTop|render.BorderLeft)
 	win := f.newPieceWindow("topleft", cursors.TopLeftCorner)
 	win.MROpt(fX|fY|fW|fH,
 		0, 0, f.theme.BorderSize, f.theme.BorderSize)
@@ -127,8 +124,7 @@ func (f *Borders) newTopRight() *piece {
 		return newEmptyPiece()
 	}
 
-	pixA, pixI := f.cornerImages(render.BorderTop|render.BorderRight,
-		render.DiagTopRight)
+	pixA, pixI := f.cornerImages(render.BorderTop|render.BorderRight)
 	win := f.newPieceWindow("topright", cursors.TopRightCorner)
 	win.MROpt(fY|fW|fH,
 		0, 0, f.theme.BorderSize, f.theme.BorderSize)
@@ -140,8 +136,7 @@ func (f *Borders) newBottomLeft() *piece {
 		return newEmptyPiece()
 	}
 
-	pixA, pixI := f.cornerImages(render.BorderBottom|render.BorderLeft,
-		render.DiagBottomLeft)
+	pixA, pixI := f.cornerImages(render.BorderBottom|render.BorderLeft)
 	win := f.newPieceWindow("bottomleft", cursors.BottomLeftCorner)
 	win.MROpt(fX|fW|fH,
 		0, 0, f.theme.BorderSize, f.theme.BorderSize)
@@ -153,8 +148,7 @@ func (f *Borders) newBottomRight() *piece {
 		return newEmptyPiece()
 	}
 
-	pixA, pixI := f.cornerImages(render.BorderBottom|render.BorderRight,
-		render.DiagBottomRight)
+	pixA, pixI := f.cornerImages(render.BorderBottom|render.BorderRight)
 	win := f.newPieceWindow("bottomright", cursors.BottomRightCorner)
 	win.MROpt(fW|fH,
 		0, 0, f.theme.BorderSize, f.theme.BorderSize)
