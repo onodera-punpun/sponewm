@@ -1,12 +1,12 @@
 install: supported
 	go install -p 6 . ./cursors ./focus \
 		./frame ./heads ./hook ./layout ./logger ./misc ./render \
-		./stack ./text ./wingo-cmd ./wini ./wm ./workspace ./xclient
+		./stack ./wingo-cmd ./wini ./wm ./workspace ./xclient
 
 gofmt:
 	gofmt -w *.go cursors/*.go focus/*.go frame/*.go \
 		heads/*.go hook/*.go layout/*.go logger/*.go misc/*.go \
-		render/*.go stack/*.go text/*.go wingo-cmd/*.go wini/*.go wm/*.go \
+		render/*.go stack/*.go wingo-cmd/*.go wini/*.go wm/*.go \
 		workspace/*.go xclient/*.go
 	colcheck -c 80 *.go */*.go
 

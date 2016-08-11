@@ -1019,21 +1019,6 @@ func (cmd Shell) Run() gribble.Value {
 	return nil
 }
 
-func fixScannerBugs(s string) string {
-	// For some reason, Go's text/scanner doesn't unescape escaped quotes
-	// in strings. So we try to be nice and do it here.
-	s = strings.Replace(s, "\\\"", "\"", -1)
-
-	// BUG(burntsushi): I think there is a bug in text/scanner where if
-	// a string ends with an escaped quote, the quote is cutoff and the
-	// backslash is left intact.
-	if s[len(s)-1] == '\\' {
-		s = fmt.Sprintf("%s\"", s[0:len(s)-1])
-	}
-
-	return s
-}
-
 type Unfloat struct {
 	Client gribble.Any `param:"1" types:"int,string"`
 	Help   string      `

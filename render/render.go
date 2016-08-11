@@ -31,18 +31,8 @@ func New(ximg *xgraphics.Image) *Image {
 	return &Image{ximg}
 }
 
-func NewSolid(X *xgbutil.XUtil, bgColor Color, width, height int) *Image {
-	img := New(xgraphics.New(X, image.Rect(0, 0, width, height)))
-
-	r, g, b := bgColor.RGB8()
-	img.ForExp(func(x, y int) (uint8, uint8, uint8, uint8) {
-		return r, g, b, 0xff
-	})
-	return img
-}
-
-func NewBorder(X *xgbutil.XUtil, borderType int, borderColor,
-	bgColor Color, width, height) *Image {
+func NewBorder(X *xgbutil.XUtil, borderType int, borderColor Color,
+	width, height int) *Image {
 
 	img := New(xgraphics.New(X, image.Rect(0, 0, width, height)))
 
@@ -56,9 +46,9 @@ func NewBorder(X *xgbutil.XUtil, borderType int, borderColor,
 }
 
 func NewCorner(X *xgbutil.XUtil, borderType int, borderColor,
-	bgColor Color, width, height, diagonal int) *Image {
+	width, height) *Image {
 
-	return NewBorder(X, borderType, borderColor, bgColor,
+	return NewBorder(X, borderType, borderColor,
 			width, height, 0, 0)
 }
 
