@@ -18,11 +18,6 @@ The flags are:
 		When set, Wingo will always try to read configuration files in the
 		directory specified first. (Wingo will otherwise default to
 		$HOME/.config/wingo or /etc/xdg/wingo.)
-	--write-config
-		When set, Wingo will write a fresh set of default configuration files
-		to $HOME/.config/wingo and then exit. Wingo will NOT write any files
-		if $HOME/.config/wingo already exists (to prevent accidentally
-		overwriting an existing configuration).
 	-p num-cpus
 		The maximum number of CPUs that can be executing simultaneously.
 		By default, this is set to the number of CPUs detected by the Go

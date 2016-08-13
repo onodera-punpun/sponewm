@@ -58,7 +58,6 @@ func (m *Maximized) Exists(c Client) bool {
 	return false
 }
 
-
 func (m *Maximized) ResizeMaster(amount float64) {
 }
 

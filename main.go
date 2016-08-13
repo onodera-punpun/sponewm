@@ -42,7 +42,6 @@ var (
 	flagReplace        = false
 	flagConfigDir      = ""
 	flagDataDir        = ""
-	flagWriteConfig    = false
 	flagCpuProfile     = ""
 	flagWingoRestarted = false
 	flagShowSocket     = false
@@ -70,14 +69,6 @@ func init() {
 			"is not set, the following paths (roughly) will be checked\n"+
 			"in order: $XDG_DATA_HOME/wingo, /usr/local/share, /usr/share,\n"+
 			"$GOPATH/src/github.com/onodera-punpun/wingo/data")
-	flag.BoolVar(&flagWriteConfig, "write-config", flagWriteConfig,
-		"Writes a fresh set of configuration files to $XDG_CONFIG_HOME/wingo\n"+
-			"if XDG_CONFIG_HOME is set. Otherwise, configuration files\n"+
-			"are written to $HOME/.config/wingo.\n"+
-			"This will fail if the 'wingo' configuration directory already\n"+
-			"exists, to prevent accidentally overwriting an existing\n"+
-			"configuration.\n\n"+
-			"When this flag is set, Wingo will not start.")
 	flag.BoolVar(&flagWingoRestarted, "wingo-restarted", flagWingoRestarted,
 		"DO NOT USE. INTERNAL WINGO USE ONLY.")
 
@@ -102,11 +93,6 @@ func init() {
 }
 
 func main() {
-	if flagWriteConfig {
-		writeConfigFiles()
-		os.Exit(0)
-	}
-
 	X, err := xgbutil.NewConn()
 	if err != nil {
 		logger.Error.Println(err)
