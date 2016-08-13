@@ -3,8 +3,7 @@ zzz
 *.prof
 *.mprof
 TAGS
-wingo-cmd/wingo-cmd
-wingo
+spone/spone
+spone
 x.log
 wiki
-
