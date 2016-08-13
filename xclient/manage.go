@@ -10,6 +10,7 @@ import (
 	"github.com/BurntSushi/xgbutil/xrect"
 	"github.com/BurntSushi/xgbutil/xwindow"
 
+	"github.com/onodera-punpun/wingo/event"
 	"github.com/onodera-punpun/wingo/focus"
 	"github.com/onodera-punpun/wingo/frame"
 	"github.com/onodera-punpun/wingo/heads"
@@ -65,6 +66,9 @@ func New(id xproto.Window) *Client {
 
 	c.manage()
 
+	if !wm.Startup {
+		event.Notify(event.ManagedClient{c.Id()})
+	}
 	if !c.iconified {
 		c.Map()
 		if !wm.Startup && c.PrimaryType() == TypeNormal {
