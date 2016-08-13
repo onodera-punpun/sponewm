@@ -28,7 +28,6 @@ import (
 	"github.com/onodera-punpun/wingo/frame"
 
 	"github.com/onodera-punpun/wingo/focus"
-	"github.com/onodera-punpun/wingo/hook"
 	"github.com/onodera-punpun/wingo/logger"
 	"github.com/onodera-punpun/wingo/misc"
 	"github.com/onodera-punpun/wingo/stack"
@@ -139,7 +138,6 @@ func main() {
 	stack.Initialize(X)
 	cursors.Initialize(X)
 	wm.Initialize(X, commands.Env, newHacks())
-	hook.Initialize(commands.Env, misc.ConfigFile("hooks.wini"))
 
 	// Initialize event handlers on the root window.
 	rootInit(X)
@@ -180,12 +178,6 @@ func main() {
 		defer pprof.StopCPUProfile()
 	}
 
-	if flagWingoRestarted {
-		hook.Fire(hook.Restarted, hook.Args{})
-	} else {
-		hook.Fire(hook.Startup, hook.Args{})
-	}
-
 EVENTLOOP:
 	for {
 		select {
@@ -211,9 +203,7 @@ EVENTLOOP:
 		time.Sleep(1 * time.Second)
 
 		// We need to tell the next invocation of Wingo that it is being
-		// *restarted*. (So that we don't refire the startup hook.)
-		// Thus, search os.Args for "--wingo-restarted". If it doesn't exist,
-		// add it.
+		// *restarted*.
 		found := false
 		for _, arg := range os.Args {
 			if strings.ToLower(strings.TrimSpace(arg)) == "--wingo-restarted" {

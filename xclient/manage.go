@@ -10,11 +10,9 @@ import (
 	"github.com/BurntSushi/xgbutil/xrect"
 	"github.com/BurntSushi/xgbutil/xwindow"
 
-	"github.com/onodera-punpun/wingo/event"
 	"github.com/onodera-punpun/wingo/focus"
 	"github.com/onodera-punpun/wingo/frame"
 	"github.com/onodera-punpun/wingo/heads"
-	"github.com/onodera-punpun/wingo/hook"
 	"github.com/onodera-punpun/wingo/logger"
 	"github.com/onodera-punpun/wingo/stack"
 	"github.com/onodera-punpun/wingo/wm"
@@ -67,14 +65,6 @@ func New(id xproto.Window) *Client {
 
 	c.manage()
 
-	// We don't fire the managed hook on startup since it can lead to
-	// unintuitive state changes.
-	// If someone really wants it, we can add a new "startup_managed" hook
-	// or something.
-	if !wm.Startup {
-		event.Notify(event.ManagedClient{c.Id()})
-		c.FireHook(hook.Managed)
-	}
 	if !c.iconified {
 		c.Map()
 		if !wm.Startup && c.PrimaryType() == TypeNormal {

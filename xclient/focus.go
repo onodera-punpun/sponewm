@@ -6,7 +6,6 @@ import (
 	"github.com/onodera-punpun/wingo/event"
 	"github.com/onodera-punpun/wingo/focus"
 	"github.com/onodera-punpun/wingo/frame"
-	"github.com/onodera-punpun/wingo/hook"
 	"github.com/onodera-punpun/wingo/wm"
 	"github.com/onodera-punpun/wingo/workspace"
 )
@@ -26,7 +25,6 @@ func (c *Client) Focused() {
 
 	event.Notify(event.FocusedClient{c.Id()})
 	event.Notify(event.ChangedActiveClient{c.Id()})
-	c.FireHook(hook.Focused)
 }
 
 func (c *Client) Unfocused() {
@@ -40,7 +38,6 @@ func (c *Client) Unfocused() {
 	if wasFocused {
 		event.Notify(event.UnfocusedClient{c.Id()})
 		event.Notify(event.ChangedActiveClient{0})
-		c.FireHook(hook.Unfocused)
 	}
 }
 

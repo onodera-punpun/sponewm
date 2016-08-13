@@ -41,7 +41,7 @@ func writeConfigFiles() {
 	}
 
 	files := []string{
-		"hooks.wini", "key.wini", "mouse.wini", "options.wini", "theme.wini",
+		"key.wini", "mouse.wini", "options.wini", "theme.wini",
 	}
 	for _, f := range files {
 		dst := path.Join(configDir, f)

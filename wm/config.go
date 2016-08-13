@@ -64,7 +64,6 @@ func loadConfig() (*Configuration, error) {
 			misc.ConfigFile("options.wini"),
 			(*Configuration).loadOptionsConfigSection,
 		},
-		// FYI hooks.wini is loaded in the hook package.
 	}
 	for _, cfile := range cfiles {
 		cdata, err := wini.Parse(cfile.fpath)

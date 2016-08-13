@@ -1,8 +1,6 @@
 package xclient
 
 import (
-	"fmt"
-
 	"github.com/BurntSushi/xgb/xproto"
 
 	"github.com/BurntSushi/xgbutil/icccm"
@@ -13,7 +11,6 @@ import (
 
 	"github.com/onodera-punpun/wingo/event"
 	"github.com/onodera-punpun/wingo/frame"
-	"github.com/onodera-punpun/wingo/hook"
 	"github.com/onodera-punpun/wingo/logger"
 	"github.com/onodera-punpun/wingo/stack"
 	"github.com/onodera-punpun/wingo/wm"
@@ -149,13 +146,6 @@ func (c *Client) Win() *xwindow.Window {
 
 func (c *Client) TopWin() *xwindow.Window {
 	return c.frame.Parent().Window
-}
-
-func (c *Client) FireHook(hk hook.Type) {
-	args := hook.Args{
-		Client: fmt.Sprintf("%d", c.Id()),
-	}
-	hook.Fire(hk, args)
 }
 
 func (c *Client) Layer() int {

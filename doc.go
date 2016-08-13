@@ -34,9 +34,7 @@ The flags are:
 		numbers result in more logging. When running normally, this should be
 		set to 2, which includes errors and warnings. When debugging, this
 		should be set to 3, which includes messages that usually are emitted
-		in certain state transitions. (The log level 4 is probably too much for
-		most uses, but it will include messages about hooks matching or not
-		matching.)
+		in certain state transitions.
 	--log-colors
 		When set, the log output will highlight errors and warning differently
 		from other text using terminal escape sequences.
