@@ -15,7 +15,7 @@ import (
 )
 
 // ipc starts the command server via a unix domain socket. It accepts
-// connections, reads Spone commands, and attempts to execute them. If the
+// connections, reads SponeWM commands, and attempts to execute them. If the
 // command results in an error, it is sent back to the client. Otherwise, the
 // return value of the command is sent to the user.
 //

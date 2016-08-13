@@ -1,28 +1,12 @@
 package misc
 
 import (
-	"fmt"
-	"io/ioutil"
-	"path"
-
 	"github.com/BurntSushi/xdg"
 
 	"github.com/onodera-punpun/sponewm/logger"
 )
 
 var ConfigPaths = xdg.Paths{
-	Override:     "",
-	XDGSuffix:    "sponewm",
-	GoImportPath: "github.com/onodera-punpun/spone/config",
-}
-
-var DataPaths = xdg.Paths{
-	Override:     "",
-	XDGSuffix:    "sponewm",
-	GoImportPath: "github.com/onodera-punpun/sponewm/data",
-}
-
-var ScriptPaths = xdg.Paths{
 	Override:     "",
 	XDGSuffix:    "sponewm",
 	GoImportPath: "github.com/onodera-punpun/sponewm/config",
@@ -34,38 +18,4 @@ func ConfigFile(name string) string {
 		logger.Error.Fatalln(err)
 	}
 	return fpath
-}
-
-func DataFile(name string) []byte {
-	fpath, err := DataPaths.DataFile(name)
-	if err != nil {
-		logger.Error.Fatalln(err)
-	}
-	bs, err := ioutil.ReadFile(fpath)
-	if err != nil {
-		logger.Error.Fatalf("Could not read %s: %s", fpath, err)
-	}
-	return bs
-}
-
-func ScriptPath(name string) string {
-	fpath, err := ScriptPaths.ConfigFile(path.Join("scripts", name, name))
-	if err != nil {
-		fpath, err = ScriptPaths.ConfigFile(path.Join("scripts", name))
-		if err != nil {
-			logger.Warning.Println(err)
-			return ""
-		}
-	}
-	return fpath
-}
-
-func ScriptConfigPath(name string) string {
-	fname := fmt.Sprintf("%s.cfg", name)
-	fp, err := ScriptPaths.ConfigFile(path.Join("scripts", name, fname))
-	if err != nil {
-		logger.Warning.Println(err)
-		return ""
-	}
-	return fp
 }

@@ -13,9 +13,6 @@ gofmt:
 cmd:
 	go install github.com/onodera-punpun/sponewm/spone
 
-supported:
-	scripts/generate-supported | gofmt > ewmh_supported.go
-
 loc:
 	find ./ -name '*.go' \
 		-and -not -wholename './tests*' -print \
