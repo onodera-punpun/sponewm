@@ -5,7 +5,7 @@ import (
 	"github.com/BurntSushi/xgbutil/keybind"
 	"github.com/BurntSushi/xgbutil/xevent"
 
-	"github.com/onodera-punpun/wingo/logger"
+	"github.com/onodera-punpun/sponewm/logger"
 )
 
 type keyCommand struct {

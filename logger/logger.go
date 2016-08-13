@@ -44,26 +44,26 @@ var (
 func init() {
 	Debug = newLogger(
 		FlagDebug,
-		log.New(os.Stderr, "WINGO DEBUG: *** ", logFlags),
+		log.New(os.Stderr, "SPONEWM DEBUG: *** ", logFlags),
 		log.New(os.Stderr,
-			BgGreen(Blue("WINGO DEBUG:")).String()+" ", logFlags))
+			BgGreen(Blue("SPONEWM DEBUG:")).String()+" ", logFlags))
 	Lots = newLogger(
 		FlagLots,
-		log.New(os.Stderr, "WINGO LOTS: ", logFlags),
-		log.New(os.Stderr, "WINGO LOTS: ", logFlags))
+		log.New(os.Stderr, "SPONEWM LOTS: ", logFlags),
+		log.New(os.Stderr, "SPONEWM LOTS: ", logFlags))
 	Message = newLogger(
 		FlagMessage,
-		log.New(os.Stderr, "WINGO MESSAGE: ", logFlags),
-		log.New(os.Stderr, "WINGO MESSAGE: ", logFlags))
+		log.New(os.Stderr, "SPONEWM MESSAGE: ", logFlags),
+		log.New(os.Stderr, "SPONEWM MESSAGE: ", logFlags))
 	Warning = newLogger(
 		FlagWarning,
-		log.New(os.Stderr, "WINGO WARNING: ", logFlags),
+		log.New(os.Stderr, "SPONEWM WARNING: ", logFlags),
 		log.New(os.Stderr,
-			Bold(Red("WINGO WARNING:")).String()+" ", logFlags))
+			Bold(Red("SPONEWM WARNING:")).String()+" ", logFlags))
 	Error = newLogger(
 		FlagError,
-		log.New(os.Stderr, "WINGO ERROR: ", logFlags),
-		log.New(os.Stderr, BgMagenta("WINGO ERROR:").String()+" ", logFlags))
+		log.New(os.Stderr, "SPONEWM ERROR: ", logFlags),
+		log.New(os.Stderr, BgMagenta("SPONEWM ERROR:").String()+" ", logFlags))
 }
 
 func newLogger(logType int, plain *log.Logger, colored *log.Logger) *logger {

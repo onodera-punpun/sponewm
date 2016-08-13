@@ -3,9 +3,9 @@ package wm
 import (
 	"strings"
 
-	"github.com/onodera-punpun/wingo/logger"
-	"github.com/onodera-punpun/wingo/render"
-	"github.com/onodera-punpun/wingo/wini"
+	"github.com/onodera-punpun/sponewm/logger"
+	"github.com/onodera-punpun/sponewm/render"
+	"github.com/onodera-punpun/sponewm/wini"
 )
 
 func setString(k wini.Key, place *string) {

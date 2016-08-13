@@ -8,7 +8,7 @@ import (
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/xwindow"
 
-	"github.com/onodera-punpun/wingo/logger"
+	"github.com/onodera-punpun/sponewm/logger"
 )
 
 type Parent struct {

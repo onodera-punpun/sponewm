@@ -9,12 +9,12 @@ import (
 	"github.com/BurntSushi/xgbutil/xrect"
 	"github.com/BurntSushi/xgbutil/xwindow"
 
-	"github.com/onodera-punpun/wingo/event"
-	"github.com/onodera-punpun/wingo/frame"
-	"github.com/onodera-punpun/wingo/logger"
-	"github.com/onodera-punpun/wingo/stack"
-	"github.com/onodera-punpun/wingo/wm"
-	"github.com/onodera-punpun/wingo/workspace"
+	"github.com/onodera-punpun/sponewm/event"
+	"github.com/onodera-punpun/sponewm/frame"
+	"github.com/onodera-punpun/sponewm/logger"
+	"github.com/onodera-punpun/sponewm/stack"
+	"github.com/onodera-punpun/sponewm/wm"
+	"github.com/onodera-punpun/sponewm/workspace"
 )
 
 const (

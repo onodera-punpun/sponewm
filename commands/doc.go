@@ -1,10 +1,7 @@
 /*
-package commands defines the Gribble command environment for Wingo.
+package commands defines the Gribble command environment for SponeWM.
 
 For more about Gribble, see 
 http://godoc.burntsushi.net/pkg/github.com/BurntSushi/gribble/
-
-For about using Gribble with Wingo, see
-https://github.com/onodera-punpun/wingo/blob/master/HOWTO-COMMANDS
 */
 package commands

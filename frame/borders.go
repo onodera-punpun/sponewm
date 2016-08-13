@@ -5,7 +5,7 @@ import (
 
 	"github.com/BurntSushi/xgbutil"
 
-	"github.com/onodera-punpun/wingo/render"
+	"github.com/onodera-punpun/sponewm/render"
 )
 
 type Borders struct {

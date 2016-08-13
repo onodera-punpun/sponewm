@@ -10,14 +10,14 @@ import (
 	"github.com/BurntSushi/xgbutil/xrect"
 	"github.com/BurntSushi/xgbutil/xwindow"
 
-	"github.com/onodera-punpun/wingo/event"
-	"github.com/onodera-punpun/wingo/focus"
-	"github.com/onodera-punpun/wingo/frame"
-	"github.com/onodera-punpun/wingo/heads"
-	"github.com/onodera-punpun/wingo/logger"
-	"github.com/onodera-punpun/wingo/stack"
-	"github.com/onodera-punpun/wingo/wm"
-	"github.com/onodera-punpun/wingo/workspace"
+	"github.com/onodera-punpun/sponewm/event"
+	"github.com/onodera-punpun/sponewm/focus"
+	"github.com/onodera-punpun/sponewm/frame"
+	"github.com/onodera-punpun/sponewm/heads"
+	"github.com/onodera-punpun/sponewm/logger"
+	"github.com/onodera-punpun/sponewm/stack"
+	"github.com/onodera-punpun/sponewm/wm"
+	"github.com/onodera-punpun/sponewm/workspace"
 )
 
 func New(id xproto.Window) *Client {
@@ -120,7 +120,7 @@ func (c *Client) manage() {
 	if err != nil {
 		logger.Warning.Printf(
 			"Could not add client '%s' to SaveSet. This may be problematic "+
-				"if you try to replace Wingo with another window manager: %s",
+				"if you try to replace SponeWM with another window manager: %s",
 			c, err)
 	}
 }
@@ -146,7 +146,7 @@ func (c *Client) maybeInitPlace(presumedWorkspace workspace.Workspacer) {
 			// head the client is on and save its state. This is so future
 			// workspace switches will be able to place the client
 			// appropriately.
-			// (This is most common on a Wingo restart.)
+			// (This is most common on a SponeWM restart.)
 			// We refer to detected workspace as "fake" because the client
 			// isn't on a visible workspace (see above), and therefore the
 			// visible workspace returned by FindMostOverlap *cannot* contain

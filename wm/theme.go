@@ -1,10 +1,10 @@
 package wm
 
 import (
-	"github.com/onodera-punpun/wingo/frame"
-	"github.com/onodera-punpun/wingo/misc"
-	"github.com/onodera-punpun/wingo/render"
-	"github.com/onodera-punpun/wingo/wini"
+	"github.com/onodera-punpun/sponewm/frame"
+	"github.com/onodera-punpun/sponewm/misc"
+	"github.com/onodera-punpun/sponewm/render"
+	"github.com/onodera-punpun/sponewm/wini"
 )
 
 type ThemeConfig struct {

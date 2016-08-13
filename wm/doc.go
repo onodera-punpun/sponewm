@@ -1,5 +1,5 @@
 /*
-package wm is a Wingo specific package that maintains the global state of
-Wingo.
+package wm is a SponeWM specific package that maintains the global state of
+SponeWM.
 */
 package wm

@@ -22,17 +22,17 @@ import (
 	"github.com/BurntSushi/xgbutil/mousebind"
 	"github.com/BurntSushi/xgbutil/xevent"
 
-	"github.com/onodera-punpun/wingo/commands"
-	"github.com/onodera-punpun/wingo/cursors"
-	"github.com/onodera-punpun/wingo/event"
-	"github.com/onodera-punpun/wingo/frame"
+	"github.com/onodera-punpun/sponewm/commands"
+	"github.com/onodera-punpun/sponewm/cursors"
+	"github.com/onodera-punpun/sponewm/event"
+	"github.com/onodera-punpun/sponewm/frame"
 
-	"github.com/onodera-punpun/wingo/focus"
-	"github.com/onodera-punpun/wingo/logger"
-	"github.com/onodera-punpun/wingo/misc"
-	"github.com/onodera-punpun/wingo/stack"
-	"github.com/onodera-punpun/wingo/wm"
-	"github.com/onodera-punpun/wingo/xclient"
+	"github.com/onodera-punpun/sponewm/focus"
+	"github.com/onodera-punpun/sponewm/logger"
+	"github.com/onodera-punpun/sponewm/misc"
+	"github.com/onodera-punpun/sponewm/stack"
+	"github.com/onodera-punpun/sponewm/wm"
+	"github.com/onodera-punpun/sponewm/xclient"
 )
 
 var (
@@ -41,9 +41,8 @@ var (
 	flagLogColors      = false
 	flagReplace        = false
 	flagConfigDir      = ""
-	flagDataDir        = ""
 	flagCpuProfile     = ""
-	flagWingoRestarted = false
+	flagSponeRestarted = false
 	flagShowSocket     = false
 )
 
@@ -51,29 +50,24 @@ func init() {
 	flag.IntVar(&flagGoMaxProcs, "p", flagGoMaxProcs,
 		"The maximum number of CPUs that can be executing simultaneously.")
 	flag.IntVar(&flagLogLevel, "log-level", flagLogLevel,
-		"The logging level of Wingo. Valid values are 0, 1, 2, 3 or 4.\n"+
-			"Higher numbers result in Wingo producing more output.")
+		"The logging level of SponeWM. Valid values are 0, 1, 2, 3 or 4.\n"+
+			"Higher numbers result in SponeWM producing more output.")
 	flag.BoolVar(&flagLogColors, "log-colors", flagLogColors,
 		"Whether to output logging data with terminal colors.")
 	flag.BoolVar(&flagReplace, "replace", flagReplace,
-		"When set, Wingo will attempt to replace a currently running\n"+
+		"When set, SponeWM will attempt to replace a currently running\n"+
 			"window manager. If this is not set, and another window manager\n"+
-			"is running, Wingo will exit.")
+			"is running, SponeWM will exit.")
 	flag.StringVar(&flagConfigDir, "config-dir", flagConfigDir,
 		"Override the location of the configuration files. When this\n"+
 			"is not set, the following paths (roughly) will be checked\n"+
-			"in order: $XDG_CONFIG_DIR/wingo, /etc/xdg/wingo,\n"+
-			"$GOPATH/src/github.com/onodera-punpun/wingo/config")
-	flag.StringVar(&flagDataDir, "data-dir", flagDataDir,
-		"Override the location of the data files (images/fonts). When this\n"+
-			"is not set, the following paths (roughly) will be checked\n"+
-			"in order: $XDG_DATA_HOME/wingo, /usr/local/share, /usr/share,\n"+
-			"$GOPATH/src/github.com/onodera-punpun/wingo/data")
-	flag.BoolVar(&flagWingoRestarted, "wingo-restarted", flagWingoRestarted,
-		"DO NOT USE. INTERNAL WINGO USE ONLY.")
+			"in order: $XDG_CONFIG_DIR/sponewm, /etc/xdg/sponewm,\n"+
+			"$GOPATH/src/github.com/onodera-punpun/sponewm/config")
+	flag.BoolVar(&flagSponeRestarted, "spone-restarted", flagSponeRestarted,
+		"DO NOT USE. INTERNAL SPONE USE ONLY.")
 
 	flag.BoolVar(&flagShowSocket, "show-socket", flagShowSocket,
-		"When set, the command will detect if Wingo is already running,\n"+
+		"When set, the command will detect if SponeWM is already running,\n"+
 			"and if so, outputs the file path to the current socket.")
 
 	flag.StringVar(&flagCpuProfile, "cpuprofile", flagCpuProfile,
@@ -188,16 +182,16 @@ EVENTLOOP:
 		}
 		time.Sleep(1 * time.Second)
 
-		// We need to tell the next invocation of Wingo that it is being
+		// We need to tell the next invocation of SponeWM that it is being
 		// *restarted*.
 		found := false
 		for _, arg := range os.Args {
-			if strings.ToLower(strings.TrimSpace(arg)) == "--wingo-restarted" {
+			if strings.ToLower(strings.TrimSpace(arg)) == "--spone-restarted" {
 				found = true
 			}
 		}
 		if !found {
-			os.Args = append(os.Args, "--wingo-restarted")
+			os.Args = append(os.Args, "--spone-restarted")
 		}
 		logger.Message.Println("The user has told us to restart...\n\n\n")
 		if err := syscall.Exec(os.Args[0], os.Args, os.Environ()); err != nil {
@@ -218,7 +212,7 @@ func setSupported() {
 	// While we're at it, set the supporting wm hint too.
 	ewmh.SupportingWmCheckSet(wm.X, wm.X.RootWin(), wm.X.Dummy())
 	ewmh.SupportingWmCheckSet(wm.X, wm.X.Dummy(), wm.X.Dummy())
-	ewmh.WmNameSet(wm.X, wm.X.Dummy(), "Wingo")
+	ewmh.WmNameSet(wm.X, wm.X.Dummy(), "SponeWM")
 }
 
 // manageExistingClients traverse the window tree and tries to manage all
@@ -252,7 +246,7 @@ func usage() {
 	fmt.Fprintf(os.Stderr, "\nUsage: %s [flags]\n", path.Base(os.Args[0]))
 	flag.VisitAll(func(fg *flag.Flag) {
 		// Don't let users know about flags they shouldn't use.
-		if fg.Name == "wingo-restarted" {
+		if fg.Name == "spone-restarted" {
 			return
 		}
 		fmt.Printf("--%s=\"%s\"\n\t%s\n", fg.Name, fg.DefValue,
@@ -267,8 +261,8 @@ func showSocketPath(X *xgbutil.XUtil) {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
-	if strings.ToLower(currentWM) != "wingo" {
-		fmt.Fprintf(os.Stderr, "Could not detect a Wingo instance. "+
+	if strings.ToLower(currentWM) != "sponewm" {
+		fmt.Fprintf(os.Stderr, "Could not detect a SponeWM instance. "+
 			"(Found '%s' instead.)\n", currentWM)
 		os.Exit(1)
 	}

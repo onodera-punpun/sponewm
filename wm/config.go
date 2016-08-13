@@ -6,9 +6,9 @@ import (
 
 	"github.com/BurntSushi/xgbutil/ewmh"
 
-	"github.com/onodera-punpun/wingo/logger"
-	"github.com/onodera-punpun/wingo/misc"
-	"github.com/onodera-punpun/wingo/wini"
+	"github.com/onodera-punpun/sponewm/logger"
+	"github.com/onodera-punpun/sponewm/misc"
+	"github.com/onodera-punpun/sponewm/wini"
 )
 
 type Configuration struct {
@@ -45,7 +45,7 @@ func newConfig() *Configuration {
 //
 // Most of this code is incredibly boring.
 func loadConfig() (*Configuration, error) {
-	conf := newConfig() // globally defined in wingo.go
+	conf := newConfig() // globally defined in sponewm.go
 
 	type confFile struct {
 		fpath       string

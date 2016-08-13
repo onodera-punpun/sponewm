@@ -10,12 +10,12 @@ import (
 
 	"github.com/BurntSushi/xgbutil"
 
-	"github.com/onodera-punpun/wingo/commands"
-	"github.com/onodera-punpun/wingo/logger"
+	"github.com/onodera-punpun/sponewm/commands"
+	"github.com/onodera-punpun/sponewm/logger"
 )
 
 // ipc starts the command server via a unix domain socket. It accepts
-// connections, reads Wingo commands, and attempts to execute them. If the
+// connections, reads Spone commands, and attempts to execute them. If the
 // command results in an error, it is sent back to the client. Otherwise, the
 // return value of the command is sent to the user.
 //
@@ -53,9 +53,9 @@ func socketFilePath(X *xgbutil.XUtil) string {
 	var runtimeDir string
 	xdgRuntime := os.Getenv("XDG_RUNTIME_DIR")
 	if len(xdgRuntime) > 0 {
-		runtimeDir = path.Join(xdgRuntime, "wingo")
+		runtimeDir = path.Join(xdgRuntime, "spone")
 	} else {
-		runtimeDir = path.Join(os.TempDir(), "wingo")
+		runtimeDir = path.Join(os.TempDir(), "spone")
 	}
 
 	if err := os.MkdirAll(runtimeDir, 0777); err != nil {
@@ -85,7 +85,7 @@ func handleClient(conn net.Conn) {
 		// Run the command. We set the error reporting to verbose. Be kind!
 		// If the command resulted in an error, we stop and send the error back
 		// to the user. (This would be a Gribble parse/type error, not a
-		// Wingo error.)
+		// SponeWM error.)
 		commands.Env.Verbose = true
 		val, err := commands.Env.RunMany(msg)
 		commands.Env.Verbose = false

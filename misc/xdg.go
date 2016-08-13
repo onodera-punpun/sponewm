@@ -7,25 +7,25 @@ import (
 
 	"github.com/BurntSushi/xdg"
 
-	"github.com/onodera-punpun/wingo/logger"
+	"github.com/onodera-punpun/sponewm/logger"
 )
 
 var ConfigPaths = xdg.Paths{
 	Override:     "",
-	XDGSuffix:    "wingo",
-	GoImportPath: "github.com/onodera-punpun/wingo/config",
+	XDGSuffix:    "sponewm",
+	GoImportPath: "github.com/onodera-punpun/spone/config",
 }
 
 var DataPaths = xdg.Paths{
 	Override:     "",
-	XDGSuffix:    "wingo",
-	GoImportPath: "github.com/onodera-punpun/wingo/data",
+	XDGSuffix:    "sponewm",
+	GoImportPath: "github.com/onodera-punpun/sponewm/data",
 }
 
 var ScriptPaths = xdg.Paths{
 	Override:     "",
-	XDGSuffix:    "wingo",
-	GoImportPath: "github.com/onodera-punpun/wingo/config",
+	XDGSuffix:    "sponewm",
+	GoImportPath: "github.com/onodera-punpun/sponewm/config",
 }
 
 func ConfigFile(name string) string {

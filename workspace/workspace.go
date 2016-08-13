@@ -7,9 +7,9 @@ import (
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/xrect"
 
-	"github.com/onodera-punpun/wingo/event"
-	"github.com/onodera-punpun/wingo/layout"
-	"github.com/onodera-punpun/wingo/logger"
+	"github.com/onodera-punpun/sponewm/event"
+	"github.com/onodera-punpun/sponewm/layout"
+	"github.com/onodera-punpun/sponewm/logger"
 )
 
 type Workspace struct {

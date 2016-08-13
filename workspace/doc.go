@@ -1,6 +1,6 @@
 /*
 Package workspace is responsible for maintaining the state for the workspaces
-used in Wingo. It's responsible for showing or hiding a workspace, activating a
+used in SponeWM. It's responsible for showing or hiding a workspace, activating a
 workspace, adding/removing workspaces, adding clients to workspaces, and
 managing the state of all layouts for each workspace.
 

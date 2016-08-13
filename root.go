@@ -9,10 +9,10 @@ import (
 	"github.com/BurntSushi/xgbutil/xrect"
 	"github.com/BurntSushi/xgbutil/xwindow"
 
-	"github.com/onodera-punpun/wingo/focus"
-	"github.com/onodera-punpun/wingo/logger"
-	"github.com/onodera-punpun/wingo/wm"
-	"github.com/onodera-punpun/wingo/xclient"
+	"github.com/onodera-punpun/sponewm/focus"
+	"github.com/onodera-punpun/sponewm/logger"
+	"github.com/onodera-punpun/sponewm/wm"
+	"github.com/onodera-punpun/sponewm/xclient"
 )
 
 func rootInit(X *xgbutil.XUtil) {
@@ -86,17 +86,17 @@ func handleClientMessages(X *xgbutil.XUtil, ev xevent.ClientMessageEvent) {
 	}
 	switch name {
 	case "_NET_NUMBER_OF_DESKTOPS":
-		logger.Warning.Printf("Wingo does not support adding/removing " +
+		logger.Warning.Printf("SponeWM does not support adding/removing " +
 			"desktops using the _NET_NUMBER_OF_DESKTOPS property. Please use " +
-			"the Wingo commands 'AddWorkspace' and 'RemoveWorkspace' to add " +
+			"the Spone commands 'AddWorkspace' and 'RemoveWorkspace' to add " +
 			"or remove workspaces.")
 	case "_NET_DESKTOP_GEOMETRY":
-		logger.Warning.Printf("Wingo does not support the " +
+		logger.Warning.Printf("SponeWM does not support the " +
 			"_NET_DESKTOP_GEOMETRY property. Namely, more than one workspace " +
 			"can be visible at a time, so different workspaces can have " +
 			"different geometries.")
 	case "_NET_DESKTOP_VIEWPORT":
-		logger.Warning.Printf("Wingo does not use viewports, and therefore " +
+		logger.Warning.Printf("SponeWM does not use viewports, and therefore " +
 			"does not support the _NET_DESKTOP_VIEWPORT property.")
 	case "_NET_CURRENT_DESKTOP":
 		index := int(ev.Data.Data32[0])

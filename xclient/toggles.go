@@ -3,11 +3,11 @@ package xclient
 import (
 	"time"
 
-	"github.com/onodera-punpun/wingo/frame"
-	"github.com/onodera-punpun/wingo/layout"
-	"github.com/onodera-punpun/wingo/stack"
-	"github.com/onodera-punpun/wingo/wm"
-	"github.com/onodera-punpun/wingo/workspace"
+	"github.com/onodera-punpun/sponewm/frame"
+	"github.com/onodera-punpun/sponewm/layout"
+	"github.com/onodera-punpun/sponewm/stack"
+	"github.com/onodera-punpun/sponewm/wm"
+	"github.com/onodera-punpun/sponewm/workspace"
 )
 
 func (c *Client) FloatingToggle() {

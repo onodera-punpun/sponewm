@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/onodera-punpun/wingo/commands"
-	"github.com/onodera-punpun/wingo/wm"
+	"github.com/onodera-punpun/sponewm/commands"
+	"github.com/onodera-punpun/sponewm/wm"
 )
 
 func newHacks() wm.CommandHacks {

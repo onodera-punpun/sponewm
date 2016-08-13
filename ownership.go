@@ -12,7 +12,7 @@ import (
 	"github.com/BurntSushi/xgbutil/xprop"
 	"github.com/BurntSushi/xgbutil/xwindow"
 
-	"github.com/onodera-punpun/wingo/logger"
+	"github.com/onodera-punpun/sponewm/logger"
 )
 
 // This file is responsible for implementing all the crud around getting
@@ -23,8 +23,8 @@ import (
 // own requests ownership over the role of window manager in the current
 // X environment. It can fail if it does not successfully get ownership.
 //
-// When 'replace' is true, Wingo will attempt to replace an window manager
-// that is currently running. Otherwise, Wingo will quit if a window manager
+// When 'replace' is true, SponeWM will attempt to replace an window manager
+// that is currently running. Otherwise, SponeWM will quit if a window manager
 // is running.
 func own(X *xgbutil.XUtil, replace bool) error {
 	otherWmRunning := false
@@ -69,7 +69,7 @@ func own(X *xgbutil.XUtil, replace bool) error {
 			return fmt.Errorf(
 				"Another window manager (%s) is already running. Please use "+
 					"the '--replace' option to replace the current window "+
-					"manager with Wingo.", otherWmName)
+					"manager with SponeWM.", otherWmName)
 		} else {
 			logger.Message.Printf(
 				"Waiting for %s to shutdown and transfer ownership to us.",
@@ -109,8 +109,8 @@ func own(X *xgbutil.XUtil, replace bool) error {
 			select {
 			case <-timeout:
 				return fmt.Errorf(
-					"Wingo failed to replace the currently running window "+
-						"manager (%s). Namely, Wingo was not able to detect "+
+					"SponeWM failed to replace the currently running window "+
+						"manager (%s). Namely, SponeWM was not able to detect "+
 						"that the current window manager had shut down.",
 					otherWmName)
 			default:
@@ -130,7 +130,7 @@ func own(X *xgbutil.XUtil, replace bool) error {
 		}
 	}
 
-	logger.Message.Println("Wingo has window manager ownership!")
+	logger.Message.Println("SponeWM has window manager ownership!")
 	announce(X)
 
 	// Listen for SelectionClear events. When we get one of these, then we
@@ -148,7 +148,7 @@ func disown(X *xgbutil.XUtil, ev xevent.SelectionClearEvent) {
 }
 
 // announce sends a ClientMessage event to the root window to let everyone
-// know that Wingo is the boss. (As per ICCCM 2.8.)
+// know that SponeWM is the boss. (As per ICCCM 2.8.)
 func announce(X *xgbutil.XUtil) {
 	typAtom, err := xprop.Atm(X, "MANAGER")
 	if err != nil {
@@ -176,7 +176,7 @@ func managerAtom(X *xgbutil.XUtil) (xproto.Atom, error) {
 // currentTime forcefully causes a PropertyNotify event to fire on the root
 // window, then scans the event queue and picks up the time.
 //
-// It is NOT SAFE to call this function in a place other than Wingo's
+// It is NOT SAFE to call this function in a place other than SponeWM's
 // initialization. Namely, this function subverts xevent's queue and reads
 // events directly from X.
 func currentTime(X *xgbutil.XUtil) (xproto.Timestamp, error) {

@@ -1,29 +1,28 @@
-wingo-cmd is a tool that can issue commands to Wingo from the command line.
+spone is a tool that can issue commands to SponeWM from the command line.
 
 The set of commands available can be viewed in list form with
 
-  wingo-cmd --list
+  spone --list
 
 And to get for detailed usage for each command:
 
-  wingo-cmd --list-usage
+  spone --list-usage
 
 Or for a particular command:
 
-  wingo-cmd --usage WorkspaceGreedy
+  spone --usage WorkspaceGreedy
 
 
 Example usage
 =============
 Move the active window to (20, 100)
 
-  wingo-cmd 'Move (GetActive) 20 100'
+  spone 'Move (GetActive) 20 100'
 
 Resize the window with id 0xa00001 to half the screen width and height
 
-  wingo-cmd 'Resize 0xa00001 0.5 0.5'
+  spone 'Resize 0xa00001 0.5 0.5'
 
 Close the active window:
 
-  wingo-cmd 'Close (GetActive)'
-
+  spone 'Close (GetActive)'

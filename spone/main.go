@@ -16,7 +16,7 @@ import (
 
 	"github.com/BurntSushi/cmd"
 
-	"github.com/onodera-punpun/wingo/commands"
+	"github.com/onodera-punpun/sponewm/commands"
 )
 
 var (
@@ -58,10 +58,10 @@ func main() {
 	// Get the commands from file/stdin/argument.
 	cmds := getCommands()
 
-	// Connect to the Wingo command server.
+	// Connect to the SponeWM command server.
 	conn, err := net.Dial("unix", socketFilePath())
 	if err != nil {
-		log.Fatalf("Could not connect to Wingo IPC: %s", err)
+		log.Fatalf("Could not connect to SponeWM IPC: %s", err)
 	}
 
 	// If the 'poll' flag is set, then we'll need to send the command and
@@ -91,7 +91,7 @@ func main() {
 }
 
 func socketFilePath() string {
-	c := cmd.New("wingo", "--show-socket")
+	c := cmd.New("spone", "--show-socket")
 	if err := c.Run(); err != nil {
 		log.Fatal(err)
 	}

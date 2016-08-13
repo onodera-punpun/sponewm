@@ -1,17 +1,17 @@
 install: supported
 	go install -p 6 . ./cursors ./focus \
 		./frame ./heads ./layout ./logger ./misc ./render \
-		./stack ./wingo-cmd ./wini ./wm ./workspace ./xclient
+		./stack ./spone ./wini ./wm ./workspace ./xclient
 
 gofmt:
 	gofmt -w *.go cursors/*.go focus/*.go frame/*.go \
 		heads/*.go layout/*.go logger/*.go misc/*.go \
-		render/*.go stack/*.go wingo-cmd/*.go wini/*.go wm/*.go \
+		render/*.go stack/*.go spone/*.go wini/*.go wm/*.go \
 		workspace/*.go xclient/*.go
 	colcheck -c 80 *.go */*.go
 
 cmd:
-	go install github.com/BurntSushi/wingo/wingo-cmd
+	go install github.com/onodera-punpun/sponewm/spone
 
 supported:
 	scripts/generate-supported | gofmt > ewmh_supported.go

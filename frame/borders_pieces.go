@@ -6,9 +6,9 @@ import (
 	"github.com/BurntSushi/xgbutil/xgraphics"
 	"github.com/BurntSushi/xgbutil/xwindow"
 
-	"github.com/onodera-punpun/wingo/cursors"
-	"github.com/onodera-punpun/wingo/logger"
-	"github.com/onodera-punpun/wingo/render"
+	"github.com/onodera-punpun/sponewm/cursors"
+	"github.com/onodera-punpun/sponewm/logger"
+	"github.com/onodera-punpun/sponewm/render"
 )
 
 func (f *Borders) newPieceWindow(ident string,

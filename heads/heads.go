@@ -9,8 +9,8 @@ import (
 	"github.com/BurntSushi/xgbutil/xrect"
 	"github.com/BurntSushi/xgbutil/xwindow"
 
-	"github.com/onodera-punpun/wingo/logger"
-	"github.com/onodera-punpun/wingo/workspace"
+	"github.com/onodera-punpun/sponewm/logger"
+	"github.com/onodera-punpun/sponewm/workspace"
 )
 
 type Heads struct {
@@ -252,7 +252,7 @@ func Convert(rect, src, dest xrect.Rect) xrect.Rect {
 	return xrect.New(nx, ny, nw, nh)
 }
 
-// NumHeads returns the current number of heads that Wingo is using.
+// NumHeads returns the current number of heads that SponeWM is using.
 func (hds *Heads) NumHeads() int {
 	return len(hds.geom)
 }

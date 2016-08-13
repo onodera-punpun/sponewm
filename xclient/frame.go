@@ -7,9 +7,9 @@ import (
 	"github.com/BurntSushi/xgbutil/icccm"
 	"github.com/BurntSushi/xgbutil/xrect"
 
-	"github.com/onodera-punpun/wingo/frame"
-	"github.com/onodera-punpun/wingo/logger"
-	"github.com/onodera-punpun/wingo/wm"
+	"github.com/onodera-punpun/sponewm/frame"
+	"github.com/onodera-punpun/sponewm/logger"
+	"github.com/onodera-punpun/sponewm/wm"
 )
 
 // refreshExtents sets the _NET_FRAME_EXTENTS property whenever the frame
@@ -211,7 +211,7 @@ func (c *Client) newClientFrames() clientFrames {
 }
 
 // createFrames constructs each individual frame for a clientFrames value.
-// At present, Wingo will die if there are any errors.
+// At present, SponeWM will die if there are any errors.
 func createFrames(c *Client) clientFrames {
 	var err error
 	errHandle := func(err error) {

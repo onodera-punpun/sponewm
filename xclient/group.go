@@ -3,7 +3,7 @@ package xclient
 import (
 	"github.com/BurntSushi/xgbutil/icccm"
 
-	"github.com/onodera-punpun/wingo/stack"
+	"github.com/onodera-punpun/sponewm/stack"
 )
 
 // Transient is a wrapper around transient that type switches an empty interface

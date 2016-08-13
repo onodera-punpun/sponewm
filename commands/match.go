@@ -5,8 +5,8 @@ import (
 
 	"github.com/BurntSushi/gribble"
 
-	"github.com/onodera-punpun/wingo/logger"
-	"github.com/onodera-punpun/wingo/xclient"
+	"github.com/onodera-punpun/sponewm/logger"
+	"github.com/onodera-punpun/sponewm/xclient"
 )
 
 type MatchClientMapped struct {

@@ -5,7 +5,7 @@ package wm
 	of the commands. It may be easier to leave them separate.
 
 	Basically, the problem is that a mouse command operates on a client whereas
-	key (or general) commands always operate on the current state of Wingo.
+	key (or general) commands always operate on the current state of SponeWM.
 	The former requires parameterization over a client whereas the latter
 	can simply rely on the current global state.
 
@@ -21,8 +21,8 @@ import (
 	"github.com/BurntSushi/xgbutil/mousebind"
 	"github.com/BurntSushi/xgbutil/xevent"
 
-	"github.com/onodera-punpun/wingo/cursors"
-	"github.com/onodera-punpun/wingo/logger"
+	"github.com/onodera-punpun/sponewm/cursors"
+	"github.com/onodera-punpun/sponewm/logger"
 )
 
 // MouseClientClicked is a terrible hack to inject state into commands.

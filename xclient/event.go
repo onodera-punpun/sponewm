@@ -8,11 +8,11 @@ import (
 	"github.com/BurntSushi/xgbutil/xevent"
 	"github.com/BurntSushi/xgbutil/xprop"
 
-	"github.com/onodera-punpun/wingo/focus"
-	"github.com/onodera-punpun/wingo/frame"
-	"github.com/onodera-punpun/wingo/layout"
-	"github.com/onodera-punpun/wingo/logger"
-	"github.com/onodera-punpun/wingo/wm"
+	"github.com/onodera-punpun/sponewm/focus"
+	"github.com/onodera-punpun/sponewm/frame"
+	"github.com/onodera-punpun/sponewm/layout"
+	"github.com/onodera-punpun/sponewm/logger"
+	"github.com/onodera-punpun/sponewm/wm"
 )
 
 func (c *Client) attachEventCallbacks() {
@@ -59,7 +59,7 @@ func (c *Client) cbMapNotify() xevent.MapNotifyFun {
 		// on its own...
 		if !c.iconified {
 			logger.Warning.Printf("POSSIBLE BUG: Client '%s' is trying to map "+
-				"itself, but Wingo doesn't think it was iconified.", c)
+				"itself, but SponeWM doesn't think it was iconified.", c)
 			return
 		}
 
@@ -78,11 +78,11 @@ func (c *Client) cbDestroyNotify() xevent.DestroyNotifyFun {
 func (c *Client) cbUnmapNotify() xevent.UnmapNotifyFun {
 	f := func(X *xgbutil.XUtil, ev xevent.UnmapNotifyEvent) {
 		// When a client issues an Unmap request, the window manager should
-		// unmanage it. However, when wingo unmaps the window, we shouldn't
-		// unmanage it. Thus, every time wingo unmaps the window, the
+		// unmanage it. However, when SponeWM unmaps the window, we shouldn't
+		// unmanage it. Thus, every time SponeWM unmaps the window, the
 		// unmapIgnore counter is incremented. Only when it is zero does it mean
 		// that we should unmanage the client (i.e., the unmap request came
-		// from somewhere other than Wingo.)
+		// from somewhere other than SponeWM.)
 		if c.unmapIgnore > 0 {
 			c.unmapIgnore--
 			return
@@ -270,7 +270,7 @@ func (c *Client) cbShapeNotify() xevent.ShapeNotifyFun {
 		}
 
 		// We don't even bother with shaping the frame if the client has any
-		// kind of decoration. Unless I'm mistaken, shaping Wingo's decorations
+		// kind of decoration. Unless I'm mistaken, shaping SponeWM's decorations
 		// to fit client shaping really isn't going to do anything...
 		if _, ok := c.frame.(*frame.Nada); ok {
 			return

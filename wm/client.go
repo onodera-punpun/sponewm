@@ -3,9 +3,9 @@ package wm
 import (
 	"github.com/BurntSushi/xgb/xproto"
 
-	"github.com/onodera-punpun/wingo/frame"
-	"github.com/onodera-punpun/wingo/heads"
-	"github.com/onodera-punpun/wingo/workspace"
+	"github.com/onodera-punpun/sponewm/frame"
+	"github.com/onodera-punpun/sponewm/heads"
+	"github.com/onodera-punpun/sponewm/workspace"
 )
 
 type Client interface {

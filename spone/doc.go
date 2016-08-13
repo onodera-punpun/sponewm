@@ -1,19 +1,19 @@
 /*
-wingo-cmd uses Wingo's IPC mechanism to send commands and output the response
-to stdout. wingo-cmd can also be used to view documentation on all available
+spone uses SPoneWM's IPC mechanism to send commands and output the response
+to stdout. spone can also be used to view documentation on all available
 commands.
 
 Usage:
-	wingo-cmd [flags] [command]
+	spone [flags] [command]
 
 Note that 'command' MUST be specified as a single argument. So that this is
 illegal:
 
-	wingo-cmd AddWorkspace "new-workspace-name"
+	spone AddWorkspace "new-workspace-name"
 
 Use this instead:
 
-	wingo-cmd 'AddWorkspace "new-workspace-name"'
+	spone 'AddWorkspace "new-workspace-name"'
 
 The flags are:
 	-f file

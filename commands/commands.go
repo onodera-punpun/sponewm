@@ -16,12 +16,12 @@ import (
 	"github.com/BurntSushi/xgbutil/xprop"
 	"github.com/BurntSushi/xgbutil/xrect"
 
-	"github.com/onodera-punpun/wingo/focus"
-	"github.com/onodera-punpun/wingo/logger"
-	"github.com/onodera-punpun/wingo/misc"
-	"github.com/onodera-punpun/wingo/wm"
-	"github.com/onodera-punpun/wingo/workspace"
-	"github.com/onodera-punpun/wingo/xclient"
+	"github.com/onodera-punpun/sponewm/focus"
+	"github.com/onodera-punpun/sponewm/logger"
+	"github.com/onodera-punpun/sponewm/misc"
+	"github.com/onodera-punpun/sponewm/wm"
+	"github.com/onodera-punpun/sponewm/workspace"
+	"github.com/onodera-punpun/sponewm/xclient"
 )
 
 // Env declares all available commands. Any command not in
@@ -62,7 +62,7 @@ var Env = gribble.New([]gribble.Command{
 	&Shell{},
 	&Unfloat{},
 	&Unmaximize{},
-	&WingoExec{},
+	&SponeExec{},
 	&Workspace{},
 	&WorkspaceGreedy{},
 	&WorkspaceHead{},
@@ -165,7 +165,7 @@ func syncRun(f func() gribble.Value) gribble.Value {
 type AddWorkspace struct {
 	Name string `param:"1"`
 	Help string `
-Adds a new workspace to Wingo with a name Name. Note that a workspace name
+Adds a new workspace to SponeWM with a name Name. Note that a workspace name
 must be unique with respect to other workspaces and must have non-zero length.
 
 The name of the workspace that was added is returned.
@@ -552,14 +552,14 @@ type MouseMove struct {
 	Help string `
 Initiates a drag that allows a window to be moved with the mouse.
 
-This is a special command that can only be assigned in Wingo's mouse
+This is a special command that can only be assigned in SponeWM's mouse
 configuration file. Invoking this command in any other way has no effect.
 `
 }
 
 func (cmd MouseMove) Run() gribble.Value {
 	logger.Warning.Printf("The MouseMove command can only be invoked from " +
-		"the Wingo mouse configuration file.")
+		"the SponeWM mouse configuration file.")
 	return nil
 }
 
@@ -577,14 +577,14 @@ TopRight, BottomLeft and BottomRight. When "Infer" is used, the direction
 is determined based on where the pointer is on the window when the drag is
 initiated.
 
-This is a special command that can only be assigned in Wingo's mouse
+This is a special command that can only be assigned in SponeWM's mouse
 configuration file. Invoking this command in any other way has no effect.
 `
 }
 
 func (cmd MouseResize) Run() gribble.Value {
 	logger.Warning.Printf("The MouseResize command can only be invoked from " +
-		"the Wingo mouse configuration file.")
+		"the SpomeWM mouse configuration file.")
 	return nil
 }
 
@@ -717,7 +717,7 @@ func (cmd MovePointerRelative) Run() gribble.Value {
 
 type Restart struct {
 	Help string `
-Restarts Wingo in place using exec. This should be used to reload Wingo
+Restarts SponeWM in place using exec. This should be used to reload SponeWM
 after you've made changes to its configuration.
 `
 }
@@ -732,7 +732,7 @@ func (cmd Restart) Run() gribble.Value {
 
 type Quit struct {
 	Help string `
-Stops Wingo.
+Stops SponeWM.
 `
 }
 
@@ -850,7 +850,7 @@ type Shell struct {
 	Command string `param:"1"`
 	Help    string `
 Attempts to execute the shell command specified by Command. If an error occurs,
-it will be logged to Wingo's stderr.
+it will be logged to SponeWM's stderr.
 `
 }
 
@@ -926,12 +926,12 @@ func (cmd Unmaximize) Run() gribble.Value {
 	})
 }
 
-type WingoExec struct {
+type SponeExec struct {
 	Commands string `param:"1"`
-	Help     string `Executes a series of Wingo commands specified by Commands.`
+	Help     string `Executes a series of SponeWM commands specified by Commands.`
 }
 
-func (cmd WingoExec) Run() gribble.Value {
+func (cmd SponeExec) Run() gribble.Value {
 	Env.Verbose = true
 	Env.RunMany(cmd.Commands)
 	Env.Verbose = false
@@ -1136,7 +1136,7 @@ func (cmd TagGet) Run() gribble.Value {
 	}
 
 	var cid xproto.Window
-	tagName := fmt.Sprintf("_WINGO_TAG_%s", cmd.Name)
+	tagName := fmt.Sprintf("_SPONE_TAG_%s", cmd.Name)
 	if n, ok := cmd.Client.(int); ok && n == 0 {
 		cid = wm.Root.Id
 	} else {
@@ -1173,7 +1173,7 @@ func (cmd TagSet) Run() gribble.Value {
 	}
 
 	var cid xproto.Window
-	tagName := fmt.Sprintf("_WINGO_TAG_%s", cmd.Name)
+	tagName := fmt.Sprintf("_SPONE_TAG_%s", cmd.Name)
 	if n, ok := cmd.Client.(int); ok && n == 0 {
 		cid = wm.Root.Id
 	} else {

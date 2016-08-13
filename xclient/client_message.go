@@ -7,10 +7,10 @@ import (
 	"github.com/BurntSushi/xgbutil/icccm"
 	"github.com/BurntSushi/xgbutil/xprop"
 
-	"github.com/onodera-punpun/wingo/frame"
-	"github.com/onodera-punpun/wingo/logger"
-	"github.com/onodera-punpun/wingo/stack"
-	"github.com/onodera-punpun/wingo/wm"
+	"github.com/onodera-punpun/sponewm/frame"
+	"github.com/onodera-punpun/sponewm/logger"
+	"github.com/onodera-punpun/sponewm/stack"
+	"github.com/onodera-punpun/sponewm/wm"
 )
 
 func (c *Client) handleClientMessage(name string, data []uint32) {

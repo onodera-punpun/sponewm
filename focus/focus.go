@@ -8,7 +8,7 @@ import (
 	"github.com/BurntSushi/xgbutil/xprop"
 	"github.com/BurntSushi/xgbutil/xwindow"
 
-	"github.com/onodera-punpun/wingo/logger"
+	"github.com/onodera-punpun/sponewm/logger"
 )
 
 var (
@@ -124,7 +124,7 @@ func Focus(c Client) {
 
 // Root emulates focus of the root window.
 //
-// N.B. Technically, a special off-screen window maintained by Wingo gets
+// N.B. Technically, a special off-screen window maintained by SponeWM gets
 // focus, but you won't be able to tell the difference. (I hope.)
 func Root() {
 	for _, c := range Clients {

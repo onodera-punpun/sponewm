@@ -6,8 +6,8 @@ import (
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"github.com/BurntSushi/xgbutil/icccm"
 
-	"github.com/onodera-punpun/wingo/layout"
-	"github.com/onodera-punpun/wingo/wm"
+	"github.com/onodera-punpun/sponewm/layout"
+	"github.com/onodera-punpun/sponewm/wm"
 )
 
 func (c *Client) handleProperty(name string) {
