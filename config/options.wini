@@ -1,50 +1,17 @@
-# These are some global configuration options for Wingo. It may not look like
-# there's a lot here, but that's because a lot of the configuration is done
-# with your key/mouse bindings, and your theme settings.
-
 [Options]
-# The list of workspaces to set upon startup. Workspaces can be added or
-# removed while Wingo is running.
-workspaces := 1 2 3 4 browser mail
+# Defualt workspaces
+workspaces := www irc src
 
-# The default layout that is used for all workspaces. Currently, the
-# only available layouts are: Floating, Vertical or Horizontal.
-# Setting this to something other than a Floating layout effectively turns
-# Wingo into a tiling window manager.
+# Default layout (Floating or Tiling)
 default_layout := Floating
 
-# When enabled, windows will be focused when the mouse enters the window.
-# N.B. I don't use focus follows mouse, so I'm not sure precisely how it
-# should work. If I've messed up, file a bug report.
-focus_follows_mouse := no
-
-# If "focus_follows_mouse" is enabled, then this setting will focus a window
-# whenever the pointer moves into the window.
-focus_follows_mouse_focus := yes
-
-# If "focus_follows_mouse" is enabled, then this setting will raise a window
-# whenever the pointer moves into the window.
+# Focus behavoir
+focus_follows_mouse := yes
 focus_follows_mouse_raise := no
-
-# If "focus_follows_mouse" is enabled, then this setting will focus a new
-# window when it has been created. (Otherwise, a new window will be raised
-# but not focused.)
-focus_follows_mouse_startup_focus := no
-
-# If enabled, head focus will follow the mouse. That is, moving the mouse to
-# another monitor will move the focus to the workspace on that monitor.
-# Note that this does not require that "focus_follows_mouse" be enabled;
-# however this only works when the mouse is directly over the root window.
-# (So enabling this option might be weird if "focus_follows_mouse" is
-# disabled.)
-#
-# N.B. It is possible that this could have an effect on performance, since
-# most pointer motion events on the root window must be inspected.
 focus_follows_mouse_head := no
 
-# The shell to be used to launch commands.
-# It is used like so: `SHELL -c "{COMMAND}"`.
-# If you need to pass additional arguments to the shell invocation, then
-# you'll need to make a wrapper script.
-# (Make sure it can handle the `-c` flag!)
+# Floating padding (when spawning windows under the cursor)
+floating_padding := 49 20 20 20
+
+# Exec shell
 shell := dash

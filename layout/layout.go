@@ -31,7 +31,7 @@ type Layout interface {
 
 type Floater interface {
 	Layout
-	InitialPlacement(x *xgbutil.XUtil, c Client)
+	InitialPlacement(x *xgbutil.XUtil, c Client, padding []int)
 	Save()
 	Reposition()
 }

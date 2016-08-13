@@ -1,6 +1,7 @@
 package wm
 
 import (
+	"strconv"
 	"strings"
 
 	"github.com/BurntSushi/xgbutil/ewmh"
@@ -11,18 +12,13 @@ import (
 )
 
 type Configuration struct {
-	ConfirmKey, CancelKey string
-	BackspaceKey          string
-	TabKey, RevTabKey     string
-
-	Ffm                 bool
-	FfmRaise            bool
-	FfmHead             bool
-	Workspaces          []string
-	DefaultLayout       string
-	ShowFyi, ShowErrors bool
-	Shell               string
-	AudioProgram        string
+	Ffm              bool
+	FfmRaise         bool
+	FfmHead          bool
+	FloatingPadding  []int
+	Workspaces       []string
+	DefaultLayout    string
+	Shell            string
 
 	mouse map[string][]mouseCommand
 	key   map[string][]keyCommand
@@ -31,16 +27,12 @@ type Configuration struct {
 // newConfig
 func newConfig() *Configuration {
 	return &Configuration{
-		ConfirmKey:   "Return",
-		CancelKey:    "Escape",
-		BackspaceKey: "BackSpace",
-		TabKey:       "Tab",
-		RevTabKey:    "ISO_Left_Tab",
-
 		Ffm:             true,
 		FfmRaise:        false,
 		FfmHead:         false,
-		Workspaces:      []string{"1", "2", "3", "4"},
+		// TODO: Why does this only work when commented out?
+		//FloatingPadding: []int{29, 0, 0, 0},
+		Workspaces:      []string{"www", "irc", "src"},
 		Shell:           "dash",
 
 		mouse: map[string][]mouseCommand{},
@@ -174,10 +166,16 @@ func (conf *Configuration) loadOptionsConfigSection(
 			setBool(key, &conf.FfmRaise)
 		case "focus_follows_mouse_head":
 			setBool(key, &conf.FfmHead)
-		case "cancel":
-			setString(key, &conf.CancelKey)
-		case "confirm":
-			setString(key, &conf.ConfirmKey)
+		case "floating_padding":
+			if floatingpadding, ok := getLastString(key); ok {
+				for _, a := range strings.Split(floatingpadding, " ") {
+					i, err := strconv.Atoi(a)
+					if err != nil {
+						logger.Warning.Println(err)
+					}
+					conf.FloatingPadding = append(conf.FloatingPadding, i)
+				}
+			}
 		case "shell":
 			setString(key, &conf.Shell)
 		}

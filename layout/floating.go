@@ -4,6 +4,8 @@ import (
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/xrect"
+
+	"github.com/onodera-punpun/wingo/logger"
 )
 
 type Floating struct {
@@ -17,27 +19,32 @@ func NewFloating() *Floating {
 	}
 }
 
-// TODO: Add "border" to monitor edges.
-func (f *Floating) InitialPlacement(x *xgbutil.XUtil, c Client) {
+func (f *Floating) InitialPlacement(X *xgbutil.XUtil, c Client, padding []int) {
 	cgeom := c.Geom()
-	xc, rw := x.Conn(), x.RootWin()
-	qp, _ := xproto.QueryPointer(xc, rw).Reply()
+	qp, err := xproto.QueryPointer(X.Conn(), X.RootWin()).Reply()
+	if err != nil {
+		logger.Warning.Printf("Could not query pointer: %s", err)
+		return
+	}
 
-	fx, fy := f.geom.X(), f.geom.Y()
-	// TODO: Is this x/y-limit needed, what does it do?
-	xlimit := f.geom.Width() - cgeom.Width()
-	ylimit := f.geom.Height() - cgeom.Height()
-	if xlimit > 0 {
-		// TODO: Currently hardcoding the bordersize (10), because I can't
-		// seem to get the value
-		fx += int(qp.RootX) - cgeom.Width() / 2 + 10
+	x := int(qp.RootX) - (cgeom.Width() / 2)
+	y := int(qp.RootY) - (cgeom.Height() / 2)
+	// Left screen border.
+	if x < padding[3] {
+		x = padding[3]
+	// Right screen border.
+	} else if x > f.geom.Width() + f.geom.X() - cgeom.Width() - padding[1] {
+		x = f.geom.Width() + f.geom.X() - cgeom.Width() - padding[1]
 	}
-	if ylimit > 0 {
-		// TODO: Currently hardcoding the bordersize (10), because I can't
-		// seem to get the value
-		fy += int(qp.RootY) - cgeom.Height() / 2 + 10
+	// Top screen border.
+	if y < padding[0] {
+		y = padding[0]
+	// Bottom screen border.
+	} else if y > f.geom.Height() + f.geom.Y() - cgeom.Height() - padding[2] {
+		y = f.geom.Height() + f.geom.Y() - cgeom.Height() - padding[2] 
 	}
-	f.Move(c, fx, fy)
+
+	f.Move(c, x, y)
 }
 
 func (f *Floating) Place()   {}

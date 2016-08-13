@@ -51,6 +51,26 @@ func (cmd AutoUntile) Run() gribble.Value {
 	})
 }
 
+type AutoTileToggle struct {
+	Workspace gribble.Any `param:"1" types:"int,string"`
+	Help      string      `
+Toggles tiling, see AutoTile and AutoUntile.
+`
+}
+
+func (cmd AutoTileToggle) Run() gribble.Value {
+	return syncRun(func() gribble.Value {
+		withWorkspace(cmd.Workspace, func(wrk *workspace.Workspace) {
+			if wrk.State != workspace.AutoTiling {
+				wrk.LayoutStateSet(workspace.AutoTiling)
+			} else {
+				wrk.LayoutStateSet(workspace.Floating)
+			}
+		})
+		return nil
+	})
+}
+
 type AutoCycle struct {
 	Workspace gribble.Any `param:"1" types:"int,string"`
 	Help      string      `

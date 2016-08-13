@@ -73,6 +73,7 @@ var Env = gribble.New([]gribble.Command{
 
 	&AutoTile{},
 	&AutoUntile{},
+	&AutoTileToggle{},
 	&AutoCycle{},
 	&AutoResizeMaster{},
 	&AutoResizeWindow{},
