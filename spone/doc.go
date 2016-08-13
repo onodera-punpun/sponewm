@@ -1,3 +1,5 @@
+package main
+
 /*
 spone uses SPoneWM's IPC mechanism to send commands and output the response
 to stdout. spone can also be used to view documentation on all available
@@ -33,4 +35,3 @@ The flags are:
 		When milliseconds is greater than 0, the given commands will be
 		executed at the specified interval.
 */
-package main

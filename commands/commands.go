@@ -18,7 +18,6 @@ import (
 
 	"github.com/onodera-punpun/sponewm/focus"
 	"github.com/onodera-punpun/sponewm/logger"
-	"github.com/onodera-punpun/sponewm/misc"
 	"github.com/onodera-punpun/sponewm/wm"
 	"github.com/onodera-punpun/sponewm/workspace"
 	"github.com/onodera-punpun/sponewm/xclient"
@@ -27,20 +26,12 @@ import (
 // Env declares all available commands. Any command not in
 // this list cannot be executed.
 var Env = gribble.New([]gribble.Command{
-	&AddWorkspace{},
 	&Close{},
-	&Float{},
 	&Focus{},
 	&FocusRaise{},
 	&FrameBorders{},
 	&FrameNada{},
-	&HeadCycle{},
-	&HeadFocus{},
-	&HeadFocusWithClient{},
 	&ToggleFloating{},
-	&ToggleIconify{},
-	&Iconify{},
-	&Deiconify{},
 	&ToggleMaximize{},
 	&ToggleStackAbove{},
 	&ToggleStackBelow{},
@@ -53,23 +44,14 @@ var Env = gribble.New([]gribble.Command{
 	&MovePointer{},
 	&MovePointerRelative{},
 	&Raise{},
-	&RemoveWorkspace{},
-	&RenameWorkspace{},
 	&Resize{},
 	&Restart{},
 	&Quit{},
-	&SetLayout{},
 	&Shell{},
-	&Unfloat{},
 	&Unmaximize{},
-	&SponeExec{},
 	&Workspace{},
-	&WorkspaceGreedy{},
-	&WorkspaceHead{},
 	&WorkspaceSendClient{},
-	&WorkspaceToHead{},
 	&WorkspaceWithClient{},
-	&WorkspaceGreedyWithClient{},
 
 	&AutoTile{},
 	&AutoUntile{},
@@ -162,25 +144,6 @@ func syncRun(f func() gribble.Value) gribble.Value {
 	return <-SafeReturn
 }
 
-type AddWorkspace struct {
-	Name string `param:"1"`
-	Help string `
-Adds a new workspace to SponeWM with a name Name. Note that a workspace name
-must be unique with respect to other workspaces and must have non-zero length.
-
-The name of the workspace that was added is returned.
-`
-}
-
-func (cmd AddWorkspace) Run() gribble.Value {
-	return syncRun(func() gribble.Value {
-		if err := wm.AddWorkspace(cmd.Name); err != nil {
-			return ""
-		}
-		return cmd.Name
-	})
-}
-
 type Close struct {
 	Client gribble.Any `param:"1" types:"int,string"`
 	Help   string      `
@@ -194,25 +157,6 @@ func (cmd Close) Run() gribble.Value {
 	return syncRun(func() gribble.Value {
 		withClient(cmd.Client, func(c *xclient.Client) {
 			c.Close()
-		})
-		return nil
-	})
-}
-
-type Float struct {
-	Client gribble.Any `param:"1" types:"int,string"`
-	Help   string      `
-Floats the window specified by Client. If the window is already floating,
-this command has no effect.
-
-Client may be the window id or a substring that matches a window name.
-`
-}
-
-func (cmd Float) Run() gribble.Value {
-	return syncRun(func() gribble.Value {
-		withClient(cmd.Client, func(c *xclient.Client) {
-			c.Float()
 		})
 		return nil
 	})
@@ -310,71 +254,6 @@ func (cmd FrameNada) Run() gribble.Value {
 	})
 }
 
-type HeadCycle struct {
-	Help string `
-Cycles focus to the next head, ordered by index. Heads are ordered
-by their physical position: left to right and then top to bottom.
-`
-}
-
-func (cmd HeadCycle) Run() gribble.Value {
-	return syncRun(func() gribble.Value {
-		cur := wm.Heads.VisibleIndex(wm.Workspace())
-		next := misc.Mod(cur+1, wm.Heads.NumHeads())
-		wm.Heads.WithVisibleWorkspace(next,
-			func(wrk *workspace.Workspace) {
-				wm.SetWorkspace(wrk, false)
-			})
-		wm.FocusFallback()
-		return nil
-	})
-}
-
-type HeadFocus struct {
-	Head int    `param:"1"`
-	Help string `
-Focuses the head indexed at Head. Indexing starts at 0. Heads are ordered
-by their physical position: left to right and then top to bottom.
-`
-}
-
-func (cmd HeadFocus) Run() gribble.Value {
-	return syncRun(func() gribble.Value {
-		wm.Heads.WithVisibleWorkspace(cmd.Head,
-			func(wrk *workspace.Workspace) {
-				wm.SetWorkspace(wrk, false)
-			})
-		wm.FocusFallback()
-		return nil
-	})
-}
-
-type HeadFocusWithClient struct {
-	Head   int         `param:"1"`
-	Client gribble.Any `param:"2" types:"int,string"`
-	Help   string      `
-Focuses the head indexed at Head, and move the Client specified by client to
-that head. Indexing of heads starts at 0. Heads are ordered by their physical
-position: left to right and then top to bottom.
-
-Client may be the window id or a substring that matches a window name.
-`
-}
-
-func (cmd HeadFocusWithClient) Run() gribble.Value {
-	return syncRun(func() gribble.Value {
-		withClient(cmd.Client, func(c *xclient.Client) {
-			wm.Heads.WithVisibleWorkspace(cmd.Head,
-				func(wrk *workspace.Workspace) {
-					wm.SetWorkspace(wrk, false)
-					wrk.Add(c)
-					c.Raise()
-				})
-		})
-		return nil
-	})
-}
-
 type ToggleFloating struct {
 	Client gribble.Any `param:"1" types:"int,string"`
 	Help   string      `
@@ -389,63 +268,6 @@ func (cmd ToggleFloating) Run() gribble.Value {
 	return syncRun(func() gribble.Value {
 		withClient(cmd.Client, func(c *xclient.Client) {
 			c.FloatingToggle()
-		})
-		return nil
-	})
-}
-
-type ToggleIconify struct {
-	Client gribble.Any `param:"1" types:"int,string"`
-	Help   string      `
-Iconifies (minimizes) or deiconifies (unminimizes) the window specified by
-Client.
-
-Client may be the window id or a substring that matches a window name.
-`
-}
-
-func (cmd ToggleIconify) Run() gribble.Value {
-	return syncRun(func() gribble.Value {
-		withClient(cmd.Client, func(c *xclient.Client) {
-			c.IconifyToggle()
-		})
-		return nil
-	})
-}
-
-type Iconify struct {
-	Client gribble.Any `param:"1" types:"int,string"`
-	Help   string      `
-Iconifies (minimizes) the window specified by Client. If the window
-is already iconified, this command has no effect.
-
-Client may be the window id or a substring that matches a window name.
-`
-}
-
-func (cmd Iconify) Run() gribble.Value {
-	return syncRun(func() gribble.Value {
-		withClient(cmd.Client, func(c *xclient.Client) {
-			c.Iconify()
-		})
-		return nil
-	})
-}
-
-type Deiconify struct {
-	Client gribble.Any `param:"1" types:"int,string"`
-	Help   string      `
-Deiconifies (unminimizes) the window specified by Client. If the window
-is already deiconified, this command has no effect.
-
-Client may be the window id or a substring that matches a window name.
-`
-}
-
-func (cmd Deiconify) Run() gribble.Value {
-	return syncRun(func() gribble.Value {
-		withClient(cmd.Client, func(c *xclient.Client) {
-			c.Deiconify()
 		})
 		return nil
 	})
@@ -744,77 +566,6 @@ func (cmd Quit) Run() gribble.Value {
 	})
 }
 
-type SetLayout struct {
-	Workspace gribble.Any `param:"1" types:"int,string"`
-	Name      string      `param:"2"`
-	Help      string      `
-Sets the current layout of the workspace specified by Workspace to the layout
-named by Name. If a layout with name Name does not exist, this command has
-no effect.
-
-Note that this command has no effect if the workspace is not visible.
-
-Workspace may be a workspace index (integer) starting at 0, or a workspace
-name.
-`
-}
-
-func (cmd SetLayout) Run() gribble.Value {
-	return syncRun(func() gribble.Value {
-		withWorkspace(cmd.Workspace, func(wrk *workspace.Workspace) {
-			wrk.SetLayout(cmd.Name)
-		})
-		return nil
-	})
-}
-
-type RemoveWorkspace struct {
-	Workspace gribble.Any `param:"1" types:"int,string"`
-	Help      string      `
-Removes the workspace specified by Workspace. Note that a workspace can *only*
-be removed if it is empty (i.e., does not contain any windows).
-
-Workspace may be a workspace index (integer) starting at 0, or a workspace
-name.
-`
-}
-
-func (cmd RemoveWorkspace) Run() gribble.Value {
-	return syncRun(func() gribble.Value {
-		withWorkspace(cmd.Workspace, func(wrk *workspace.Workspace) {
-			if err := wm.RemoveWorkspace(wrk); err != nil {
-				return
-			}
-
-			wm.FocusFallback()
-		})
-		return nil
-	})
-}
-
-type RenameWorkspace struct {
-	Workspace gribble.Any `param:"1" types:"int,string"`
-	NewName   string      `param:"2"`
-	Help      string      `
-Renames the workspace specified by Workspace to the name in NewName.
-
-Workspace may be a workspace index (integer) starting at 0, or a workspace
-name.
-NewName can only be a string.
-`
-}
-
-func (cmd RenameWorkspace) Run() gribble.Value {
-	return syncRun(func() gribble.Value {
-		withWorkspace(cmd.Workspace, func(wrk *workspace.Workspace) {
-			if err := wm.RenameWorkspace(wrk, cmd.NewName); err != nil {
-				return
-			}
-		})
-		return nil
-	})
-}
-
 type Resize struct {
 	Client gribble.Any `param:"1" types:"int,string"`
 	Width  gribble.Any `param:"2" types:"int,float"`
@@ -888,25 +639,6 @@ func (cmd Shell) Run() gribble.Value {
 	return nil
 }
 
-type Unfloat struct {
-	Client gribble.Any `param:"1" types:"int,string"`
-	Help   string      `
-Unfloats the window specified by Client. If the window is not floating,
-this command has no effect.
-
-Client may be the window id or a substring that matches a window name.
-`
-}
-
-func (cmd Unfloat) Run() gribble.Value {
-	return syncRun(func() gribble.Value {
-		withClient(cmd.Client, func(c *xclient.Client) {
-			c.Unfloat()
-		})
-		return nil
-	})
-}
-
 type Unmaximize struct {
 	Client gribble.Any `param:"1" types:"int,string"`
 	Help   string      `
@@ -926,18 +658,6 @@ func (cmd Unmaximize) Run() gribble.Value {
 	})
 }
 
-type SponeExec struct {
-	Commands string `param:"1"`
-	Help     string `Executes a series of SponeWM commands specified by Commands.`
-}
-
-func (cmd SponeExec) Run() gribble.Value {
-	Env.Verbose = true
-	Env.RunMany(cmd.Commands)
-	Env.Verbose = false
-	return nil
-}
-
 type Workspace struct {
 	Workspace gribble.Any `param:"1" types:"int,string"`
 	Help      string      `
@@ -955,55 +675,6 @@ func (cmd Workspace) Run() gribble.Value {
 			wm.FocusFallback()
 		})
 		return nil
-	})
-}
-
-type WorkspaceGreedy struct {
-	Workspace gribble.Any `param:"1" types:"int,string"`
-	Help      string      `
-Sets the current workspace to the one specified by Workspace in a greedy
-fashion.
-
-A greedy switch *always* brings the specified workspace to the
-currently focused head. (N.B. Greedy is only different when switching between
-two visible workspaces.)
-
-Workspace may be a workspace index (integer) starting at 0, or a workspace
-name.
-`
-}
-
-func (cmd WorkspaceGreedy) Run() gribble.Value {
-	return syncRun(func() gribble.Value {
-		withWorkspace(cmd.Workspace, func(wrk *workspace.Workspace) {
-			wm.SetWorkspace(wrk, true)
-			wm.FocusFallback()
-		})
-		return nil
-	})
-}
-
-type WorkspaceHead struct {
-	Workspace gribble.Any `param:"1" types:"int,string"`
-	Help      string      `
-Retrieves the head index of the workspace specified by Workspace. If the
-workspace is not visible, then -1 is returned.
-
-Head indexing starts at 0. Heads are ordered by their physical position: left
-to right and then top to bottom.
-
-Workspace may be a workspace index (integer) starting at 0, or a workspace
-name.
-`
-}
-
-func (cmd WorkspaceHead) Run() gribble.Value {
-	return syncRun(func() gribble.Value {
-		index := -1
-		withWorkspace(cmd.Workspace, func(wrk *workspace.Workspace) {
-			index = wm.Heads.VisibleIndex(wrk)
-		})
-		return index
 	})
 }
 
@@ -1031,31 +702,6 @@ func (cmd WorkspaceSendClient) Run() gribble.Value {
 	})
 }
 
-type WorkspaceToHead struct {
-	Head      int         `param:"1"`
-	Workspace gribble.Any `param:"2" types:"int,string"`
-	Help      string      `
-Sets the workspace specified by Workspace to appear on the head specified by
-the Head index.
-
-Workspace may be a workspace index (integer) starting at 0, or a workspace
-name.
-
-Head indexing starts at 0. Heads are ordered by their physical position: left
-to right and then top to bottom.
-`
-}
-
-func (cmd WorkspaceToHead) Run() gribble.Value {
-	return syncRun(func() gribble.Value {
-		withWorkspace(cmd.Workspace, func(wrk *workspace.Workspace) {
-			wm.WorkspaceToHead(cmd.Head, wrk)
-			wm.FocusFallback()
-		})
-		return nil
-	})
-}
-
 type WorkspaceWithClient struct {
 	Workspace gribble.Any `param:"1" types:"int,string"`
 	Client    gribble.Any `param:"2" types:"int,string"`
@@ -1077,38 +723,6 @@ func (cmd WorkspaceWithClient) Run() gribble.Value {
 				c.Raise()
 				wrk.Add(c)
 				wm.SetWorkspace(wrk, false)
-				wm.FocusFallback()
-			})
-		})
-		return nil
-	})
-}
-
-type WorkspaceGreedyWithClient struct {
-	Workspace gribble.Any `param:"1" types:"int,string"`
-	Client    gribble.Any `param:"2" types:"int,string"`
-	Help      string      `
-Sets the current workspace to the workspace specified by Workspace in a greedy
-fashion, and moves the window specified by Client to that workspace.
-
-A greedy switch *always* brings the specified workspace to the
-currently focused head. (N.B. Greedy is only different when switching between
-two visible workspaces.)
-
-Workspace may be a workspace index (integer) starting at 0, or a workspace
-name.
-
-Client may be the window id or a substring that matches a window name.
-`
-}
-
-func (cmd WorkspaceGreedyWithClient) Run() gribble.Value {
-	return syncRun(func() gribble.Value {
-		withWorkspace(cmd.Workspace, func(wrk *workspace.Workspace) {
-			withClient(cmd.Client, func(c *xclient.Client) {
-				c.Raise()
-				wrk.Add(c)
-				wm.SetWorkspace(wrk, true)
 				wm.FocusFallback()
 			})
 		})

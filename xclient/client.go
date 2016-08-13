@@ -45,7 +45,7 @@ type Client struct {
 	maximized   bool
 	fullscreen  bool
 	iconified   bool
-	sticky      bool // Belongs to no workspace.
+	sticky      bool
 	skipTaskbar bool
 	skipPager   bool
 

@@ -1,3 +1,5 @@
+package workspace
+
 /*
 Package workspace is responsible for maintaining the state for the workspaces
 used in SponeWM. It's responsible for showing or hiding a workspace, activating a
@@ -55,4 +57,3 @@ layouts, and knows when to call "Place" on any particular layout.
 
 (Note that iconified clients are removed from all layouts.)
 */
-package workspace

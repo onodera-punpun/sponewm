@@ -36,6 +36,12 @@ type Floater interface {
 	Reposition()
 }
 
+type Tiler interface {
+	Layout
+	Save()
+	Reposition()
+}
+
 type AutoTiler interface {
 	Layout
 	ResizeMaster(amount float64)

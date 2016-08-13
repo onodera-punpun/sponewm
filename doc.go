@@ -1,3 +1,5 @@
+package main
+
 /*
 SponeWM is an X window manager written in pure Go that supports floating and
 tiling window placement policies. It is mostly EWMH and ICCCM compliant. Its
@@ -37,4 +39,3 @@ The flags are:
 		When set, a CPU profile will be written to prof-file when SponeWM exits.
 
 */
-package main
