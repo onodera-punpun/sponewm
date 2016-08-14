@@ -34,19 +34,10 @@ func (m *Maximized) Place() {
 	}
 }
 
-func (m *Maximized) Unplace() {
-}
-
 func (m *Maximized) Add(c Client) {
 	if !m.Exists(c) {
 		m.clients.PushFront(c)
 	}
-}
-
-func (m *Maximized) Remove(c Client) {
-}
-
-func (m *Maximized) Destroy() {
 }
 
 func (m *Maximized) Exists(c Client) bool {
@@ -56,52 +47,6 @@ func (m *Maximized) Exists(c Client) bool {
 		}
 	}
 	return false
-}
-
-func (m *Maximized) ResizeMaster(amount float64) {
-}
-
-func (m *Maximized) ResizeWindow(amount float64) {
-}
-
-func (m *Maximized) Next() {
-	if f := m.clients.Front(); f != nil {
-		m.clients.MoveToBack(f)
-		c := m.clients.Front().Value.(Client)
-		c.Focus()
-		c.Raise()
-		m.Place()
-	}
-}
-
-func (m *Maximized) Prev() {
-	if b := m.clients.Back(); b != nil {
-		m.clients.MoveToFront(b)
-		c := m.clients.Front().Value.(Client)
-		c.Focus()
-		c.Raise()
-		m.Place()
-	}
-}
-
-// This is useful, but can be implemented later
-func (m *Maximized) SwitchNext() {
-}
-
-// This is useful, but can be implemented later
-func (m *Maximized) SwitchPrev() {
-}
-
-func (m *Maximized) FocusMaster() {
-}
-
-func (m *Maximized) MakeMaster() {
-}
-
-func (m *Maximized) MastersMore() {
-}
-
-func (m *Maximized) MastersFewer() {
 }
 
 func (m *Maximized) MROpt(c Client, flags, x, y, width, height int) {}

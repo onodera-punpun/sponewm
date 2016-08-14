@@ -5,23 +5,20 @@ import (
 	"github.com/BurntSushi/xgbutil/xrect"
 )
 
-const (
-	FloatFloating = iota
-)
-
-const (
-	AutoTileVertical = iota
-)
-
 type Layout interface {
 	Name() string
 	SetGeom(geom xrect.Rect)
-	Place()
+
 	Unplace()
+
 	Add(c Client)
 	Remove(c Client)
 	Exists(c Client) bool
+
 	Destroy()
+
+	Save()
+	Reposition()
 
 	MROpt(c Client, flags, x, y, width, height int)
 	MoveResize(c Client, x, y, width, height int)
@@ -31,27 +28,12 @@ type Layout interface {
 
 type Floater interface {
 	Layout
-	InitialPlacement(x *xgbutil.XUtil, c Client, padding []int)
-	Save()
-	Reposition()
+	Place()
+	InitialPlacement(c Client, X *xgbutil.XUtil, padding []int)
 }
 
 type Tiler interface {
 	Layout
-	Save()
-	Reposition()
-}
-
-type AutoTiler interface {
-	Layout
-	ResizeMaster(amount float64)
-	ResizeWindow(amount float64)
-	Next()
-	Prev()
-	SwitchNext()
-	SwitchPrev()
-	FocusMaster()
-	MakeMaster()
-	MastersMore()
-	MastersFewer()
+	Place(padding []int, gap int)
+	MakeMaster(c Client)
 }

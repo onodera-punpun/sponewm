@@ -23,8 +23,8 @@ type Workspace struct {
 	floaters   []layout.Floater
 	curFloater int
 
-	autoTilers   []layout.AutoTiler
-	curAutoTiler int
+	tilers   []layout.Tiler
+	curTiler int
 }
 
 func (wrks *Workspaces) NewWorkspace(name string) *Workspace {
@@ -35,8 +35,8 @@ func (wrks *Workspaces) NewWorkspace(name string) *Workspace {
 		State:   Floating,
 		Clients: make([]Client, 0, 40),
 
-		curFloater:   0,
-		curAutoTiler: 0,
+		curFloater: 0,
+		curTiler:   0,
 	}
 
 	// Layouts must be listed in the order in which their corresponding
@@ -44,10 +44,10 @@ func (wrks *Workspaces) NewWorkspace(name string) *Workspace {
 	wrk.floaters = []layout.Floater{
 		layout.NewFloating(),
 	}
-	wrk.autoTilers = []layout.AutoTiler{
-		layout.NewVertical(),
-		layout.NewHorizontal(),
-		layout.NewMaximized(),
+	wrk.tilers = []layout.Tiler{
+		// TODO: Fix Maximed
+		//layout.NewMaximized(),
+		layout.NewTiling(),
 	}
 
 	if state, index := wrk.findLayout(wrks.defaultLayout); state != -1 {
@@ -55,9 +55,9 @@ func (wrks *Workspaces) NewWorkspace(name string) *Workspace {
 		case Floating:
 			wrk.curFloater = index
 			wrk.State = Floating
-		case AutoTiling:
-			wrk.curAutoTiler = index
-			wrk.State = AutoTiling
+		case Tiling:
+			wrk.curTiler = index
+			wrk.State = Tiling
 		default:
 			panic(fmt.Sprintf("Unknown layout state '%d'.", state))
 		}
@@ -70,7 +70,7 @@ func (wrk *Workspace) Destroy() {
 	for _, lay := range wrk.floaters {
 		lay.Destroy()
 	}
-	for _, lay := range wrk.autoTilers {
+	for _, lay := range wrk.tilers {
 		lay.Destroy()
 	}
 }
@@ -199,7 +199,7 @@ func (wrk *Workspace) setGeom(geom xrect.Rect) {
 	for _, lay := range wrk.floaters {
 		lay.SetGeom(geom)
 	}
-	for _, lay := range wrk.autoTilers {
+	for _, lay := range wrk.tilers {
 		lay.SetGeom(geom)
 	}
 }
@@ -248,8 +248,8 @@ func (wrk *Workspace) Place() {
 	switch wrk.State {
 	case Floating:
 		// Nada nada limonada
-	case AutoTiling:
-		wrk.LayoutAutoTiler().Place()
+	case Tiling:
+		wrk.LayoutTiler().Place(wm.Config.FloatingPadding, 20)
 	default:
 		panic("Layout mode not implemented.")
 	}
@@ -311,7 +311,7 @@ func (wrk *Workspace) IconifyToggle(c Client) {
 // the workspace will add the client to its list of tilable clients and re-tile.
 func (wrk *Workspace) CheckFloatingStatus(c Client) {
 	// If it's in one tiler, it's in them all.
-	tilable := wrk.LayoutAutoTiler().Exists(c)
+	tilable := wrk.LayoutTiler().Exists(c)
 	if tilable && c.ShouldForceFloating() {
 		wrk.removeFromTilers(c)
 		if wrk.State != Floating {
@@ -328,8 +328,8 @@ func (wrk *Workspace) LayoutFloater() layout.Floater {
 	return wrk.floaters[wrk.curFloater]
 }
 
-func (wrk *Workspace) LayoutAutoTiler() layout.AutoTiler {
-	return wrk.autoTilers[wrk.curAutoTiler]
+func (wrk *Workspace) LayoutTiler() layout.Tiler {
+	return wrk.tilers[wrk.curTiler]
 }
 
 func (wrk *Workspace) addToFloaters(c Client) {
@@ -348,23 +348,14 @@ func (wrk *Workspace) addToTilers(c Client) {
 	if c.ShouldForceFloating() {
 		return
 	}
-	for _, autoTiler := range wrk.autoTilers {
-		autoTiler.Add(c)
+	for _, tiler := range wrk.tilers {
+		tiler.Add(c)
 	}
 }
 
 func (wrk *Workspace) removeFromTilers(c Client) {
-	for _, autoTiler := range wrk.autoTilers {
-		autoTiler.Remove(c)
-	}
-}
-
-func (wrk *Workspace) AutoCycle() {
-	if wrk.State == AutoTiling {
-		wrk.curAutoTiler = (wrk.curAutoTiler + 1) % len(wrk.autoTilers)
-		wrk.LayoutAutoTiler().Place()
-
-		event.Notify(event.ChangedLayout{wrk.Name})
+	for _, tiler := range wrk.tilers {
+		tiler.Remove(c)
 	}
 }
 
@@ -372,8 +363,8 @@ func (wrk *Workspace) Layout(c Client) layout.Layout {
 	switch {
 	case wrk.State == Floating || c.ShouldForceFloating():
 		return wrk.LayoutFloater()
-	case wrk.State == AutoTiling:
-		return wrk.LayoutAutoTiler()
+	case wrk.State == Tiling:
+		return wrk.LayoutTiler()
 	default:
 		panic(fmt.Sprintf("Unknown layout state '%d'.", wrk.State))
 	}
@@ -386,9 +377,9 @@ func (wrk *Workspace) SetLayout(name string) {
 	case Floating:
 		wrk.curFloater = index
 		wrk.LayoutStateSet(Floating)
-	case AutoTiling:
-		wrk.curAutoTiler = index
-		wrk.LayoutStateSet(AutoTiling)
+	case Tiling:
+		wrk.curTiler = index
+		wrk.LayoutStateSet(Tiling)
 	case -1: // couldn't find layout with name 'name'
 		logger.Warning.Printf("Unknown layout '%s'.", name)
 		return
@@ -410,7 +401,7 @@ func (wrk *Workspace) findLayout(name string) (state int, index int) {
 		}
 	}
 	if use == nil {
-		for i, lay := range wrk.autoTilers {
+		for i, lay := range wrk.tilers {
 			if name == strings.ToLower(lay.Name()) {
 				use = lay
 				index = i
@@ -424,8 +415,8 @@ func (wrk *Workspace) findLayout(name string) (state int, index int) {
 
 	if _, ok := use.(layout.Floater); ok {
 		return Floating, index
-	} else if _, ok := use.(layout.AutoTiler); ok {
-		return AutoTiling, index
+	} else if _, ok := use.(layout.Tiler); ok {
+		return Tiling, index
 	}
 	panic(fmt.Sprintf("Unknown layout type: %T", use))
 }
@@ -434,8 +425,8 @@ func (wrk *Workspace) LayoutName() string {
 	switch wrk.State {
 	case Floating:
 		return wrk.LayoutFloater().Name()
-	case AutoTiling:
-		return wrk.LayoutAutoTiler().Name()
+	case Tiling:
+		return wrk.LayoutTiler().Name()
 	}
 	panic(fmt.Sprintf("Unknown workspace layout state: %d", wrk.State))
 }
@@ -446,9 +437,9 @@ func (wrk *Workspace) LayoutStateSet(state int) {
 	}
 
 	if state == wrk.State {
-		// If it's an AutoTiler, then just call Place again.
-		if wrk.State == AutoTiling {
-			wrk.LayoutAutoTiler().Place()
+		// If it's a tiler, then just call Place again.
+		if wrk.State == Tiling {
+			wrk.LayoutTiler().Place(wm.Config.FloatingPadding, 20)
 		}
 		return
 	}
@@ -458,8 +449,9 @@ func (wrk *Workspace) LayoutStateSet(state int) {
 	case Floating:
 		wrk.LayoutFloater().Save()
 		wrk.LayoutFloater().Unplace()
-	case AutoTiling:
-		wrk.LayoutAutoTiler().Unplace()
+	case Tiling:
+		wrk.LayoutTiler().Save()
+		wrk.LayoutTiler().Unplace()
 	default:
 		panic("Layout state not implemented.")
 	}
@@ -470,9 +462,10 @@ func (wrk *Workspace) LayoutStateSet(state int) {
 		wrk.State = state
 		wrk.LayoutFloater().Place()
 		wrk.LayoutFloater().Reposition()
-	case AutoTiling:
+	case Tiling:
 		wrk.State = state
-		wrk.LayoutAutoTiler().Place()
+		wrk.LayoutTiler().Place(wm.Config.FloatingPadding, 20)
+		wrk.LayoutTiler().Reposition()
 	default:
 		panic("Layout state not implemented.")
 	}

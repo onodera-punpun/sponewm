@@ -69,7 +69,6 @@ func (c *Client) Geom() xrect.Rect {
 
 func (c *Client) FrameTile() {
 	c.EnsureUnmax()
-	// TODO: Remove border?
 	c.FrameBorders()
 }
 

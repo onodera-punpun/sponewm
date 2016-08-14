@@ -16,6 +16,7 @@ type Configuration struct {
 	FfmRaise         bool
 	FfmHead          bool
 	FloatingPadding  []int
+	TilingPadding    []int
 	Workspaces       []string
 	DefaultLayout    string
 	Shell            string
@@ -32,6 +33,7 @@ func newConfig() *Configuration {
 		FfmHead:         false,
 		// TODO: Why does this only work when commented out?
 		//FloatingPadding: []int{29, 0, 0, 0},
+		//TilingPadding:   []int{29, 0, 0, 0},
 		Workspaces:      []string{"www", "irc", "src"},
 		Shell:           "dash",
 
@@ -173,6 +175,16 @@ func (conf *Configuration) loadOptionsConfigSection(
 						logger.Warning.Println(err)
 					}
 					conf.FloatingPadding = append(conf.FloatingPadding, i)
+				}
+			}
+		case "tiling_padding":
+			if tilingpadding, ok := getLastString(key); ok {
+				for _, a := range strings.Split(tilingpadding, " ") {
+					i, err := strconv.Atoi(a)
+					if err != nil {
+						logger.Warning.Println(err)
+					}
+					conf.TilingPadding = append(conf.TilingPadding, i)
 				}
 			}
 		case "shell":

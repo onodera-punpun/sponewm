@@ -10,8 +10,7 @@ import (
 
 const (
 	Floating = iota
-	AutoTiling
-	ManualTiling
+	Tiling
 )
 
 type Heads interface {
