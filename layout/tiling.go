@@ -87,15 +87,16 @@ func (t *Tiling) Add(c Client) {
 }
 
 func (t *Tiling) Remove(c Client) {
-	for l := t.clients.Front(); l != nil; l = l.Next() {
+	for l := t.clients.Back(); l != nil; l = l.Prev() {
 		if l.Value.(Client) == c {
 			t.clients.Remove(l)
+			return
 		}
 	}
 }
 
 func (t *Tiling) Exists(c Client) bool {
-	for l := t.clients.Front(); l != nil; l = l.Next() {
+	for l := t.clients.Back(); l != nil; l = l.Prev() {
 		if l.Value.(Client) == c {
 			return true
 		}
@@ -105,27 +106,9 @@ func (t *Tiling) Exists(c Client) bool {
 
 func (t *Tiling) Destroy() {}
 
-// Save is called when a workspace switches from a tiling layout to a
-// floating layout. It should save the "last-tiling" state for all tiling
-// clients.
-func (t *Tiling) Save() {
-	for l := t.clients.Front(); l != nil; l = l.Next() {
-		c := l.Value.(Client)
-		if _, ok := c.Layout().(*Tiling); ok {
-			c.SaveState("last-tiling")
-		}
-	}
-}
+func (t *Tiling) Save() {}
 
-// Reposition is called when a workspace switches from a floating layout to a
-// tiling layout. It should reload the "last-tiling" client state.
 func (t *Tiling) Reposition() {
-	for l := t.clients.Front(); l != nil; l = l.Next() {
-		c := l.Value.(Client)
-		if _, ok := c.Layout().(*Tiling); ok {
-			c.LoadState("last-tiling")
-		}
-	}
 }
 
 func (t *Tiling) MROpt(c Client, flags, x, y, width, height int) {}
@@ -136,6 +119,12 @@ func (t *Tiling) Move(c Client, x, y int) {}
 
 func (t *Tiling) Resize(c Client, width, height int) {}
 
-func (t *Tiling) MakeMaster() {
-	// TODO
+func (t *Tiling) MakeMaster(c Client) {
+	for l := t.clients.Back(); l != nil; l = l.Prev() {
+		if l.Value.(Client) == c {
+			t.clients.MoveToFront(l)
+			t.Place()
+			return
+		}
+	}
 }

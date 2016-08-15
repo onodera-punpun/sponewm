@@ -34,5 +34,5 @@ type Floater interface {
 
 type Tiler interface {
 	Layout
-	MakeMaster()
+	MakeMaster(c Client)
 }

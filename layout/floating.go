@@ -33,20 +33,21 @@ func (f *Floating) Unplace() {}
 
 func (f *Floating) Add(c Client) {
 	if !f.Exists(c) {
-		f.clients.PushFront(c)
+		f.clients.PushBack(c)
 	}
 }
 
 func (f *Floating) Remove(c Client) {
-	for l := f.clients.Front(); l != nil; l = l.Next() {
+	for l := f.clients.Back(); l != nil; l = l.Prev() {
 		if l.Value.(Client) == c {
 			f.clients.Remove(l)
+			return
 		}
 	}
 }
 
 func (f *Floating) Exists(c Client) bool {
-	for l := f.clients.Front(); l != nil; l = l.Next() {
+	for l := f.clients.Back(); l != nil; l = l.Prev() {
 		if l.Value.(Client) == c {
 			return true
 		}
@@ -60,7 +61,7 @@ func (f *Floating) Destroy() {}
 // tiling layout. It should save the "last-floating" state for all floating
 // clients.
 func (f *Floating) Save() {
-	for l := f.clients.Front(); l != nil; l = l.Next() {
+	for l := f.clients.Back(); l != nil; l = l.Prev() {
 		c := l.Value.(Client)
 		if _, ok := c.Layout().(*Floating); ok {
 			c.SaveState("last-floating")
@@ -71,7 +72,7 @@ func (f *Floating) Save() {
 // Reposition is called when a workspace switches from a tiling layout to a
 // floating layout. It should reload the "last-floating" client state.
 func (f *Floating) Reposition() {
-	for l := f.clients.Front(); l != nil; l = l.Next() {
+	for l := f.clients.Back(); l != nil; l = l.Prev() {
 		c := l.Value.(Client)
 		if _, ok := c.Layout().(*Floating); ok {
 			c.LoadState("last-floating")

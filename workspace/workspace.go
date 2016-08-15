@@ -448,7 +448,6 @@ func (wrk *Workspace) LayoutStateSet(state int) {
 		wrk.LayoutFloater().Save()
 		wrk.LayoutFloater().Unplace()
 	case Tiling:
-		wrk.LayoutTiler().Save()
 		wrk.LayoutTiler().Unplace()
 	default:
 		panic("Layout state not implemented.")
@@ -463,7 +462,6 @@ func (wrk *Workspace) LayoutStateSet(state int) {
 	case Tiling:
 		wrk.State = state
 		wrk.LayoutTiler().Place()
-		wrk.LayoutTiler().Reposition()
 	default:
 		panic("Layout state not implemented.")
 	}

@@ -4,6 +4,7 @@ import (
 	"github.com/BurntSushi/gribble"
 
 	"github.com/onodera-punpun/sponewm/workspace"
+	"github.com/onodera-punpun/sponewm/xclient"
 )
 
 type Tile struct {
@@ -73,6 +74,7 @@ func (cmd TileToggle) Run() gribble.Value {
 
 type MakeMaster struct {
 	Workspace gribble.Any `param:"1" types:"int,string"`
+	Client gribble.Any `param:"2" types:"int,string"`
 	Help      string      `
 Switches the current window with the first master in the layout for the
 workspace specified by Workspace.
@@ -90,7 +92,9 @@ func (cmd MakeMaster) Run() gribble.Value {
 			if wrk.State != workspace.Tiling {
 				return
 			}
-			wrk.LayoutTiler().MakeMaster()
+			withClient(cmd.Client, func(c *xclient.Client) {
+				wrk.LayoutTiler().MakeMaster(c)
+			})
 		})
 		return nil
 	})
