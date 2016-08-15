@@ -169,19 +169,6 @@ func (c *Client) updateState(action, prop string) {
 		case "toggle":
 			c.StackBelowToggle()
 		}
-	case "_NET_WM_STATE_DEMANDS_ATTENTION":
-		switch action {
-		case "remove":
-			c.attnStop()
-		case "add":
-			c.attnStart()
-		case "toggle":
-			if c.demanding {
-				c.attnStop()
-			} else {
-				c.attnStart()
-			}
-		}
 	default:
 		logger.Warning.Printf("_NET_WM_STATE: Unsupported state '%s'.", prop)
 	}
@@ -235,7 +222,6 @@ func (c *Client) refreshState() {
 	case stack.LayerBelow:
 		atoms = append(atoms, "_NET_WM_STATE_BELOW")
 	}
-	// ignoring _NET_WM_STATE_DEMANDS_ATTENTION
 	// ignoring _NET_WM_STATE_FOCUSED
 
 	ewmh.WmStateSet(wm.X, c.Id(), atoms)

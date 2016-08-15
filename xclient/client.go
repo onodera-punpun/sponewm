@@ -74,7 +74,6 @@ type Client struct {
 	shaped    bool
 
 	attnQuit  chan struct{}
-	demanding bool
 }
 
 func (c *Client) Map() {

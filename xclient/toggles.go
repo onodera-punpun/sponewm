@@ -1,9 +1,6 @@
 package xclient
 
 import (
-	"time"
-
-	"github.com/onodera-punpun/sponewm/frame"
 	"github.com/onodera-punpun/sponewm/layout"
 	"github.com/onodera-punpun/sponewm/stack"
 	"github.com/onodera-punpun/sponewm/wm"
@@ -288,48 +285,4 @@ func (c *Client) SkipPagerSet(yes bool) {
 		c.skipPager = false
 		c.removeState("_NET_WM_STATE_SKIP_PAGER")
 	}
-}
-
-func (c *Client) attnStart() {
-	if c.demanding {
-		return
-	}
-
-	c.demanding = true
-	go func() {
-		for {
-			select {
-			case <-time.After(500 * time.Millisecond):
-				if c.State() == frame.Active {
-					c.frame.Inactive()
-					c.state = frame.Inactive
-				} else {
-					c.frame.Active()
-					c.state = frame.Active
-				}
-			case <-c.attnQuit:
-				return
-			}
-		}
-	}()
-
-	c.addState("_NET_WM_STATE_DEMANDS_ATTENTION")
-}
-
-func (c *Client) attnStop() {
-	if !c.demanding {
-		return
-	}
-
-	c.attnQuit <- struct{}{}
-	c.demanding = false
-
-	// If this client is the last focused client, then make it active.
-	if wm.LastFocused().Id() == c.Id() {
-		c.frame.Active()
-	} else {
-		c.frame.Inactive()
-	}
-
-	c.removeState("_NET_WM_STATE_DEMANDS_ATTENTION")
 }

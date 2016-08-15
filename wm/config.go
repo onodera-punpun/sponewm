@@ -17,6 +17,7 @@ type Configuration struct {
 	FfmHead          bool
 	FloatingPadding  []int
 	TilingPadding    []int
+	Gap              int
 	Workspaces       []string
 	DefaultLayout    string
 	Shell            string
@@ -34,6 +35,7 @@ func newConfig() *Configuration {
 		// TODO: Why does this only work when commented out?
 		//FloatingPadding: []int{29, 0, 0, 0},
 		//TilingPadding:   []int{29, 0, 0, 0},
+		Gap:             20,
 		Workspaces:      []string{"www", "irc", "src"},
 		Shell:           "dash",
 
@@ -187,6 +189,8 @@ func (conf *Configuration) loadOptionsConfigSection(
 					conf.TilingPadding = append(conf.TilingPadding, i)
 				}
 			}
+		case "gap":
+			setInt(key, &conf.Gap)
 		case "shell":
 			setString(key, &conf.Shell)
 		}

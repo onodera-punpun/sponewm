@@ -60,7 +60,6 @@ func New(id xproto.Window) *Client {
 		fullscreen:  false,
 		skipTaskbar: false,
 		skipPager:   false,
-		demanding:   false,
 		attnQuit:    make(chan struct{}, 0),
 	}
 

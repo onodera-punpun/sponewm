@@ -11,12 +11,10 @@ import (
 )
 
 func (c *Client) Focus() {
-	c.attnStop()
 	focus.Focus(c)
 }
 
 func (c *Client) Focused() {
-	c.attnStop()
 	c.frame.Active()
 	c.state = frame.Active
 	focus.SetFocus(c)

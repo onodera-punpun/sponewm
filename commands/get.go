@@ -500,7 +500,7 @@ Returns a list of states that the client is in. These states are in
 correspondence with the possible values of the _NET_WM_STATE property.
 The following states may appear in the list: STICKY, MAXIMIZED_VERT,
 MAXIMIZED_HORZ, SKIP_TASKBAR, SKIP_PAGER, HIDDEN, FULLSCREEN,
-ABOVE, BELOW, DEMANDS_ATTENTION and FOCUSED.
+ABOVE, BELOW and FOCUSED.
 
 More details can be found here: http://goo.gl/FHdjl
 
