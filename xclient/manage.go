@@ -139,6 +139,12 @@ func (c *Client) maybeInitPlace(presumedWorkspace workspace.Workspacer) {
 				frame:     c.frame,
 				maximized: c.maximized,
 			}
+			c.states["last-tiling"] = clientState{
+				geom:      xrect.New(xrect.Pieces(c.frame.Geom())),
+				headGeom:  xrect.New(xrect.Pieces(wrk.HeadGeom())),
+				frame:     c.frame,
+				maximized: c.maximized,
+			}
 		} else if wm.Startup {
 			// This is a bit tricky. If the window manager is starting up and
 			// has to manage existing clients, then we need to find which
@@ -157,6 +163,12 @@ func (c *Client) maybeInitPlace(presumedWorkspace workspace.Workspacer) {
 			cgeom := c.frame.Geom()
 			if fakeWrk := wm.Heads.FindMostOverlap(cgeom); fakeWrk != nil {
 				c.states["last-floating"] = clientState{
+					geom:      xrect.New(xrect.Pieces(c.frame.Geom())),
+					headGeom:  xrect.New(xrect.Pieces(fakeWrk.HeadGeom())),
+					frame:     c.frame,
+					maximized: c.maximized,
+				}
+				c.states["last-tiling"] = clientState{
 					geom:      xrect.New(xrect.Pieces(c.frame.Geom())),
 					headGeom:  xrect.New(xrect.Pieces(fakeWrk.HeadGeom())),
 					frame:     c.frame,

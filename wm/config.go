@@ -1,7 +1,6 @@
 package wm
 
 import (
-	"strconv"
 	"strings"
 
 	"github.com/BurntSushi/xgbutil/ewmh"
@@ -15,9 +14,9 @@ type Configuration struct {
 	Ffm              bool
 	FfmRaise         bool
 	FfmHead          bool
-	FloatingPadding  []int
-	TilingPadding    []int
 	Gap              int
+	FloatingPadding  int
+	TilingPadding    int
 	Workspaces       []string
 	DefaultLayout    string
 	Shell            string
@@ -32,10 +31,9 @@ func newConfig() *Configuration {
 		Ffm:             true,
 		FfmRaise:        false,
 		FfmHead:         false,
-		// TODO: Why does this only work when commented out?
-		//FloatingPadding: []int{29, 0, 0, 0},
-		//TilingPadding:   []int{29, 0, 0, 0},
 		Gap:             20,
+		FloatingPadding: 20,
+		TilingPadding:   40,
 		Workspaces:      []string{"www", "irc", "src"},
 		Shell:           "dash",
 
@@ -170,25 +168,9 @@ func (conf *Configuration) loadOptionsConfigSection(
 		case "focus_follows_mouse_head":
 			setBool(key, &conf.FfmHead)
 		case "floating_padding":
-			if floatingpadding, ok := getLastString(key); ok {
-				for _, a := range strings.Split(floatingpadding, " ") {
-					i, err := strconv.Atoi(a)
-					if err != nil {
-						logger.Warning.Println(err)
-					}
-					conf.FloatingPadding = append(conf.FloatingPadding, i)
-				}
-			}
+			setInt(key, &conf.FloatingPadding)
 		case "tiling_padding":
-			if tilingpadding, ok := getLastString(key); ok {
-				for _, a := range strings.Split(tilingpadding, " ") {
-					i, err := strconv.Atoi(a)
-					if err != nil {
-						logger.Warning.Println(err)
-					}
-					conf.TilingPadding = append(conf.TilingPadding, i)
-				}
-			}
+			setInt(key, &conf.TilingPadding)
 		case "gap":
 			setInt(key, &conf.Gap)
 		case "shell":

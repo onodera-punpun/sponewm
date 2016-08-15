@@ -45,7 +45,6 @@ func (wrks *Workspaces) NewWorkspace(name string) *Workspace {
 		layout.NewFloating(),
 	}
 	wrk.tilers = []layout.Tiler{
-		layout.NewMaximized(),
 		layout.NewTiling(),
 	}
 
@@ -470,29 +469,4 @@ func (wrk *Workspace) LayoutStateSet(state int) {
 	}
 
 	event.Notify(event.ChangedLayout{wrk.Name})
-}
-
-func (wrk *Workspace) SelectGroupText() string {
-	return wrk.String()
-}
-
-func (wrk *Workspace) SelectText() string {
-	return wrk.String()
-}
-
-type SelectData struct {
-	Selected    func(wrk *Workspace)
-	Highlighted func(wrk *Workspace)
-}
-
-func (wrk *Workspace) SelectSelected(data interface{}) {
-	if f := data.(SelectData).Selected; f != nil {
-		f(wrk)
-	}
-}
-
-func (wrk *Workspace) SelectHighlighted(data interface{}) {
-	if f := data.(SelectData).Highlighted; f != nil {
-		f(wrk)
-	}
 }

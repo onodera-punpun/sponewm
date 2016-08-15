@@ -28,13 +28,13 @@ func (t *Tiling) SetGeom(geom xrect.Rect) {
 func (t *Tiling) Place() {
 	// TODO: I'm gonna hardcode this because I can't
 	// figure out this circular depenency shit.
-	padding := []int{69, 40, 40, 40}
 	gap := 20
+	padding := 40 - (gap / 2)
 
-	x := 0 + padding[1]
-	y := 0 + padding[0]
-	width := t.geom.Width() + t.geom.X() - padding[1] - padding[3]
-	height := t.geom.Height() + t.geom.Y() - padding[0] - padding[2]
+	x := t.geom.X() + padding
+	y := t.geom.Y() + padding
+	width := t.geom.Width() - (padding * 2)
+	height := t.geom.Height() - (padding * 2)
 
 	n := t.clients.Len() - 1
 	i := 0
@@ -43,37 +43,37 @@ func (t *Tiling) Place() {
 		c := l.Value.(Client)
 
 		if i < n {
-			if i % 2 != 0 {
+			if i%2 != 0 {
 				height /= 2
 			} else {
 				width /= 2
 			}
-			if i % 4 == 2 {
+			if i%4 == 2 {
 				x += width
-			} else if i % 4 == 3 {
+			} else if i%4 == 3 {
 				y += height
 			}
 		}
-		if i % 4 == 0 {
+		if i%4 == 0 {
 			y -= height
-		} else if i % 4 == 1 {
+		} else if i%4 == 1 {
 			x += width
-		} else if i % 4 == 2 {
+		} else if i%4 == 2 {
 			y += height
-		} else if i % 4 == 3 {
+		} else if i%4 == 3 {
 			x -= width
 		}
 		if i == 0 {
 			if n != 0 {
-				width = int(float64(t.geom.Width() + t.geom.X()) * 0.617) - padding[1] - padding[3]
+				width = int(float64(t.geom.Width())*0.617) - (padding * 2)
 			}
-			y = 0 + padding[0]
+			y = t.geom.Y() + padding
 		} else if i == 1 {
-			width = t.geom.Width() + t.geom.X() - padding[1] - padding[3] - width
+			width = t.geom.Width() - width - (padding * 2)
 		}
 
 		c.FrameTile()
-		c.MoveResize(x + gap, y + gap, width - gap, height - gap)
+		c.MoveResize(x+(gap/2), y+(gap/2), width-gap, height-gap)
 		i++
 	}
 }

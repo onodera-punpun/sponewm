@@ -27,7 +27,7 @@ func (f *Floating) SetGeom(geom xrect.Rect) {
 	f.geom = geom
 }
 
-func (f *Floating) Place()   {}
+func (f *Floating) Place() {}
 
 func (f *Floating) Unplace() {}
 
@@ -102,26 +102,26 @@ func (f *Floating) Resize(c Client, width, height int) {
 func (f *Floating) InitialPlacement(c Client, X *xgbutil.XUtil) {
 	// TODO: I'm gonna hardcode this because I can't
 	// figure out this circular depenency shit.
-	padding := []int{29, 20, 20, 20}
+	padding := 20
 
 	cgeom := c.Geom()
 	qp, _ := xproto.QueryPointer(X.Conn(), X.RootWin()).Reply()
 
-	x := int(qp.RootX) - (cgeom.Width() / 2)
-	y := int(qp.RootY) - (cgeom.Height() / 2)
-	// Left screen border.
-	if x < padding[3] {
-		x = padding[3]
-	// Right screen border.
-	} else if x > f.geom.Width() + f.geom.X() - cgeom.Width() - padding[1] {
-		x = f.geom.Width() + f.geom.X() - cgeom.Width() - padding[1]
+	x := int(qp.RootX) - (cgeom.Width() / 2) + f.geom.X() - (f.geom.X() / 2)
+	y := int(qp.RootY) - (cgeom.Height() / 2) + f.geom.Y() - (f.geom.Y() / 2)
+	if x < padding {
+		// Left screen border.
+		x = f.geom.X() + padding
+	} else if x > f.geom.Width()-cgeom.Width()-padding {
+		// Right screen border.
+		x = f.geom.X() + f.geom.Width() - cgeom.Width() - padding
 	}
-	// Top screen border.
-	if y < padding[0] {
-		y = padding[0]
-	// Bottom screen border.
-	} else if y > f.geom.Height() + f.geom.Y() - cgeom.Height() - padding[2] {
-		y = f.geom.Height() + f.geom.Y() - cgeom.Height() - padding[2] 
+	if y < padding {
+		// Top screen border.
+		y = f.geom.Y() + padding
+	} else if y > f.geom.Height()-cgeom.Height()-padding {
+		// Bottom screen border.
+		y = f.geom.Y() + f.geom.Height() - cgeom.Height() - padding
 	}
 
 	f.Move(c, x, y)
