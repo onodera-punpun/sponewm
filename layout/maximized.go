@@ -26,13 +26,15 @@ func (m *Maximized) SetGeom(geom xrect.Rect) {
 }
 
 func (m *Maximized) Place() {
-	for el := m.clients.Front(); el != nil; el = el.Next() {
-		c := el.Value.(Client)
-		x, y, w, h := m.geom.X(), m.geom.Y(), m.geom.Width(), m.geom.Height()
+	for l := m.clients.Front(); l != nil; l = l.Next() {
+		c := l.Value.(Client)
+
 		c.FrameTile()
-		c.MoveResize(x, y, w, h)
+		c.MoveResize(m.geom.X(), m.geom.Y(), m.geom.Width(), m.geom.Height())
 	}
 }
+
+func (m *Maximized) Unplace() {}
 
 func (m *Maximized) Add(c Client) {
 	if !m.Exists(c) {
@@ -40,14 +42,22 @@ func (m *Maximized) Add(c Client) {
 	}
 }
 
+func (t *Maximized) Remove(c Client) {}
+
 func (m *Maximized) Exists(c Client) bool {
-	for e := m.clients.Front(); e != nil; e = e.Next() {
-		if e.Value.(Client) == c {
+	for l := m.clients.Front(); l != nil; l = l.Next() {
+		if l.Value.(Client) == c {
 			return true
 		}
 	}
 	return false
 }
+
+func (m *Maximized) Destroy() {}
+
+func (m *Maximized) Save() {}
+
+func (m *Maximized) Reposition() {}
 
 func (m *Maximized) MROpt(c Client, flags, x, y, width, height int) {}
 
@@ -56,3 +66,5 @@ func (m *Maximized) MoveResize(c Client, x, y, width, height int) {}
 func (m *Maximized) Move(c Client, x, y int) {}
 
 func (m *Maximized) Resize(c Client, width, height int) {}
+
+func (m *Maximized) MakeMaster() {}

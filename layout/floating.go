@@ -1,19 +1,21 @@
 package layout
 
 import (
+	"container/list"
+
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/xrect"
 )
 
 type Floating struct {
-	clients []Client
+	clients *list.List
 	geom    xrect.Rect
 }
 
 func NewFloating() *Floating {
 	return &Floating{
-		clients: make([]Client, 0),
+		clients: list.New(),
 	}
 }
 
@@ -31,21 +33,21 @@ func (f *Floating) Unplace() {}
 
 func (f *Floating) Add(c Client) {
 	if !f.Exists(c) {
-		f.clients = append(f.clients, c)
+		f.clients.PushFront(c)
 	}
 }
 
 func (f *Floating) Remove(c Client) {
-	for i, client := range f.clients {
-		if client == c {
-			f.clients = append(f.clients[:i], f.clients[i+1:]...)
+	for l := f.clients.Front(); l != nil; l = l.Next() {
+		if l.Value.(Client) == c {
+			f.clients.Remove(l)
 		}
 	}
 }
 
 func (f *Floating) Exists(c Client) bool {
-	for _, client := range f.clients {
-		if client == c {
+	for l := f.clients.Front(); l != nil; l = l.Next() {
+		if l.Value.(Client) == c {
 			return true
 		}
 	}
@@ -58,7 +60,8 @@ func (f *Floating) Destroy() {}
 // tiling layout. It should save the "last-floating" state for all floating
 // clients.
 func (f *Floating) Save() {
-	for _, c := range f.clients {
+	for l := f.clients.Front(); l != nil; l = l.Next() {
+		c := l.Value.(Client)
 		if _, ok := c.Layout().(*Floating); ok {
 			c.SaveState("last-floating")
 		}
@@ -68,14 +71,8 @@ func (f *Floating) Save() {
 // Reposition is called when a workspace switches from a tiling layout to a
 // floating layout. It should reload the "last-floating" client state.
 func (f *Floating) Reposition() {
-	if f.geom == nil {
-		return
-	}
-	for _, c := range f.clients {
-		// Don't reposition windows that are already in the floating layout.
-		if c.ShouldForceFloating() {
-			continue
-		}
+	for l := f.clients.Front(); l != nil; l = l.Next() {
+		c := l.Value.(Client)
 		if _, ok := c.Layout().(*Floating); ok {
 			c.LoadState("last-floating")
 		}
@@ -102,7 +99,11 @@ func (f *Floating) Resize(c Client, width, height int) {
 	c.SaveState("last-floating")
 }
 
-func (f *Floating) InitialPlacement(c Client, X *xgbutil.XUtil, padding []int) {
+func (f *Floating) InitialPlacement(c Client, X *xgbutil.XUtil) {
+	// TODO: I'm gonna hardcode this because I can't
+	// figure out this circular depenency shit.
+	padding := []int{29, 20, 20, 20}
+
 	cgeom := c.Geom()
 	qp, _ := xproto.QueryPointer(X.Conn(), X.RootWin()).Reply()
 

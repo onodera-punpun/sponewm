@@ -9,6 +9,7 @@ type Layout interface {
 	Name() string
 	SetGeom(geom xrect.Rect)
 
+	Place()
 	Unplace()
 
 	Add(c Client)
@@ -28,12 +29,10 @@ type Layout interface {
 
 type Floater interface {
 	Layout
-	Place()
-	InitialPlacement(c Client, X *xgbutil.XUtil, padding []int)
+	InitialPlacement(c Client, X *xgbutil.XUtil)
 }
 
 type Tiler interface {
 	Layout
-	Place(padding []int, gap int)
-	MakeMaster(c Client)
+	MakeMaster()
 }

@@ -90,10 +90,8 @@ func (cmd MakeMaster) Run() gribble.Value {
 			if wrk.State != workspace.Tiling {
 				return
 			}
-			// TODO: Add this
-			//wrk.LayoutTiler().MakeMaster()
+			wrk.LayoutTiler().MakeMaster()
 		})
 		return nil
 	})
 }
-

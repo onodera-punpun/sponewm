@@ -45,8 +45,7 @@ func (wrks *Workspaces) NewWorkspace(name string) *Workspace {
 		layout.NewFloating(),
 	}
 	wrk.tilers = []layout.Tiler{
-		// TODO: Fix Maximed
-		//layout.NewMaximized(),
+		layout.NewMaximized(),
 		layout.NewTiling(),
 	}
 
@@ -249,7 +248,7 @@ func (wrk *Workspace) Place() {
 	case Floating:
 		// Nada nada limonada
 	case Tiling:
-		wrk.LayoutTiler().Place(wm.Config.FloatingPadding, 20)
+		wrk.LayoutTiler().Place()
 	default:
 		panic("Layout mode not implemented.")
 	}
@@ -439,7 +438,7 @@ func (wrk *Workspace) LayoutStateSet(state int) {
 	if state == wrk.State {
 		// If it's a tiler, then just call Place again.
 		if wrk.State == Tiling {
-			wrk.LayoutTiler().Place(wm.Config.FloatingPadding, 20)
+			wrk.LayoutTiler().Place()
 		}
 		return
 	}
@@ -464,7 +463,7 @@ func (wrk *Workspace) LayoutStateSet(state int) {
 		wrk.LayoutFloater().Reposition()
 	case Tiling:
 		wrk.State = state
-		wrk.LayoutTiler().Place(wm.Config.FloatingPadding, 20)
+		wrk.LayoutTiler().Place()
 		wrk.LayoutTiler().Reposition()
 	default:
 		panic("Layout state not implemented.")

@@ -2,6 +2,7 @@ package layout
 
 import (
 	"container/list"
+
 	"github.com/BurntSushi/xgbutil/xrect"
 )
 
@@ -24,10 +25,14 @@ func (t *Tiling) SetGeom(geom xrect.Rect) {
 	t.geom = geom
 }
 
-func (t *Tiling) Place(padding []int, gap int) {
-	// TODO: Is the 0 needed here?
-	x := 0 + padding[0]
-	y := 0 + padding[2]
+func (t *Tiling) Place() {
+	// TODO: I'm gonna hardcode this because I can't
+	// figure out this circular depenency shit.
+	padding := []int{69, 40, 40, 40}
+	gap := 20
+
+	x := 0 + padding[1]
+	y := 0 + padding[0]
 	width := t.geom.Width() + t.geom.X() - padding[1] - padding[3]
 	height := t.geom.Height() + t.geom.Y() - padding[0] - padding[2]
 
@@ -62,7 +67,7 @@ func (t *Tiling) Place(padding []int, gap int) {
 			if n != 0 {
 				width = int(float64(t.geom.Width() + t.geom.X()) * 0.617) - padding[1] - padding[3]
 			}
-			y = 0 + padding[2]
+			y = 0 + padding[0]
 		} else if i == 1 {
 			width = t.geom.Width() + t.geom.X() - padding[1] - padding[3] - width
 		}
@@ -131,6 +136,6 @@ func (t *Tiling) Move(c Client, x, y int) {}
 
 func (t *Tiling) Resize(c Client, width, height int) {}
 
-func (t *Tiling) MakeMaster(c Client) {
-	t.clients.PushFront(c)
+func (t *Tiling) MakeMaster() {
+	// TODO
 }
