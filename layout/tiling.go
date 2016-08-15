@@ -29,7 +29,7 @@ func (t *Tiling) Place() {
 	// TODO: I'm gonna hardcode this because I can't
 	// figure out this circular depenency shit.
 	gap := 20
-	padding := 40 - (gap / 2)
+	padding := 80 - (gap / 2)
 
 	x := t.geom.X() + padding
 	y := t.geom.Y() + padding
@@ -82,7 +82,7 @@ func (t *Tiling) Unplace() {}
 
 func (t *Tiling) Add(c Client) {
 	if !t.Exists(c) {
-		t.clients.PushFront(c)
+		t.clients.PushBack(c)
 	}
 }
 

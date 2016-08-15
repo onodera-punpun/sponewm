@@ -99,15 +99,6 @@ func main() {
 		return
 	}
 
-	// Do this first! Attempt to retrieve window manager ownership.
-	// This includes waiting for any existing window manager to die.
-	// 'own' also sets up handlers for quitting when a window manager tries
-	// to replace *us*.
-	if err := own(X, flagReplace); err != nil {
-		logger.Error.Fatalf(
-			"Could not establish window manager ownership: %s", err)
-	}
-
 	if len(flagConfigDir) > 0 {
 		misc.ConfigPaths.Override = flagConfigDir
 	}
