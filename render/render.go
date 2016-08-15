@@ -49,7 +49,7 @@ func NewCorner(X *xgbutil.XUtil, borderType int, borderColor Color,
 	width, height int) *Image {
 
 	return NewBorder(X, borderType, borderColor,
-			width, height)
+		width, height)
 }
 
 // XXX: Optimize.

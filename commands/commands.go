@@ -17,8 +17,8 @@ import (
 	"github.com/BurntSushi/xgbutil/xrect"
 
 	"github.com/onodera-punpun/sponewm/focus"
-	"github.com/onodera-punpun/sponewm/wm"
 	"github.com/onodera-punpun/sponewm/logger"
+	"github.com/onodera-punpun/sponewm/wm"
 	"github.com/onodera-punpun/sponewm/workspace"
 	"github.com/onodera-punpun/sponewm/xclient"
 )

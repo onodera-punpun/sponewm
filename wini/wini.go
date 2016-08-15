@@ -182,7 +182,7 @@ func (d *Data) Sections() []string {
 	sections := make([]string, len(d.data))
 
 	i := 0
-	for s, _ := range d.data {
+	for s := range d.data {
 		sections[i] = s
 		i++
 	}
@@ -210,7 +210,7 @@ func (d *Data) Keys(section string) []Key {
 	if s, ok := d.data[skey]; ok {
 		keys := make([]Key, len(s))
 		i := 0
-		for k, _ := range s {
+		for k := range s {
 			keys[i] = Key{data: d, section: skey, key: k,
 				niceSection: section}
 			i++

@@ -8,7 +8,7 @@ import (
 )
 
 type ThemeConfig struct {
-	Borders     ThemeBorders
+	Borders ThemeBorders
 }
 
 type ThemeBorders struct {

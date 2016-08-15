@@ -36,8 +36,8 @@ type Client struct {
 	frame     frame.Frame
 	workspace workspace.Workspacer
 
-	frames  clientFrames
-	states  map[string]clientState
+	frames clientFrames
+	states map[string]clientState
 
 	name        string
 	state       int // One of frame.Active or frame.Inactive.
@@ -73,7 +73,7 @@ type Client struct {
 	hadStruts bool
 	shaped    bool
 
-	attnQuit  chan struct{}
+	attnQuit chan struct{}
 }
 
 func (c *Client) Map() {

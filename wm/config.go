@@ -11,15 +11,15 @@ import (
 )
 
 type Configuration struct {
-	Ffm              bool
-	FfmRaise         bool
-	FfmHead          bool
-	Gap              int
-	FloatingPadding  int
-	TilingPadding    int
-	Workspaces       []string
-	DefaultLayout    string
-	Shell            string
+	Ffm             bool
+	FfmRaise        bool
+	FfmHead         bool
+	Gap             int
+	FloatingPadding int
+	TilingPadding   int
+	Workspaces      []string
+	DefaultLayout   string
+	Shell           string
 
 	mouse map[string][]mouseCommand
 	key   map[string][]keyCommand

@@ -7,7 +7,7 @@ import (
 
 func newHacks() wm.CommandHacks {
 	return wm.CommandHacks{
-		MouseResizeDirection:     mouseResizeDirection,
+		MouseResizeDirection: mouseResizeDirection,
 	}
 }
 
