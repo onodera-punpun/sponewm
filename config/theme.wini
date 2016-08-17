@@ -1,9 +1,0 @@
-[Borders]
-# Set border size
-border_size := 10
-
-# Set border colors
-a_thin_color := 0xeeeeee
-i_thin_color := 0xeeeeee
-a_border_color := 0xeeeeee
-i_border_color := 0xeeeeee

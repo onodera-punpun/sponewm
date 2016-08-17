@@ -167,7 +167,7 @@ EVENTLOOP:
 			c := client.(*xclient.Client)
 
 			// TODO: Erm, can I remove this?
-			if _, ok := c.Frame().(*frame.Borders); ok {
+			if _, ok := c.Frame().(*frame.Decor); ok {
 				c.FrameNada()
 			}
 		}

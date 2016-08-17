@@ -45,7 +45,7 @@ func (c *Client) handleProperty(name string) {
 		decor := c.shouldDecor()
 		if _, ok := c.Layout().(layout.Floater); ok {
 			if decor {
-				c.FrameBorders()
+				c.FrameDecor()
 			} else {
 				c.FrameNada()
 			}
@@ -53,7 +53,7 @@ func (c *Client) handleProperty(name string) {
 			for k := range c.states {
 				s := c.states[k]
 				if decor {
-					s.frame = c.frames.borders
+					s.frame = c.frames.decor
 				} else {
 					s.frame = c.frames.nada
 				}

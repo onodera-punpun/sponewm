@@ -29,7 +29,7 @@ var Env = gribble.New([]gribble.Command{
 	&Close{},
 	&Focus{},
 	&FocusRaise{},
-	&FrameBorders{},
+	&FrameDecor{},
 	&FrameNada{},
 	&ToggleFloating{},
 	&ToggleMaximize{},
@@ -208,19 +208,19 @@ func (cmd FocusRaise) Run() gribble.Value {
 	})
 }
 
-type FrameBorders struct {
+type FrameDecor struct {
 	Client gribble.Any `param:"1" types:"int,string"`
 	Help   string      `
-Set the decorations of the window specified by Client to the "Borders" frame.
+Set the decorations of the window specified by Client to the "Decor" frame.
 
 Client may be the window id or a substring that matches a window name.
 `
 }
 
-func (cmd FrameBorders) Run() gribble.Value {
+func (cmd FrameDecor) Run() gribble.Value {
 	return syncRun(func() gribble.Value {
 		withClient(cmd.Client, func(c *xclient.Client) {
-			c.FrameBorders()
+			c.FrameDecor()
 		})
 		return nil
 	})

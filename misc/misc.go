@@ -1,10 +1,7 @@
 package misc
 
 import (
-	"fmt"
 	"math"
-	"runtime"
-	"strings"
 )
 
 func Max(a, b int) int {
@@ -37,24 +34,4 @@ func Round(n float64) int {
 		return int(ceil)
 	}
 	return int(ceil) - 1
-}
-
-// Prints a simple stack trace without panicing.
-//
-// XXX: I tried using runtime.Stack, but I couldn't get it to work...
-func StackTrace() string {
-	// var pc uintptr
-	var fname string
-	var line int
-	var ok bool = true
-
-	lines := make([]string, 0, 10)
-	for i := 1; i < 200; i++ {
-		_, fname, line, ok = runtime.Caller(i)
-		if !ok {
-			break
-		}
-		lines = append(lines, fmt.Sprintf("%s:%d %s", fname, line, "N/A"))
-	}
-	return strings.Join(lines, "\n")
 }

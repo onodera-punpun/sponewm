@@ -27,7 +27,7 @@ var (
 	Clients    ClientList
 	Heads      *heads.Heads
 	Config     *Configuration
-	Theme      *ThemeConfig
+	Theme      *ThemeDecor
 	StickyWrk  *workspace.Sticky
 	gribbleEnv *gribble.Environment
 	cmdHacks   CommandHacks

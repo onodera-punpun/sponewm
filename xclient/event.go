@@ -138,7 +138,6 @@ func (c *Client) sendConfigureNotify() {
 		Y:                int16(geom.Y()),
 		Width:            uint16(c.win.Geom.Width()),
 		Height:           uint16(c.win.Geom.Height()),
-		BorderWidth:      0,
 		OverrideRedirect: false,
 	}
 	xproto.SendEvent(wm.X.Conn(), false, c.Id(),
@@ -273,23 +272,6 @@ func (c *Client) cbShapeNotify() xevent.ShapeNotifyFun {
 		// kind of decoration. Unless I'm mistaken, shaping SponeWM's decorations
 		// to fit client shaping really isn't going to do anything...
 		if _, ok := c.frame.(*frame.Nada); ok {
-			return
-		}
-
-		// So this is only done with Borders frames. It basically
-		// negates the effects of shaping since we use one monolithic
-		// rectangle.
-		rect := xproto.Rectangle{
-			X:      0,
-			Y:      0,
-			Width:  uint16(c.frame.Geom().Width()),
-			Height: uint16(c.frame.Geom().Height()),
-		}
-		err = shape.RectanglesChecked(wm.X.Conn(),
-			shape.SoUnion, shape.SkBounding, xproto.ClipOrderingUnsorted,
-			c.frame.Parent().Id, 0, 0, []xproto.Rectangle{rect}).Check()
-		if err != nil {
-			logger.Warning.Printf("Error adding rectangles on '%s': %s", c, err)
 			return
 		}
 	}

@@ -108,8 +108,7 @@ func (t *Tiling) Destroy() {}
 
 func (t *Tiling) Save() {}
 
-func (t *Tiling) Reposition() {
-}
+func (t *Tiling) Reposition() {}
 
 func (t *Tiling) MROpt(c Client, flags, x, y, width, height int) {}
 

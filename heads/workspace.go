@@ -23,6 +23,8 @@ func (hds *Heads) ActivateWorkspace(wk *workspace.Workspace) {
 
 func (hds *Heads) SwitchWorkspaces(wk1, wk2 *workspace.Workspace) {
 	v1, v2 := hds.VisibleIndex(wk1), hds.VisibleIndex(wk2)
+	// TODO: Somehow siwtch Show and Hide here, for less flickering
+	// when switching desktop
 	switch {
 	case v1 > -1 && v2 > -1:
 		wk1.Hide()

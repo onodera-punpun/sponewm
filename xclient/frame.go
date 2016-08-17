@@ -24,9 +24,9 @@ func (c *Client) refreshExtents() {
 	ewmh.FrameExtentsSet(wm.X, c.Id(), &exts)
 }
 
-// FrameBorders switches this client's frame to the 'Borders' frame.
-func (c *Client) FrameBorders() {
-	c.frames.set(c.frames.borders)
+// FrameDecor switches this client's frame to the 'Decor' frame.
+func (c *Client) FrameDecor() {
+	c.frames.set(c.frames.decor)
 }
 
 // FrameNada switches this client's frame to the 'Nada' frame.
@@ -177,9 +177,9 @@ func (c *Client) validateSize(size, inc, base, min, max int) int {
 // clientFrames represents the group of all possible frames that the client
 // can switch to at any point in time.
 type clientFrames struct {
-	client  *Client
-	borders *frame.Borders
-	nada    *frame.Nada
+	client *Client
+	decor  *frame.Decor
+	nada   *frame.Nada
 }
 
 // newClientFrames constructs a clientFrames value, initializes all possible
@@ -190,13 +190,9 @@ func (c *Client) newClientFrames() clientFrames {
 	cf := createFrames(c)
 
 	if c.shouldDecor() {
-		c.frame = cf.borders
+		c.frame = cf.decor
 	} else {
-		if c.PrimaryType() == TypeNormal {
-			c.frame = cf.nada
-		} else {
-			c.frame = cf.nada
-		}
+		c.frame = cf.nada
 	}
 
 	x, y, w, h := frame.ClientToFrame(c.frame, -1,
@@ -224,8 +220,7 @@ func createFrames(c *Client) clientFrames {
 	cf.nada, err = frame.NewNada(wm.X, nil, c)
 	errHandle(err)
 
-	cf.borders, err = frame.NewBorders(wm.X, wm.Theme.Borders.FrameTheme(),
-		cf.nada.Parent(), c)
+	cf.decor, err = frame.NewDecor(wm.X, wm.Theme.FrameTheme(), cf.nada.Parent(), c)
 	errHandle(err)
 
 	return cf
@@ -250,22 +245,22 @@ func (cf clientFrames) set(f frame.Frame) {
 // this client.
 func (cf clientFrames) destroy() {
 	cf.nada.Destroy()
-	cf.borders.Destroy()
+	cf.decor.Destroy()
 
 	// Since a single parent window is shared between all frames, we only need
 	// to pick a parent window from one of the frames, and destroy that.
-	cf.borders.Parent().Destroy()
+	cf.decor.Parent().Destroy()
 }
 
 func (cf clientFrames) maximize() {
-	cf.borders.Maximize()
+	cf.decor.Maximize()
 	cf.nada.Maximize()
 
 	cf.client.refreshExtents()
 }
 
 func (cf clientFrames) unmaximize() {
-	cf.borders.Unmaximize()
+	cf.decor.Unmaximize()
 	cf.nada.Unmaximize()
 
 	cf.client.refreshExtents()

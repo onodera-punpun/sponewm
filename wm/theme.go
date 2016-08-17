@@ -1,66 +1,80 @@
 package wm
 
+// TODO: This is a fucking mess, read up on structs
+// and shit, and clean this up.
+
 import (
+	"github.com/BurntSushi/xgbutil/xgraphics"
+
 	"github.com/onodera-punpun/sponewm/frame"
 	"github.com/onodera-punpun/sponewm/misc"
-	"github.com/onodera-punpun/sponewm/render"
-	"github.com/onodera-punpun/sponewm/wini"
+	"github.com/onodera-punpun/sponewm/logger"
 )
 
-type ThemeConfig struct {
-	Borders ThemeBorders
+type ThemeDecor struct {
+	decorTopA, decorTopI       *xgraphics.Image
+	decorBottomA, decorBottomI *xgraphics.Image
+	decorLeftA, decorLeftI     *xgraphics.Image
+	decorRightA, decorRightI   *xgraphics.Image
+	decorSizeTop               int
+	decorSizeBottom            int
+	decorSizeLeft              int
+	decorSizeRight             int
 }
 
-type ThemeBorders struct {
-	borderSize                 int
-	aBorderColor, iBorderColor render.Color
-}
-
-func (tb ThemeBorders) FrameTheme() *frame.BordersTheme {
-	return &frame.BordersTheme{
-		BorderSize:   tb.borderSize,
-		ABorderColor: tb.aBorderColor,
-		IBorderColor: tb.iBorderColor,
+func (td ThemeDecor) FrameTheme() *frame.DecorTheme {
+	return &frame.DecorTheme{
+		DecorTopA:       td.decorTopA,
+		DecorTopI:       td.decorTopI,
+		DecorBottomA:    td.decorBottomA,
+		DecorBottomI:    td.decorBottomI,
+		DecorLeftA:      td.decorLeftA,
+		DecorLeftI:      td.decorLeftI,
+		DecorRightA:     td.decorRightA,
+		DecorRightI:     td.decorRightI,
+		DecorSizeTop:    td.decorSizeTop,
+		DecorSizeBottom: td.decorSizeBottom,
+		DecorSizeLeft:   td.decorSizeLeft,
+		DecorSizeRight:  td.decorSizeRight,
 	}
 }
 
-func newTheme() *ThemeConfig {
-	return &ThemeConfig{
-		Borders: ThemeBorders{
-			borderSize:   10,
-			aBorderColor: render.NewColor(0xeeeeee),
-			iBorderColor: render.NewColor(0xeeeeee),
-		},
+func newTheme() *ThemeDecor {
+	return &ThemeDecor{
+		decorTopA:       builtInImage(misc.DecorTopAPng),
+		decorTopI:       builtInImage(misc.DecorTopIPng),
+		decorBottomA:    builtInImage(misc.DecorBottomAPng),
+		decorBottomI:    builtInImage(misc.DecorBottomIPng),
+		decorLeftA:      builtInImage(misc.DecorLeftAPng),
+		decorLeftI:      builtInImage(misc.DecorLeftIPng),
+		decorRightA:     builtInImage(misc.DecorRightAPng),
+		decorRightI:     builtInImage(misc.DecorRightIPng),
+		decorSizeTop:    20,
+		decorSizeBottom: 10,
+		decorSizeLeft:   10,
+		decorSizeRight:  10,
 	}
 }
 
-func loadTheme() (*ThemeConfig, error) {
+func loadTheme() (*ThemeDecor, error) {
 	theme := newTheme()
 
-	tdata, err := wini.Parse(misc.ConfigFile("theme.wini"))
-	if err != nil {
-		return nil, err
-	}
-
-	for _, section := range tdata.Sections() {
-		switch section {
-		case "borders":
-			for _, key := range tdata.Keys(section) {
-				loadBorderOption(theme, key)
-			}
-		}
-	}
+	xgraphics.NewFileName(X, "active_top")
+	xgraphics.NewFileName(X, "inactive_top")
+	xgraphics.NewFileName(X, "active_bottom")
+	xgraphics.NewFileName(X, "inactive_bottom")
+	xgraphics.NewFileName(X, "active_left")
+	xgraphics.NewFileName(X, "inactive_left")
+	xgraphics.NewFileName(X, "active_right")
+	xgraphics.NewFileName(X, "inactive_right")
 
 	return theme, nil
 }
 
-func loadBorderOption(theme *ThemeConfig, k wini.Key) {
-	switch k.Name() {
-	case "border_size":
-		setInt(k, &theme.Borders.borderSize)
-	case "a_border_color":
-		setColor(k, &theme.Borders.aBorderColor)
-	case "i_border_color":
-		setColor(k, &theme.Borders.iBorderColor)
+func builtInImage(builtInData []byte) *xgraphics.Image {
+	img, err := xgraphics.NewBytes(X, builtInData)
+	if err != nil {
+		logger.Error.Fatalln(err)
 	}
+	return img
 }

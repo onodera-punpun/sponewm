@@ -4,46 +4,45 @@ import (
 	"github.com/BurntSushi/xgb/xproto"
 
 	"github.com/BurntSushi/xgbutil"
-
-	"github.com/onodera-punpun/sponewm/render"
+	"github.com/BurntSushi/xgbutil/xgraphics"
 )
 
-type Borders struct {
+type Decor struct {
 	*frame
-	theme *BordersTheme
+	theme *DecorTheme
 
 	topSide, bottomSide, leftSide, rightSide   *piece
 	topLeft, topRight, bottomLeft, bottomRight *piece
 }
 
-func NewBorders(X *xgbutil.XUtil,
-	t *BordersTheme, p *Parent, c Client) (*Borders, error) {
+func NewDecor(X *xgbutil.XUtil,
+	t *DecorTheme, p *Parent, c Client) (*Decor, error) {
 
 	f, err := newFrame(X, p, c)
 	if err != nil {
 		return nil, err
 	}
 
-	bf := &Borders{frame: f, theme: t}
+	df := &Decor{frame: f, theme: t}
 
-	bf.topSide = bf.newTopSide()
-	bf.bottomSide = bf.newBottomSide()
-	bf.leftSide = bf.newLeftSide()
-	bf.rightSide = bf.newRightSide()
+	df.topSide = df.newTopSide()
+	df.bottomSide = df.newBottomSide()
+	df.leftSide = df.newLeftSide()
+	df.rightSide = df.newRightSide()
 
-	bf.topLeft = bf.newTopLeft()
-	bf.topRight = bf.newTopRight()
-	bf.bottomLeft = bf.newBottomLeft()
-	bf.bottomRight = bf.newBottomRight()
+	df.topLeft = df.newTopLeft()
+	df.topRight = df.newTopRight()
+	df.bottomLeft = df.newBottomLeft()
+	df.bottomRight = df.newBottomRight()
 
-	return bf, nil
+	return df, nil
 }
 
-func (f *Borders) Current() bool {
+func (f *Decor) Current() bool {
 	return f.client.Frame() == f
 }
 
-func (f *Borders) Destroy() {
+func (f *Decor) Destroy() {
 	f.topSide.Destroy()
 	f.bottomSide.Destroy()
 	f.leftSide.Destroy()
@@ -57,7 +56,7 @@ func (f *Borders) Destroy() {
 	f.frame.Destroy()
 }
 
-func (f *Borders) Off() {
+func (f *Decor) Off() {
 	f.topSide.Unmap()
 	f.bottomSide.Unmap()
 	f.leftSide.Unmap()
@@ -69,7 +68,7 @@ func (f *Borders) Off() {
 	f.bottomRight.Unmap()
 }
 
-func (f *Borders) On() {
+func (f *Decor) On() {
 	Reset(f)
 
 	if f.client.State() == Active {
@@ -91,7 +90,7 @@ func (f *Borders) On() {
 	}
 }
 
-func (f *Borders) Active() {
+func (f *Decor) Active() {
 	f.State = Active
 
 	f.topSide.Active()
@@ -108,7 +107,7 @@ func (f *Borders) Active() {
 	f.parent.ClearAll()
 }
 
-func (f *Borders) Inactive() {
+func (f *Decor) Inactive() {
 	f.State = Inactive
 
 	f.topSide.Inactive()
@@ -125,8 +124,11 @@ func (f *Borders) Inactive() {
 	f.parent.ClearAll()
 }
 
-func (f *Borders) Maximize() {
-	if f.theme.BorderSize > 0 && f.Current() {
+func (f *Decor) Maximize() {
+	if f.theme.DecorSizeTop+f.theme.DecorSizeBottom+
+		f.theme.DecorSizeLeft+
+		f.theme.DecorSizeRight > 0 && f.Current() {
+
 		f.topSide.Unmap()
 		f.bottomSide.Unmap()
 		f.leftSide.Unmap()
@@ -141,8 +143,10 @@ func (f *Borders) Maximize() {
 	}
 }
 
-func (f *Borders) Unmaximize() {
-	if f.theme.BorderSize > 0 && f.Current() {
+func (f *Decor) Unmaximize() {
+	if f.theme.DecorSizeTop+f.theme.DecorSizeBottom+
+		f.theme.DecorSizeLeft+f.theme.DecorSizeRight > 0 && f.Current() {
+
 		f.topSide.Map()
 		f.bottomSide.Map()
 		f.leftSide.Map()
@@ -157,35 +161,35 @@ func (f *Borders) Unmaximize() {
 	}
 }
 
-func (f *Borders) Top() int {
+func (f *Decor) Top() int {
 	if f.client.IsMaximized() {
 		return 0
 	}
-	return f.theme.BorderSize
+	return f.theme.DecorSizeTop
 }
 
-func (f *Borders) Bottom() int {
+func (f *Decor) Bottom() int {
 	if f.client.IsMaximized() {
 		return 0
 	}
-	return f.theme.BorderSize
+	return f.theme.DecorSizeBottom
 }
 
-func (f *Borders) Left() int {
+func (f *Decor) Left() int {
 	if f.client.IsMaximized() {
 		return 0
 	}
-	return f.theme.BorderSize
+	return f.theme.DecorSizeLeft
 }
 
-func (f *Borders) Right() int {
+func (f *Decor) Right() int {
 	if f.client.IsMaximized() {
 		return 0
 	}
-	return f.theme.BorderSize
+	return f.theme.DecorSizeRight
 }
 
-func (f *Borders) moveresizePieces() {
+func (f *Decor) moveresizePieces() {
 	fg := f.Geom()
 
 	f.topSide.MROpt(fW, 0, 0, fg.Width()-f.topLeft.w()-f.topRight.w(), 0)
@@ -199,34 +203,32 @@ func (f *Borders) moveresizePieces() {
 		f.bottomLeft.w()+f.bottomSide.w(), f.bottomSide.y(), 0, 0)
 }
 
-func (f *Borders) MROpt(validate bool, flags, x, y, w, h int) {
+func (f *Decor) MROpt(validate bool, flags, x, y, w, h int) {
 	mropt(f, validate, flags, x, y, w, h)
 	f.moveresizePieces()
 }
 
-func (f *Borders) MoveResize(validate bool, x, y, w, h int) {
+func (f *Decor) MoveResize(validate bool, x, y, w, h int) {
 	moveresize(f, validate, x, y, w, h)
 	f.moveresizePieces()
 }
 
-func (f *Borders) Move(x, y int) {
+func (f *Decor) Move(x, y int) {
 	move(f, x, y)
 }
 
-func (f *Borders) Resize(validate bool, w, h int) {
+func (f *Decor) Resize(validate bool, w, h int) {
 	resize(f, validate, w, h)
 	f.moveresizePieces()
 }
 
-type BordersTheme struct {
-	BorderSize                 int
-	ABorderColor, IBorderColor render.Color
-}
-
-func DefaultBordersTheme() *BordersTheme {
-	return &BordersTheme{
-		BorderSize:   10,
-		ABorderColor: render.NewColor(0xeeeeee),
-		IBorderColor: render.NewColor(0xeeeeee),
-	}
+type DecorTheme struct {
+	DecorTopA, DecorTopI       *xgraphics.Image
+	DecorBottomA, DecorBottomI *xgraphics.Image
+	DecorLeftA, DecorLeftI     *xgraphics.Image
+	DecorRightA, DecorRightI   *xgraphics.Image
+	DecorSizeTop               int
+	DecorSizeBottom            int
+	DecorSizeLeft              int
+	DecorSizeRight             int
 }

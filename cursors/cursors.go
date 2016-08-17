@@ -24,7 +24,7 @@ var (
 )
 
 func Initialize(X *xgbutil.XUtil) {
-	// lazy...
+	// Lazy...
 	cc := func(cursor uint16) xproto.Cursor {
 		cid, err := xcursor.CreateCursor(X, cursor)
 		if err != nil {

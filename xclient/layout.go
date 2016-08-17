@@ -69,7 +69,7 @@ func (c *Client) Geom() xrect.Rect {
 
 func (c *Client) FrameTile() {
 	c.EnsureUnmax()
-	c.FrameBorders()
+	c.FrameDecor()
 }
 
 func (c *Client) MROpt(validate bool, flags, x, y, w, h int) {

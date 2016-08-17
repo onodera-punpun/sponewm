@@ -74,7 +74,7 @@ func (cmd TileToggle) Run() gribble.Value {
 
 type MakeMaster struct {
 	Workspace gribble.Any `param:"1" types:"int,string"`
-	Client gribble.Any `param:"2" types:"int,string"`
+	Client    gribble.Any `param:"2" types:"int,string"`
 	Help      string      `
 Switches the current window with the first master in the layout for the
 workspace specified by Workspace.
