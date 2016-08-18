@@ -1,8 +1,6 @@
 package wm
 
 import (
-	"github.com/BurntSushi/xgbutil/xgraphics"
-
 	"github.com/onodera-punpun/sponewm/logger"
 	"github.com/onodera-punpun/sponewm/wini"
 )
@@ -59,16 +57,4 @@ func getLastInt(k wini.Key) (int, bool) {
 	}
 
 	return vals[len(vals)-1], true
-}
-
-func setImage(k wini.Key, place **xgraphics.Image) {
-	if v, ok := getLastString(k); ok {
-		img, err := xgraphics.NewFileName(X, v)
-		if err != nil {
-			logger.Warning.Printf(
-				"Could not load '%s' as a png image because: %v", v, err)
-			return
-		}
-		*place = img
-	}
 }

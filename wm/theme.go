@@ -1,13 +1,12 @@
 package wm
 
-// TODO: This is a fucking mess, read up on structs
-// and shit, and clean this up.
-
 import (
+	"image"
+	"os"
+
 	"github.com/BurntSushi/xgbutil/xgraphics"
 
 	"github.com/onodera-punpun/sponewm/frame"
-	"github.com/onodera-punpun/sponewm/misc"
 	"github.com/onodera-punpun/sponewm/logger"
 )
 
@@ -24,57 +23,71 @@ type ThemeDecor struct {
 
 func (td ThemeDecor) FrameTheme() *frame.DecorTheme {
 	return &frame.DecorTheme{
-		DecorTopA:       td.decorTopA,
-		DecorTopI:       td.decorTopI,
-		DecorBottomA:    td.decorBottomA,
-		DecorBottomI:    td.decorBottomI,
-		DecorLeftA:      td.decorLeftA,
-		DecorLeftI:      td.decorLeftI,
-		DecorRightA:     td.decorRightA,
-		DecorRightI:     td.decorRightI,
-		DecorSizeTop:    td.decorSizeTop,
-		DecorSizeBottom: td.decorSizeBottom,
-		DecorSizeLeft:   td.decorSizeLeft,
-		DecorSizeRight:  td.decorSizeRight,
+		DecorTopA:       newImageA("top").Image,
+		DecorTopI:       newImageI("top").Image,
+		DecorBottomA:    newImageA("bottom").Image,
+		DecorBottomI:    newImageI("bottom").Image,
+		DecorLeftA:      newImageA("left").Image,
+		DecorLeftI:      newImageI("left").Image,
+		DecorRightA:     newImageA("right").Image,
+		DecorRightI:     newImageI("right").Image,
+		DecorSizeTop:    imageSize("top"),
+		DecorSizeBottom: imageSize("bottom"),
+		DecorSizeLeft:   imageSize("left"),
+		DecorSizeRight:  imageSize("right"),
 	}
 }
 
-func newTheme() *ThemeDecor {
-	return &ThemeDecor{
-		decorTopA:       builtInImage(misc.DecorTopAPng),
-		decorTopI:       builtInImage(misc.DecorTopIPng),
-		decorBottomA:    builtInImage(misc.DecorBottomAPng),
-		decorBottomI:    builtInImage(misc.DecorBottomIPng),
-		decorLeftA:      builtInImage(misc.DecorLeftAPng),
-		decorLeftI:      builtInImage(misc.DecorLeftIPng),
-		decorRightA:     builtInImage(misc.DecorRightAPng),
-		decorRightI:     builtInImage(misc.DecorRightIPng),
-		decorSizeTop:    20,
-		decorSizeBottom: 10,
-		decorSizeLeft:   10,
-		decorSizeRight:  10,
-	}
+type Image struct {
+	*xgraphics.Image
 }
 
-func loadTheme() (*ThemeDecor, error) {
-	theme := newTheme()
-
-	xgraphics.NewFileName(X, "active_top")
-	xgraphics.NewFileName(X, "inactive_top")
-	xgraphics.NewFileName(X, "active_bottom")
-	xgraphics.NewFileName(X, "inactive_bottom")
-	xgraphics.NewFileName(X, "active_left")
-	xgraphics.NewFileName(X, "inactive_left")
-	xgraphics.NewFileName(X, "active_right")
-	xgraphics.NewFileName(X, "inactive_right")
-
-	return theme, nil
+func New(ximg *xgraphics.Image) *Image {
+	return &Image{ximg}
 }
 
-func builtInImage(builtInData []byte) *xgraphics.Image {
-	img, err := xgraphics.NewBytes(X, builtInData)
+func newImageA(side string) *Image {
+	file, err := os.Open("/home/onodera/.config/sponewm/images/active_" + side + ".png")
 	if err != nil {
-		logger.Error.Fatalln(err)
+		logger.Warning.Fatalln(err)
 	}
-	return img
+	img, _, err := image.Decode(file)
+	if err != nil {
+		logger.Warning.Fatalln(err)
+	}
+
+	return New(xgraphics.NewConvert(X, img))
+}
+
+func newImageI(side string) *Image {
+	file, err := os.Open("/home/onodera/.config/sponewm/images/inactive_" + side + ".png")
+	if err != nil {
+		logger.Warning.Fatalln(err)
+	}
+	img, _, err := image.Decode(file)
+	if err != nil {
+		logger.Warning.Fatalln(err)
+	}
+
+	return New(xgraphics.NewConvert(X, img))
+}
+
+func imageSize(side string) int {
+	file, err := os.Open("/home/onodera/.config/sponewm/images/active_" + side + ".png")
+	if err != nil {
+		logger.Warning.Fatalln(err)
+	}
+
+	img, _, err := image.DecodeConfig(file)
+	if err != nil {
+		logger.Warning.Fatalln(err)
+	}
+	var size int
+	if side == "top" || side == "bottom" {
+		size = img.Height
+	} else if side == "left" || side == "right" {
+		size = img.Width
+	}
+
+	return size
 }

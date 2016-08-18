@@ -27,7 +27,7 @@ var (
 	Clients    ClientList
 	Heads      *heads.Heads
 	Config     *Configuration
-	Theme      *ThemeDecor
+	Theme      ThemeDecor
 	StickyWrk  *workspace.Sticky
 	gribbleEnv *gribble.Environment
 	cmdHacks   CommandHacks
@@ -53,9 +53,6 @@ func Initialize(x *xgbutil.XUtil,
 
 	if Config, err = loadConfig(); err != nil {
 		logger.Error.Fatalf("Could not load configuration: %s", err)
-	}
-	if Theme, err = loadTheme(); err != nil {
-		logger.Error.Fatalf("Could not load theme: %s", err)
 	}
 
 	Clients = make(ClientList, 0, 50)
