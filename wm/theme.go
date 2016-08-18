@@ -1,13 +1,11 @@
 package wm
 
 import (
-	"image"
-	"os"
-
 	"github.com/BurntSushi/xgbutil/xgraphics"
 
 	"github.com/onodera-punpun/sponewm/frame"
 	"github.com/onodera-punpun/sponewm/logger"
+	"github.com/onodera-punpun/sponewm/misc"
 )
 
 type ThemeConfig struct {
@@ -52,30 +50,30 @@ func (td ThemeConfig) FrameTheme() *frame.DecorTheme {
 
 func newTheme() *ThemeConfig {
 	return &ThemeConfig{
-		decorTopA:         newImage("active_top").Image,
-		decorTopI:         newImage("inactive_top").Image,
-		decorBottomA:      newImage("active_bottom").Image,
-		decorBottomI:      newImage("inactive_bottom").Image,
-		decorLeftA:        newImage("active_left").Image,
-		decorLeftI:        newImage("inactive_left").Image,
-		decorRightA:       newImage("active_right").Image,
-		decorRightI:       newImage("inactive_right").Image,
-		decorTopLeftA:     newImage("active_topleft").Image,
-		decorTopLeftI:     newImage("inactive_topleft").Image,
-		decorTopRightA:    newImage("active_topright").Image,
-		decorTopRightI:    newImage("inactive_topright").Image,
-		decorBottomLeftA:  newImage("active_bottomleft").Image,
-		decorBottomLeftI:  newImage("inactive_bottomleft").Image,
-		decorBottomRightA: newImage("active_bottomright").Image,
-		decorBottomRightI: newImage("inactive_bottomright").Image,
-		decorSizeTop:      imageSize("top"),
-		decorSizeBottom:   imageSize("bottom"),
-		decorSizeLeft:     imageSize("left"),
-		decorSizeRight:    imageSize("right"),
+		decorTopA:         newImage("active_top"),
+		decorTopI:         newImage("inactive_top"),
+		decorBottomA:      newImage("active_bottom"),
+		decorBottomI:      newImage("inactive_bottom"),
+		decorLeftA:        newImage("active_left"),
+		decorLeftI:        newImage("inactive_left"),
+		decorRightA:       newImage("active_right"),
+		decorRightI:       newImage("inactive_right"),
+		decorTopLeftA:     newImage("active_topleft"),
+		decorTopLeftI:     newImage("inactive_topleft"),
+		decorTopRightA:    newImage("active_topright"),
+		decorTopRightI:    newImage("inactive_topright"),
+		decorBottomLeftA:  newImage("active_bottomleft"),
+		decorBottomLeftI:  newImage("inactive_bottomleft"),
+		decorBottomRightA: newImage("active_bottomright"),
+		decorBottomRightI: newImage("inactive_bottomright"),
+		decorSizeTop:      newImage("active_top").Bounds().Dy(),
+		decorSizeBottom:   newImage("active_bottom").Bounds().Dx(),
+		decorSizeLeft:     newImage("active_left").Bounds().Dy(),
+		decorSizeRight:    newImage("active_right").Bounds().Dy(),
 	}
 }
 
-func loadTheme() (*ThemeConfig) {
+func loadTheme() *ThemeConfig {
 	return newTheme()
 }
 
@@ -83,40 +81,15 @@ type Image struct {
 	*xgraphics.Image
 }
 
-func New(ximg *xgraphics.Image) *Image {
-	return &Image{ximg}
+func New(pix *xgraphics.Image) *Image {
+	return &Image{pix}
 }
 
-func newImage(side string) *Image {
-	file, err := os.Open("/home/onodera/.config/sponewm/images/" + side + ".png")
+func newImage(side string) *xgraphics.Image {
+	pix, err := xgraphics.NewFileName(X, misc.ConfigDir()+"/images/"+side+".png")
 	if err != nil {
-		logger.Warning.Fatalln(err)
+		logger.Error.Fatalln(err)
 	}
 
-	img, _, err := image.Decode(file)
-	if err != nil {
-		logger.Warning.Fatalln(err)
-	}
-
-	return New(xgraphics.NewConvert(X, img))
-}
-
-func imageSize(side string) int {
-	file, err := os.Open("/home/onodera/.config/sponewm/images/active_" + side + ".png")
-	if err != nil {
-		logger.Warning.Fatalln(err)
-	}
-
-	img, _, err := image.DecodeConfig(file)
-	if err != nil {
-		logger.Warning.Fatalln(err)
-	}
-	var size int
-	if side == "top" || side == "bottom" {
-		size = img.Height
-	} else if side == "left" || side == "right" {
-		size = img.Width
-	}
-
-	return size
+	return pix
 }

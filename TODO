@@ -1,1 +1,5 @@
 New process spawns for new windows...
+Replace config wini with json.
+Remove/Replace logger?
+Check if center spawn is actual center.
+Fix BadWindow error.
