@@ -93,7 +93,7 @@ func (f *Decor) newTopLeft() *piece {
 	}
 
 	win := f.newPieceWindow("topleft", cursors.TopLeftCorner)
-	PixA, pixI := f.theme.DecorTopA, f.theme.DecorTopI
+	PixA, pixI := f.theme.DecorTopLeftA, f.theme.DecorTopLeftI
 
 	win.MROpt(fX|fY|fW|fH, 0, 0, f.theme.DecorSizeTop, f.theme.DecorSizeLeft)
 
@@ -106,7 +106,7 @@ func (f *Decor) newTopRight() *piece {
 	}
 
 	win := f.newPieceWindow("topright", cursors.TopRightCorner)
-	PixA, pixI := f.theme.DecorTopA, f.theme.DecorTopI
+	PixA, pixI := f.theme.DecorTopRightA, f.theme.DecorTopRightI
 
 	win.MROpt(fY|fW|fH, 0, 0, f.theme.DecorSizeTop, f.theme.DecorSizeRight)
 
@@ -119,7 +119,7 @@ func (f *Decor) newBottomLeft() *piece {
 	}
 
 	win := f.newPieceWindow("bottomleft", cursors.BottomLeftCorner)
-	PixA, pixI := f.theme.DecorTopA, f.theme.DecorTopI
+	PixA, pixI := f.theme.DecorBottomLeftA, f.theme.DecorBottomLeftI
 
 	win.MROpt(fX|fW|fH, 0, 0, f.theme.DecorSizeBottom, f.theme.DecorSizeLeft)
 
@@ -132,7 +132,7 @@ func (f *Decor) newBottomRight() *piece {
 	}
 
 	win := f.newPieceWindow("bottomright", cursors.BottomRightCorner)
-	PixA, pixI := f.theme.DecorTopA, f.theme.DecorTopI
+	PixA, pixI := f.theme.DecorBottomRightA, f.theme.DecorBottomRightI
 
 	win.MROpt(fW|fH, 0, 0, f.theme.DecorSizeBottom, f.theme.DecorSizeRight)
 

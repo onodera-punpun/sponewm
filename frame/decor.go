@@ -223,12 +223,16 @@ func (f *Decor) Resize(validate bool, w, h int) {
 }
 
 type DecorTheme struct {
-	DecorTopA, DecorTopI       *xgraphics.Image
-	DecorBottomA, DecorBottomI *xgraphics.Image
-	DecorLeftA, DecorLeftI     *xgraphics.Image
-	DecorRightA, DecorRightI   *xgraphics.Image
-	DecorSizeTop               int
-	DecorSizeBottom            int
-	DecorSizeLeft              int
-	DecorSizeRight             int
+	DecorTopA, DecorTopI                 *xgraphics.Image
+	DecorBottomA, DecorBottomI           *xgraphics.Image
+	DecorLeftA, DecorLeftI               *xgraphics.Image
+	DecorRightA, DecorRightI             *xgraphics.Image
+	DecorTopLeftA, DecorTopLeftI         *xgraphics.Image
+	DecorTopRightA, DecorTopRightI       *xgraphics.Image
+	DecorBottomLeftA, DecorBottomLeftI   *xgraphics.Image
+	DecorBottomRightA, DecorBottomRightI *xgraphics.Image
+	DecorSizeTop                         int
+	DecorSizeBottom                      int
+	DecorSizeLeft                        int
+	DecorSizeRight                       int
 }
