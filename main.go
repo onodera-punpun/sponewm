@@ -22,13 +22,12 @@ import (
 	"github.com/BurntSushi/xgbutil/xevent"
 
 	"github.com/onodera-punpun/sponewm/commands"
+	"github.com/onodera-punpun/sponewm/config"
 	"github.com/onodera-punpun/sponewm/cursors"
 	"github.com/onodera-punpun/sponewm/event"
-	"github.com/onodera-punpun/sponewm/frame"
-
 	"github.com/onodera-punpun/sponewm/focus"
+	"github.com/onodera-punpun/sponewm/frame"
 	"github.com/onodera-punpun/sponewm/logger"
-	"github.com/onodera-punpun/sponewm/settings"
 	"github.com/onodera-punpun/sponewm/stack"
 	"github.com/onodera-punpun/sponewm/wm"
 	"github.com/onodera-punpun/sponewm/xclient"
@@ -99,7 +98,7 @@ func main() {
 	}
 
 	// TODO: Move theme here
-	settings.Initialize()
+	config.Initialize()
 	mousebind.Initialize(X)
 	focus.Initialize(X)
 	stack.Initialize(X)

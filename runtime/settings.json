@@ -4,7 +4,6 @@
     "focusfollowsmouse": true,
     "gap": 20,
     "raisefollowsmouse": false,
-    "shell": "bash",
     "tilepadding": 80,
     "workspaces": [
         "www",

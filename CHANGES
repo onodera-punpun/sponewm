@@ -13,4 +13,3 @@
 * Removed lots of safety stuff I don't really care about, the user should be smarter, lol.
 * Removed hooks.
 * Moved from a .wini config to a .json config.
-* Removed hotkey stuff, this is a WM, not a hotkey daemon, use sxhkd or something.

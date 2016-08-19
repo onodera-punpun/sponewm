@@ -4,6 +4,8 @@ import (
 	"container/list"
 
 	"github.com/BurntSushi/xgbutil/xrect"
+
+	"github.com/onodera-punpun/sponewm/config"
 )
 
 type Tiling struct {
@@ -26,10 +28,8 @@ func (t *Tiling) SetGeom(geom xrect.Rect) {
 }
 
 func (t *Tiling) Place() {
-	// TODO: I'm gonna hardcode this because I can't
-	// figure out this circular depenency shit.
-	gap := 20
-	padding := 80 - (gap / 2)
+	gap := config.SettingsVal["gap"].(int)
+	padding := config.SettingsVal["tilepadding"].(int) - (gap / 2)
 
 	x := t.geom.X() + padding
 	y := t.geom.Y() + padding

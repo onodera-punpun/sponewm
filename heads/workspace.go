@@ -2,12 +2,12 @@ package heads
 
 import (
 	"fmt"
+	"math"
 	"strings"
 
 	"github.com/BurntSushi/xgbutil/xrect"
 
 	"github.com/onodera-punpun/sponewm/logger"
-	"github.com/onodera-punpun/sponewm/misc"
 	"github.com/onodera-punpun/sponewm/workspace"
 )
 
@@ -150,9 +150,8 @@ func (hds *Heads) NextWorkspace() *workspace.Workspace {
 
 func (hds *Heads) PrevWorkspace() *workspace.Workspace {
 	if cur := hds.GlobalIndex(hds.ActiveWorkspace()); cur > -1 {
-		// I fucking hate Go's modulo operator. WTF.
-		prev := misc.Mod(cur-1, len(hds.Workspaces.Wrks))
-		return hds.Workspaces.Get(prev)
+		prev := math.Mod(float64(cur-1), float64(len(hds.Workspaces.Wrks)))
+		return hds.Workspaces.Get(int(prev))
 	}
 	panic("bug")
 }

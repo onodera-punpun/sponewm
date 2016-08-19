@@ -1,12 +1,9 @@
 package commands
 
 import (
-	"bytes"
 	"fmt"
-	"os/exec"
 	"regexp"
 	"sync"
-	"time"
 
 	"github.com/BurntSushi/gribble"
 
@@ -18,7 +15,6 @@ import (
 
 	"github.com/onodera-punpun/sponewm/focus"
 	"github.com/onodera-punpun/sponewm/logger"
-	"github.com/onodera-punpun/sponewm/settings"
 	"github.com/onodera-punpun/sponewm/wm"
 	"github.com/onodera-punpun/sponewm/workspace"
 	"github.com/onodera-punpun/sponewm/xclient"
@@ -48,7 +44,6 @@ var Env = gribble.New([]gribble.Command{
 	&Resize{},
 	&Restart{},
 	&Quit{},
-	&Shell{},
 	&Unmaximize{},
 	&Workspace{},
 	&WorkspaceSendClient{},
@@ -586,48 +581,6 @@ func (cmd Resize) Run() gribble.Value {
 		})
 		return nil
 	})
-}
-
-type Shell struct {
-	Command string `param:"1"`
-	Help    string `
-Attempts to execute the shell command specified by Command. If an error occurs,
-it will be logged to SponeWM's stderr.
-`
-}
-
-func (cmd Shell) Run() gribble.Value {
-	if len(cmd.Command) == 0 {
-		logger.Warning.Printf("Cannot execute empty command.")
-		return nil
-	}
-
-	// XXX: This is very weird.
-	// If I don't put this into its own go-routine and wait a small
-	// amount of time, commands that start new X clients fail miserably.
-	// And when I say miserably, I mean they take down X itself.
-	// For some reason, this avoids that problem. For now...
-	// (I thought the problem was the grab imposed by a key binding,
-	// but ungrabbing the keyboard before running this command didn't
-	// change behavior.)
-	go func() {
-		var stderr bytes.Buffer
-
-		time.Sleep(time.Microsecond)
-		logger.Message.Printf("%s -c [%s]", settings.Settings["shell"].(string), cmd.Command)
-		shellCmd := exec.Command(settings.Settings["shell"].(string), "-c", cmd.Command)
-		shellCmd.Stderr = &stderr
-
-		err := shellCmd.Run()
-		if err != nil {
-			logger.Warning.Printf("Error running '%s': %s", cmd.Command, err)
-			if stderr.Len() > 0 {
-				logger.Warning.Printf("Error running '%s': %s",
-					cmd.Command, stderr.String())
-			}
-		}
-	}()
-	return nil
 }
 
 type Unmaximize struct {

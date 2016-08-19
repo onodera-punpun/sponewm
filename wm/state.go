@@ -13,11 +13,11 @@ import (
 	"github.com/BurntSushi/xgbutil/xevent"
 	"github.com/BurntSushi/xgbutil/xwindow"
 
+	"github.com/onodera-punpun/sponewm/config"
 	"github.com/onodera-punpun/sponewm/event"
 	"github.com/onodera-punpun/sponewm/focus"
 	"github.com/onodera-punpun/sponewm/heads"
 	"github.com/onodera-punpun/sponewm/logger"
-	"github.com/onodera-punpun/sponewm/settings"
 	"github.com/onodera-punpun/sponewm/workspace"
 )
 
@@ -53,7 +53,7 @@ func Initialize(x *xgbutil.XUtil,
 
 	Clients = make(ClientList, 0, 50)
 
-	Heads = heads.NewHeads(X, settings.Settings["defaultlayout"].(string))
+	Heads = heads.NewHeads(X, config.SettingsVal["defaultlayout"].(string))
 
 	// If _NET_DESKTOP_NAMES is set, let's use workspaces from that instead.
 	if names, _ := ewmh.DesktopNamesGet(X); len(names) > 0 {
@@ -64,7 +64,7 @@ func Initialize(x *xgbutil.XUtil,
 			}
 		}
 	} else {
-		for _, wrkName := range settings.Settings["workspaces"].([]interface{}) {
+		for _, wrkName := range config.SettingsVal["workspaces"].([]interface{}) {
 			if err := AddWorkspace(wrkName.(string)); err != nil {
 				logger.Error.Fatalf("Could not initialize workspaces: %s", err)
 			}

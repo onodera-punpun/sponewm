@@ -10,12 +10,12 @@ import (
 	"github.com/BurntSushi/xgbutil/xrect"
 	"github.com/BurntSushi/xgbutil/xwindow"
 
+	"github.com/onodera-punpun/sponewm/config"
 	"github.com/onodera-punpun/sponewm/event"
 	"github.com/onodera-punpun/sponewm/focus"
 	"github.com/onodera-punpun/sponewm/frame"
 	"github.com/onodera-punpun/sponewm/heads"
 	"github.com/onodera-punpun/sponewm/logger"
-	"github.com/onodera-punpun/sponewm/settings"
 	"github.com/onodera-punpun/sponewm/stack"
 	"github.com/onodera-punpun/sponewm/wm"
 	"github.com/onodera-punpun/sponewm/workspace"
@@ -72,7 +72,7 @@ func New(id xproto.Window) *Client {
 	if !c.iconified {
 		c.Map()
 		if !wm.Startup && c.PrimaryType() == TypeNormal {
-			if !settings.Settings["focusfollowsmouse"].(bool) {
+			if !config.SettingsVal["focusfollowsmouse"].(bool) {
 				c.Focus()
 			}
 		}

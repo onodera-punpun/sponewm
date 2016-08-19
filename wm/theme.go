@@ -3,9 +3,9 @@ package wm
 import (
 	"github.com/BurntSushi/xgbutil/xgraphics"
 
+	"github.com/onodera-punpun/sponewm/config"
 	"github.com/onodera-punpun/sponewm/frame"
 	"github.com/onodera-punpun/sponewm/logger"
-	"github.com/onodera-punpun/sponewm/settings"
 )
 
 type ThemeConfig struct {
@@ -86,7 +86,7 @@ func New(pix *xgraphics.Image) *Image {
 }
 
 func newImage(side string) *xgraphics.Image {
-	pix, err := xgraphics.NewFileName(X, settings.ConfigDir()+"/images/"+side+".png")
+	pix, err := xgraphics.NewFileName(X, config.ConfigDir()+"/images/"+side+".png")
 	if err != nil {
 		logger.Error.Fatalln(err)
 	}

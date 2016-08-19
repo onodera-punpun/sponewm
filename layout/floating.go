@@ -6,6 +6,8 @@ import (
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/xrect"
+
+	"github.com/onodera-punpun/sponewm/config"
 )
 
 type Floating struct {
@@ -101,9 +103,7 @@ func (f *Floating) Resize(c Client, width, height int) {
 }
 
 func (f *Floating) InitialPlacement(c Client, X *xgbutil.XUtil) {
-	// TODO: I'm gonna hardcode this because I can't
-	// figure out this circular depenency shit.
-	padding := 20
+	padding := config.SettingsVal["floatpadding"].(int)
 
 	cgeom := c.Geom()
 	qp, _ := xproto.QueryPointer(X.Conn(), X.RootWin()).Reply()
