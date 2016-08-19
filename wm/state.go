@@ -17,6 +17,7 @@ import (
 	"github.com/onodera-punpun/sponewm/focus"
 	"github.com/onodera-punpun/sponewm/heads"
 	"github.com/onodera-punpun/sponewm/logger"
+	"github.com/onodera-punpun/sponewm/settings"
 	"github.com/onodera-punpun/sponewm/workspace"
 )
 
@@ -26,7 +27,6 @@ var (
 	Startup    bool
 	Clients    ClientList
 	Heads      *heads.Heads
-	Config     *Configuration
 	Theme      *ThemeConfig
 	StickyWrk  *workspace.Sticky
 	gribbleEnv *gribble.Environment
@@ -51,15 +51,9 @@ func Initialize(x *xgbutil.XUtil,
 		logger.Error.Fatalf("Could not get ROOT window geometry: %s", err)
 	}
 
-	if Config, err = loadConfig(); err != nil {
-		logger.Error.Fatalf("Could not load configuration: %s", err)
-	}
-
-	Theme = loadTheme()
-
 	Clients = make(ClientList, 0, 50)
 
-	Heads = heads.NewHeads(X, Config.DefaultLayout)
+	Heads = heads.NewHeads(X, settings.Settings["defaultlayout"].(string))
 
 	// If _NET_DESKTOP_NAMES is set, let's use workspaces from that instead.
 	if names, _ := ewmh.DesktopNamesGet(X); len(names) > 0 {
@@ -70,16 +64,13 @@ func Initialize(x *xgbutil.XUtil,
 			}
 		}
 	} else {
-		for _, wrkName := range Config.Workspaces {
-			if err := AddWorkspace(wrkName); err != nil {
+		for _, wrkName := range settings.Settings["workspaces"].([]interface{}) {
+			if err := AddWorkspace(wrkName.(string)); err != nil {
 				logger.Error.Fatalf("Could not initialize workspaces: %s", err)
 			}
 		}
 	}
 	Heads.Initialize(Clients)
-
-	keybindings()
-	rootMouseSetup()
 
 	StickyWrk = Heads.Workspaces.NewSticky()
 

@@ -1,0 +1,16 @@
+* Renamed to SponeWM.
+* Removed prompt stuff.
+* Removed all decorations besides Nada.
+* Created a new decoration that uses images for borders,
+  resulting in one decoration type that can be used for
+  simple borders, titlebars on every side and infitly more posibilities.
+* Removed different tiling layouts, and added a fibbonaci one.
+* Added support for tiling padding and gaps.
+* Made floating windows spawn under the cursor instead of randomly.
+* Made floating and tiling layout more similar, for example both use list now.
+  This result in easy future tiling options, for example you can make a new
+  master window simply by moving the window id to the fron of the list.
+* Removed lots of safety stuff I don't really care about, the user should be smarter, lol.
+* Removed hooks.
+* Moved from a .wini config to a .json config.
+* Removed hotkey stuff, this is a WM, not a hotkey daemon, use sxhkd or something.

@@ -56,7 +56,7 @@ func (c *Client) HeadGeom() xrect.Rect {
 }
 
 func (c *Client) FramePieceMouseSetup(piece string, pieceid xproto.Window) {
-	wm.FramePieceMouseSetup(c, piece, pieceid)
+	//wm.FramePieceMouseSetup(c, piece, pieceid)
 }
 
 // GravitizeX adjusts the x coordinate of a window's position using the gravity

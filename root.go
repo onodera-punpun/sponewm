@@ -26,9 +26,7 @@ func rootInit(X *xgbutil.XUtil) {
 		xproto.EventMaskStructureNotify |
 		xproto.EventMaskSubstructureNotify |
 		xproto.EventMaskSubstructureRedirect
-	if wm.Config.FfmHead {
-		evMasks |= xproto.EventMaskPointerMotion
-	}
+
 	err = xwindow.New(X, X.RootWin()).Listen(evMasks)
 	if err != nil {
 		logger.Error.Fatalf("Could not listen to Root window events: %s", err)
@@ -70,12 +68,6 @@ func rootInit(X *xgbutil.XUtil) {
 	// Listen to Root client message events. This is how we handle all
 	// of the EWMH bullshit.
 	xevent.ClientMessageFun(handleClientMessages).Connect(X, wm.Root.Id)
-
-	// Check where the pointer is on motion events. If it's crossed a monitor
-	// boundary, switch the focus of the head.
-	if wm.Config.FfmHead {
-		xevent.MotionNotifyFun(handleMotionNotify).Connect(X, wm.Root.Id)
-	}
 }
 
 func handleClientMessages(X *xgbutil.XUtil, ev xevent.ClientMessageEvent) {

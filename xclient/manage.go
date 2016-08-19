@@ -15,6 +15,7 @@ import (
 	"github.com/onodera-punpun/sponewm/frame"
 	"github.com/onodera-punpun/sponewm/heads"
 	"github.com/onodera-punpun/sponewm/logger"
+	"github.com/onodera-punpun/sponewm/settings"
 	"github.com/onodera-punpun/sponewm/stack"
 	"github.com/onodera-punpun/sponewm/wm"
 	"github.com/onodera-punpun/sponewm/workspace"
@@ -71,7 +72,7 @@ func New(id xproto.Window) *Client {
 	if !c.iconified {
 		c.Map()
 		if !wm.Startup && c.PrimaryType() == TypeNormal {
-			if !wm.Config.Ffm {
+			if !settings.Settings["focusfollowsmouse"].(bool) {
 				c.Focus()
 			}
 		}

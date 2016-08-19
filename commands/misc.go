@@ -6,8 +6,6 @@ import (
 
 	"github.com/BurntSushi/gribble"
 
-	"github.com/BurntSushi/xgb/xproto"
-
 	"github.com/BurntSushi/xgbutil/xrect"
 
 	"github.com/onodera-punpun/sponewm/logger"
@@ -118,16 +116,6 @@ func withClient(cArg gribble.Any, f func(c *xclient.Client)) gribble.Any {
 		switch c {
 		case ":void:":
 			return ":void:"
-		case ":mouse:":
-			wid := xproto.Window(wm.MouseClientClicked)
-			if client := wm.FindManagedClient(wid); client != nil {
-				c := client.(*xclient.Client)
-				f(c)
-				return int(c.Id())
-			} else {
-				f(nil)
-				return ":void:"
-			}
 		default:
 			for _, client_ := range wm.Clients {
 				client := client_.(*xclient.Client)

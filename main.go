@@ -18,7 +18,6 @@ import (
 
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/ewmh"
-	"github.com/BurntSushi/xgbutil/keybind"
 	"github.com/BurntSushi/xgbutil/mousebind"
 	"github.com/BurntSushi/xgbutil/xevent"
 
@@ -29,7 +28,7 @@ import (
 
 	"github.com/onodera-punpun/sponewm/focus"
 	"github.com/onodera-punpun/sponewm/logger"
-	"github.com/onodera-punpun/sponewm/misc"
+	"github.com/onodera-punpun/sponewm/settings"
 	"github.com/onodera-punpun/sponewm/stack"
 	"github.com/onodera-punpun/sponewm/wm"
 	"github.com/onodera-punpun/sponewm/xclient"
@@ -99,11 +98,8 @@ func main() {
 		return
 	}
 
-	if len(flagConfigDir) > 0 {
-		misc.ConfigPaths.Override = flagConfigDir
-	}
-
-	keybind.Initialize(X)
+	// TODO: Move theme here
+	settings.Initialize()
 	mousebind.Initialize(X)
 	focus.Initialize(X)
 	stack.Initialize(X)

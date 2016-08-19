@@ -18,6 +18,7 @@ import (
 
 	"github.com/onodera-punpun/sponewm/focus"
 	"github.com/onodera-punpun/sponewm/logger"
+	"github.com/onodera-punpun/sponewm/settings"
 	"github.com/onodera-punpun/sponewm/wm"
 	"github.com/onodera-punpun/sponewm/workspace"
 	"github.com/onodera-punpun/sponewm/xclient"
@@ -613,8 +614,8 @@ func (cmd Shell) Run() gribble.Value {
 		var stderr bytes.Buffer
 
 		time.Sleep(time.Microsecond)
-		logger.Message.Printf("%s -c [%s]", wm.Config.Shell, cmd.Command)
-		shellCmd := exec.Command(wm.Config.Shell, "-c", cmd.Command)
+		logger.Message.Printf("%s -c [%s]", settings.Settings["shell"].(string), cmd.Command)
+		shellCmd := exec.Command(settings.Settings["shell"].(string), "-c", cmd.Command)
 		shellCmd.Stderr = &stderr
 
 		err := shellCmd.Run()

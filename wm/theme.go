@@ -5,7 +5,7 @@ import (
 
 	"github.com/onodera-punpun/sponewm/frame"
 	"github.com/onodera-punpun/sponewm/logger"
-	"github.com/onodera-punpun/sponewm/misc"
+	"github.com/onodera-punpun/sponewm/settings"
 )
 
 type ThemeConfig struct {
@@ -86,7 +86,7 @@ func New(pix *xgraphics.Image) *Image {
 }
 
 func newImage(side string) *xgraphics.Image {
-	pix, err := xgraphics.NewFileName(X, misc.ConfigDir()+"/images/"+side+".png")
+	pix, err := xgraphics.NewFileName(X, settings.ConfigDir()+"/images/"+side+".png")
 	if err != nil {
 		logger.Error.Fatalln(err)
 	}

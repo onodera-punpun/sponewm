@@ -12,6 +12,7 @@ import (
 	"github.com/onodera-punpun/sponewm/frame"
 	"github.com/onodera-punpun/sponewm/layout"
 	"github.com/onodera-punpun/sponewm/logger"
+	"github.com/onodera-punpun/sponewm/settings"
 	"github.com/onodera-punpun/sponewm/wm"
 )
 
@@ -23,7 +24,7 @@ func (c *Client) attachEventCallbacks() {
 	attrs, err := xproto.GetWindowAttributes(wm.X.Conn(), pid).Reply()
 	if err == nil {
 		masks := int(attrs.YourEventMask)
-		if wm.Config.Ffm {
+		if settings.Settings["focusfollowsmouse"].(bool) {
 			masks |= xproto.EventMaskEnterWindow
 		}
 		c.Frame().Parent().Listen(masks)
@@ -38,14 +39,11 @@ func (c *Client) attachEventCallbacks() {
 	c.cbShapeNotify().Connect(wm.X, c.Id())
 
 	// Focus follows mouse?
-	if wm.Config.Ffm {
+	if settings.Settings["focusfollowsmouse"].(bool) {
 		c.cbEnterNotify().Connect(wm.X, c.Frame().Parent().Id)
 	}
 	c.handleFocusIn().Connect(wm.X, c.Frame().Parent().Id)
 	c.handleFocusOut().Connect(wm.X, c.Frame().Parent().Id)
-
-	wm.ClientMouseSetup(c)
-	wm.FrameMouseSetup(c, c.frame.Parent().Id)
 }
 
 func (c *Client) cbMapNotify() xevent.MapNotifyFun {
@@ -204,10 +202,10 @@ func (c *Client) cbEnterNotify() xevent.EnterNotifyFun {
 			return
 		}
 		if c.IsMapped() {
-			if wm.Config.Ffm {
+			if settings.Settings["focusfollowsmouse"].(bool) {
 				c.Focus()
 			}
-			if wm.Config.FfmRaise {
+			if settings.Settings["raisefollowsmouse"].(bool) {
 				c.Raise()
 			}
 		}
